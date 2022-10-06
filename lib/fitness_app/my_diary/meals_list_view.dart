@@ -1,5 +1,5 @@
 import 'package:gotogether/fitness_app/fitness_app_theme.dart';
-import 'package:gotogether/fitness_app/models/meals_list_data.dart';
+import 'package:gotogether/fitness_app/models/home_list_data.dart';
 import 'package:gotogether/main.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +19,7 @@ class MealsListView extends StatefulWidget {
 class _MealsListViewState extends State<MealsListView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  List<MealsListData> mealsListData = MealsListData.tabIconsList;
+  List<HomeData> mealsListData = HomeData.tabIconsList;
 
   @override
   void initState() {
@@ -88,7 +88,7 @@ class MealsView extends StatelessWidget {
       {Key? key, this.mealsListData, this.animationController, this.animation})
       : super(key: key);
 
-  final MealsListData? mealsListData;
+  final HomeData? mealsListData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 

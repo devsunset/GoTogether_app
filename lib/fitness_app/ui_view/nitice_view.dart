@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
 
-class GlassView extends StatelessWidget {
+class NoticeView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  const GlassView({Key? key, this.animationController, this.animation})
+  const NoticeView({Key? key, this.animationController, this.animation})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class GlassView extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                     left: 68, bottom: 12, right: 16, top: 12),
                                 child: Text(
-                                  'Prepare your stomach for lunch with one or two glass of water',
+                                  'Go Together notice   ',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,

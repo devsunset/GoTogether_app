@@ -1,10 +1,11 @@
 import 'package:gotogether/app_theme.dart';
-import 'package:gotogether/custom_drawer/drawer_user_controller.dart';
-import 'package:gotogether/custom_drawer/home_drawer.dart';
-import 'package:gotogether/feedback_screen.dart';
-import 'package:gotogether/help_screen.dart';
+
 import 'package:gotogether/home_screen.dart';
-import 'package:gotogether/invite_friend_screen.dart';
+import 'package:gotogether/custom_drawer/home_drawer.dart';
+import 'package:gotogether/custom_drawer/drawer_user_controller.dart';
+
+import 'package:gotogether/hotel_booking/hotel_home_screen.dart';
+
 import 'package:flutter/material.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
@@ -58,27 +59,27 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           break;
         case DrawerIndex.TOGETHER:
           setState(() {
-            screenView = HelpScreen();
+            screenView = HotelHomeScreen();
           });
           break;
         case DrawerIndex.MEMBER:
           setState(() {
-            screenView = FeedbackScreen();
+            screenView = HotelHomeScreen();
           });
           break;
         case DrawerIndex.POST:
           setState(() {
-            screenView = FeedbackScreen();
+            screenView = HotelHomeScreen();
           });
           break;
         case DrawerIndex.MEMO:
           setState(() {
-            screenView = FeedbackScreen();
+            screenView = HotelHomeScreen();
           });
           break;
         case DrawerIndex.PROFILE:
           setState(() {
-            screenView = InviteFriend();
+            screenView = HotelHomeScreen();
           });
           break;
         default:

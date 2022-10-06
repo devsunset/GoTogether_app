@@ -56,17 +56,27 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             screenView = const MyHomePage();
           });
           break;
-        case DrawerIndex.Help:
+        case DrawerIndex.TOGETHER:
           setState(() {
             screenView = HelpScreen();
           });
           break;
-        case DrawerIndex.FeedBack:
+        case DrawerIndex.MEMBER:
           setState(() {
             screenView = FeedbackScreen();
           });
           break;
-        case DrawerIndex.Invite:
+        case DrawerIndex.POST:
+          setState(() {
+            screenView = FeedbackScreen();
+          });
+          break;
+        case DrawerIndex.MEMO:
+          setState(() {
+            screenView = FeedbackScreen();
+          });
+          break;
+        case DrawerIndex.PROFILE:
           setState(() {
             screenView = InviteFriend();
           });
@@ -77,3 +87,4 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     }
   }
 }
+

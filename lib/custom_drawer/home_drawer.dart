@@ -33,29 +33,30 @@ class _HomeDrawerState extends State<HomeDrawer> {
         icon: Icon(Icons.home),
       ),
       DrawerList(
-        index: DrawerIndex.Help,
+        index: DrawerIndex.TOGETHER,
         labelName: 'Together',
         icon: Icon(Icons.add_circle),
       ),
       DrawerList(
-        index: DrawerIndex.FeedBack,
+        index: DrawerIndex.MEMBER,
         labelName: 'Member',
         icon: Icon(Icons.group),
       ),
       DrawerList(
-        index: DrawerIndex.Invite,
+        index: DrawerIndex.POST,
         labelName: 'Post',
         icon: Icon(Icons.post_add),
       ),
       DrawerList(
-        index: DrawerIndex.Share,
+        index: DrawerIndex.MEMO,
         labelName: 'Memo',
         icon: Icon(Icons.edit),
       ),
       DrawerList(
-        index: DrawerIndex.About,
+        index: DrawerIndex.PROFILE,
         labelName: 'Profile',
         icon: Icon(Icons.account_box),
+        // image example
         // isAssetsImage: true,
         // imageName: 'assets/images/supportIcon.png',
       ),
@@ -297,11 +298,11 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
 enum DrawerIndex {
   HOME,
-  Help,
-  FeedBack,
-  Share,
-  About,
-  Invite,
+  TOGETHER,
+  MEMBER,
+  POST,
+  MEMO,
+  PROFILE,
 }
 
 class DrawerList {

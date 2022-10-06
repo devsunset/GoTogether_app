@@ -160,7 +160,7 @@ class MealsView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      mealsListData!.meals!.join('\n'),
+                                      mealsListData!.legend!.join('\n'),
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
                                         fontWeight: FontWeight.w500,
@@ -173,13 +173,13 @@ class MealsView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            mealsListData?.kacl != 0
+                            mealsListData?.count != 0
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Text(
-                                        mealsListData!.kacl.toString(),
+                                        mealsListData!.count.toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,

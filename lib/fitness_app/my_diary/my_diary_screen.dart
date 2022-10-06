@@ -1,6 +1,5 @@
 import 'package:gotogether/fitness_app/ui_view/body_measurement.dart';
 import 'package:gotogether/fitness_app/ui_view/nitice_view.dart';
-import 'package:gotogether/fitness_app/ui_view/mediterranean_diet_view.dart';
 import 'package:gotogether/fitness_app/ui_view/title_view.dart';
 import 'package:gotogether/fitness_app/fitness_app_theme.dart';
 import 'package:gotogether/fitness_app/my_diary/meals_list_view.dart';
@@ -61,8 +60,8 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Meals today',
-        subTxt: 'Customize',
+        titleTxt: 'Statistics',
+        subTxt: '',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve:
@@ -94,24 +93,12 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Body measurement',
-        subTxt: 'Today',
+        titleTxt: 'Recent Together Top 3',
+        subTxt: '',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve:
                 Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController!,
-      ),
-    );
-
-    listViews.add(
-      TitleView(
-        titleTxt: 'Water',
-        subTxt: 'Aqua SmartBottle',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController!,
-            curve:
-                Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController!,
       ),
     );

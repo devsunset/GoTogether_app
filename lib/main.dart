@@ -7,10 +7,17 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // disable landscape
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]).then((_) => runApp(MyApp()));
+
+  // disable portrait
+  // await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+  //   DeviceOrientation.landscapeLeft,
+  //   DeviceOrientation.landscapeRight
+  // ]).then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -26,7 +33,7 @@ class MyApp extends StatelessWidget {
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
     return MaterialApp(
-      title: 'Flutter UI',
+      title: 'GoTogether',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,

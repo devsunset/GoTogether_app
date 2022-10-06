@@ -34,29 +34,30 @@ class _HomeDrawerState extends State<HomeDrawer> {
       ),
       DrawerList(
         index: DrawerIndex.Help,
-        labelName: 'Help',
-        isAssetsImage: true,
-        imageName: 'assets/images/supportIcon.png',
+        labelName: 'Together',
+        icon: Icon(Icons.add_circle),
       ),
       DrawerList(
         index: DrawerIndex.FeedBack,
-        labelName: 'FeedBack',
-        icon: Icon(Icons.help),
-      ),
-      DrawerList(
-        index: DrawerIndex.Invite,
-        labelName: 'Invite Friend',
+        labelName: 'Member',
         icon: Icon(Icons.group),
       ),
       DrawerList(
+        index: DrawerIndex.Invite,
+        labelName: 'Post',
+        icon: Icon(Icons.post_add),
+      ),
+      DrawerList(
         index: DrawerIndex.Share,
-        labelName: 'Rate the app',
-        icon: Icon(Icons.share),
+        labelName: 'Memo',
+        icon: Icon(Icons.edit),
       ),
       DrawerList(
         index: DrawerIndex.About,
-        labelName: 'About Us',
-        icon: Icon(Icons.info),
+        labelName: 'Profile',
+        icon: Icon(Icons.account_box),
+        // isAssetsImage: true,
+        // imageName: 'assets/images/supportIcon.png',
       ),
     ];
   }
@@ -119,7 +120,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8, left: 4),
                     child: Text(
-                      'Chris Hemsworth',
+                      'devsunset',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: isLightMode ? AppTheme.grey : AppTheme.white,
@@ -296,12 +297,11 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
 enum DrawerIndex {
   HOME,
-  FeedBack,
   Help,
+  FeedBack,
   Share,
   About,
   Invite,
-  Testing,
 }
 
 class DrawerList {

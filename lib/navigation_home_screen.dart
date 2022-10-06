@@ -4,6 +4,8 @@ import 'package:gotogether/home_screen.dart';
 import 'package:gotogether/custom_drawer/home_drawer.dart';
 import 'package:gotogether/custom_drawer/drawer_user_controller.dart';
 
+
+import 'package:gotogether/fitness_app/fitness_app_home_screen.dart';
 import 'package:gotogether/hotel_booking/hotel_home_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -41,7 +43,6 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
               //callback from drawer for replace screen as user need with passing DrawerIndex(Enum index)
             },
             screenView: screenView,
-            //we replace screen view as we need on navigate starting screens like MyHomePage, HelpScreen, FeedbackScreen, etc...
           ),
         ),
       ),
@@ -59,7 +60,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           break;
         case DrawerIndex.TOGETHER:
           setState(() {
-            screenView = HotelHomeScreen();
+            screenView = FitnessAppHomeScreen();
           });
           break;
         case DrawerIndex.MEMBER:

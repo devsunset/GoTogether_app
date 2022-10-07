@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gotogether/member/member_theme.dart';
 
@@ -91,77 +90,7 @@ class MemberListView extends StatelessWidget {
                                                       color: Colors.grey
                                                           .withOpacity(0.8)),
                                                 ),
-                                                const SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Icon(
-                                                  FontAwesomeIcons.locationDot,
-                                                  size: 12,
-                                                  color: MemberTheme
-                                                          .buildLightTheme()
-                                                      .primaryColor,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    '${memberData!.dist.toStringAsFixed(1)} km to city',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
-                                                  ),
-                                                ),
                                               ],
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  RatingBar(
-                                                    initialRating:
-                                                        memberData!.rating,
-                                                    direction: Axis.horizontal,
-                                                    allowHalfRating: true,
-                                                    itemCount: 5,
-                                                    itemSize: 24,
-                                                    ratingWidget: RatingWidget(
-                                                      full: Icon(
-                                                        Icons.star_rate_rounded,
-                                                        color: MemberTheme
-                                                                .buildLightTheme()
-                                                            .primaryColor,
-                                                      ),
-                                                      half: Icon(
-                                                        Icons.star_half_rounded,
-                                                        color: MemberTheme
-                                                                .buildLightTheme()
-                                                            .primaryColor,
-                                                      ),
-                                                      empty: Icon(
-                                                        Icons
-                                                            .star_border_rounded,
-                                                        color: MemberTheme
-                                                                .buildLightTheme()
-                                                            .primaryColor,
-                                                      ),
-                                                    ),
-                                                    itemPadding:
-                                                        EdgeInsets.zero,
-                                                    onRatingUpdate: (rating) {
-                                                      print(rating);
-                                                    },
-                                                  ),
-                                                  Text(
-                                                    ' ${memberData!.reviews} Reviews',
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
-                                                  ),
-                                                ],
-                                              ),
                                             ),
                                           ],
                                         ),
@@ -186,7 +115,7 @@ class MemberListView extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Icon(
-                                  Icons.favorite_border,
+                                  Icons.person,
                                   color: MemberTheme.buildLightTheme()
                                       .primaryColor,
                                 ),

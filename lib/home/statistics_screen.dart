@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gotogether/home/home_theme.dart';
 import 'package:gotogether/home/item_list_view.dart';
 import 'package:gotogether/home/notice_view.dart';
 import 'package:gotogether/home/recent_together_view.dart';
 import 'package:gotogether/home/title_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({Key? key, this.animationController})
@@ -208,7 +208,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                           children: <Widget>[
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(0.0),
                                 child: Text(
                                   'GoTogether',
                                   textAlign: TextAlign.center,
@@ -233,7 +233,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                                     color: Colors.transparent,
                                     child: InkWell(
                                       borderRadius: const BorderRadius.all(
-                                        Radius.circular(32.0),
+                                        Radius.circular(0.0),
                                       ),
                                       onTap: () {},
                                       child: Padding(

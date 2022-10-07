@@ -17,7 +17,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
-    screenView =  HomeScreen();
+    screenView = HomeScreen();
     super.initState();
   }
 
@@ -84,4 +84,3 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     }
   }
 }
-

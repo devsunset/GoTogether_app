@@ -1,6 +1,7 @@
 import 'dart:math' as math;
-import 'package:gotogether/home/home_theme.dart';
+
 import 'package:flutter/material.dart';
+import 'package:gotogether/home/home_theme.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
 class WaveView extends StatefulWidget {

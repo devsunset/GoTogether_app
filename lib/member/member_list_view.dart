@@ -60,8 +60,8 @@ class MemberListView extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              color: MemberTheme.buildLightTheme()
-                                  .backgroundColor,
+                              color:
+                                  MemberTheme.buildLightTheme().backgroundColor,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,

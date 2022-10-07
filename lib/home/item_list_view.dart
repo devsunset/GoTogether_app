@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:gotogether/home/home_theme.dart';
 import 'package:gotogether/home/models/home_list_data.dart';
 import 'package:gotogether/main.dart';
-import 'package:flutter/material.dart';
 
 class ItemListView extends StatefulWidget {
   const ItemListView(

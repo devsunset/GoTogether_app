@@ -1,7 +1,8 @@
-import 'package:gotogether/member/member_list_view.dart';
-import 'package:gotogether/member/model/member_list_data.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gotogether/member/member_list_view.dart';
+import 'package:gotogether/member/model/member_list_data.dart';
+
 import 'member_theme.dart';
 
 class MemberScreen extends StatefulWidget {
@@ -74,8 +75,7 @@ class _MemberScreenState extends State<MemberScreen>
                           ];
                         },
                         body: Container(
-                          color:
-                              MemberTheme.buildLightTheme().backgroundColor,
+                          color: MemberTheme.buildLightTheme().backgroundColor,
                           child: ListView.builder(
                             itemCount: hotelList.length,
                             padding: const EdgeInsets.only(top: 8),
@@ -282,8 +282,8 @@ class _MemberScreenState extends State<MemberScreen>
         child: Row(
           children: <Widget>[
             Container(
-              alignment: Alignment.center,
-              width: AppBar().preferredSize.height,
+              alignment: Alignment.centerLeft,
+              width: AppBar().preferredSize.height + 40,
               height: AppBar().preferredSize.height,
               child: Material(
                 color: Colors.transparent,
@@ -312,6 +312,28 @@ class _MemberScreenState extends State<MemberScreen>
                 ),
               ),
             ),
+            Container(
+              width: AppBar().preferredSize.height + 40,
+              height: AppBar().preferredSize.height,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(32.0),
+                      ),
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

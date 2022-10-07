@@ -56,7 +56,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           break;
         case DrawerIndex.TOGETHER:
           setState(() {
-            screenView = HomeScreen();
+            screenView = MemberScreen();
           });
           break;
         case DrawerIndex.MEMBER:
@@ -66,7 +66,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           break;
         case DrawerIndex.POST:
           setState(() {
-            screenView = HomeScreen();
+            screenView = MemberScreen();
           });
           break;
         case DrawerIndex.MEMO:

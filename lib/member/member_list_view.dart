@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gotogether/hotel_booking/hotel_app_theme.dart';
+import 'package:gotogether/member/member_theme.dart';
 
-import 'model/hotel_list_data.dart';
+import 'model/member_list_data.dart';
 
-class HotelListView extends StatelessWidget {
-  const HotelListView(
+class MemberListView extends StatelessWidget {
+  const MemberListView(
       {Key? key,
       this.hotelData,
       this.animationController,
@@ -15,7 +15,7 @@ class HotelListView extends StatelessWidget {
       : super(key: key);
 
   final VoidCallback? callback;
-  final HotelListData? hotelData;
+  final MemberListData? hotelData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -60,7 +60,7 @@ class HotelListView extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              color: HotelAppTheme.buildLightTheme()
+                              color: MemberTheme.buildLightTheme()
                                   .backgroundColor,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -104,7 +104,7 @@ class HotelListView extends StatelessWidget {
                                                 Icon(
                                                   FontAwesomeIcons.locationDot,
                                                   size: 12,
-                                                  color: HotelAppTheme
+                                                  color: MemberTheme
                                                           .buildLightTheme()
                                                       .primaryColor,
                                                 ),
@@ -136,20 +136,20 @@ class HotelListView extends StatelessWidget {
                                                     ratingWidget: RatingWidget(
                                                       full: Icon(
                                                         Icons.star_rate_rounded,
-                                                        color: HotelAppTheme
+                                                        color: MemberTheme
                                                                 .buildLightTheme()
                                                             .primaryColor,
                                                       ),
                                                       half: Icon(
                                                         Icons.star_half_rounded,
-                                                        color: HotelAppTheme
+                                                        color: MemberTheme
                                                                 .buildLightTheme()
                                                             .primaryColor,
                                                       ),
                                                       empty: Icon(
                                                         Icons
                                                             .star_border_rounded,
-                                                        color: HotelAppTheme
+                                                        color: MemberTheme
                                                                 .buildLightTheme()
                                                             .primaryColor,
                                                       ),
@@ -221,7 +221,7 @@ class HotelListView extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Icon(
                                   Icons.favorite_border,
-                                  color: HotelAppTheme.buildLightTheme()
+                                  color: MemberTheme.buildLightTheme()
                                       .primaryColor,
                                 ),
                               ),

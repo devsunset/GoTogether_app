@@ -4,6 +4,7 @@ import 'package:gotogether/home/item_list_view.dart';
 import 'package:gotogether/home/notice_view.dart';
 import 'package:gotogether/home/recent_together_view.dart';
 import 'package:gotogether/home/title_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({Key? key, this.animationController})
@@ -151,8 +152,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
             padding: EdgeInsets.only(
               top: AppBar().preferredSize.height +
                   MediaQuery.of(context).padding.top +
-                  50,
-              bottom: 50 + MediaQuery.of(context).padding.bottom,
+                  25,
+              bottom: 25 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,
@@ -209,7 +210,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'Home',
+                                  'GoTogether',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: HomeTheme.fontName,
@@ -219,6 +220,29 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                                     color: HomeTheme.darkerText,
                                   ),
                                 ),
+                              ),
+                            ),
+                            Container(
+                              width: AppBar().preferredSize.height,
+                              height: AppBar().preferredSize.height,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(32.0),
+                                      ),
+                                      onTap: () {},
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(FontAwesomeIcons.envelope),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],

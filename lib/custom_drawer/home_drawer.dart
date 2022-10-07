@@ -1,5 +1,5 @@
-import 'package:gotogether/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:gotogether/app_theme.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer(

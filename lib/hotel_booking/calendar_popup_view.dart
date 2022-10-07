@@ -1,5 +1,5 @@
-import 'package:gotogether/hotel_booking/hotel_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:gotogether/hotel_booking/hotel_app_theme.dart';
 import 'package:intl/intl.dart';
 
 import 'custom_calendar.dart';
@@ -214,7 +214,8 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                                         // animationController.reverse().then((f) {
 
                                         // });
-                                        widget.onApplyClick!(startDate!, endDate!);
+                                        widget.onApplyClick!(
+                                            startDate!, endDate!);
                                         Navigator.pop(context);
                                       } catch (_) {}
                                     },

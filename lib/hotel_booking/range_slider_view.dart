@@ -1,5 +1,5 @@
-import 'package:gotogether/hotel_booking/hotel_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:gotogether/hotel_booking/hotel_app_theme.dart';
 
 class RangeSliderView extends StatefulWidget {
   const RangeSliderView({Key? key, this.values, this.onChangeRangeValues})

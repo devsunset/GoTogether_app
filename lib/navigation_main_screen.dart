@@ -1,14 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:gotogether/app_theme.dart';
-
-import 'package:gotogether/main_screen.dart';
-import 'package:gotogether/custom_drawer/home_drawer.dart';
 import 'package:gotogether/custom_drawer/drawer_user_controller.dart';
-
-
+import 'package:gotogether/custom_drawer/home_drawer.dart';
 import 'package:gotogether/home/home_screen.dart';
 import 'package:gotogether/hotel_booking/hotel_home_screen.dart';
-
-import 'package:flutter/material.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -22,7 +17,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
-    screenView = const MyHomePage();
+    screenView =  HomeScreen();
     super.initState();
   }
 
@@ -55,7 +50,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       switch (drawerIndex) {
         case DrawerIndex.HOME:
           setState(() {
-            screenView = const MyHomePage();
+            screenView = HomeScreen();
           });
           break;
         case DrawerIndex.TOGETHER:
@@ -70,17 +65,17 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           break;
         case DrawerIndex.POST:
           setState(() {
-            screenView = HotelHomeScreen();
+            screenView = HomeScreen();
           });
           break;
         case DrawerIndex.MEMO:
           setState(() {
-            screenView = HotelHomeScreen();
+            screenView = HomeScreen();
           });
           break;
         case DrawerIndex.PROFILE:
           setState(() {
-            screenView = HotelHomeScreen();
+            screenView = HomeScreen();
           });
           break;
         default:

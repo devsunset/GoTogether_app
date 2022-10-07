@@ -1,7 +1,7 @@
-import 'package:gotogether/home/wave_view.dart';
-import 'package:gotogether/home/home_theme.dart';
-import 'package:gotogether/main.dart';
 import 'package:flutter/material.dart';
+import 'package:gotogether/home/home_theme.dart';
+import 'package:gotogether/home/wave_view.dart';
+import 'package:gotogether/main.dart';
 
 class RecentTogetherView extends StatefulWidget {
   const RecentTogetherView(
@@ -15,7 +15,8 @@ class RecentTogetherView extends StatefulWidget {
   _RecentTogetherViewState createState() => _RecentTogetherViewState();
 }
 
-class _RecentTogetherViewState extends State<RecentTogetherView> with TickerProviderStateMixin {
+class _RecentTogetherViewState extends State<RecentTogetherView>
+    with TickerProviderStateMixin {
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
@@ -69,47 +70,17 @@ class _RecentTogetherViewState extends State<RecentTogetherView> with TickerProv
                                       padding: const EdgeInsets.only(
                                           left: 4, bottom: 3),
                                       child: Text(
-                                        '2100',
+                                        'Go Together Flutter App',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: HomeTheme.fontName,
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 32,
-                                          color: HomeTheme.nearlyDarkBlue,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8, bottom: 8),
-                                      child: Text(
-                                        'ml',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: HomeTheme.fontName,
-                                          fontWeight: FontWeight.w500,
                                           fontSize: 18,
-                                          letterSpacing: -0.2,
                                           color: HomeTheme.nearlyDarkBlue,
                                         ),
                                       ),
                                     ),
                                   ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 4, top: 2, bottom: 14),
-                                  child: Text(
-                                    'of daily goal 3.5L',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: HomeTheme.fontName,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      letterSpacing: 0.0,
-                                      color: HomeTheme.darkText,
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),
@@ -140,8 +111,8 @@ class _RecentTogetherViewState extends State<RecentTogetherView> with TickerProv
                                         padding: const EdgeInsets.only(left: 4),
                                         child: Icon(
                                           Icons.access_time,
-                                          color: HomeTheme.grey
-                                              .withOpacity(0.5),
+                                          color:
+                                              HomeTheme.grey.withOpacity(0.5),
                                           size: 16,
                                         ),
                                       ),
@@ -149,107 +120,48 @@ class _RecentTogetherViewState extends State<RecentTogetherView> with TickerProv
                                         padding:
                                             const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Last drink 8:26 AM',
+                                          'Created Date : 22/09/21',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            fontFamily:
-                                                HomeTheme.fontName,
+                                            fontFamily: HomeTheme.fontName,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14,
                                             letterSpacing: 0.0,
-                                            color: HomeTheme.grey
-                                                .withOpacity(0.5),
+                                            color:
+                                                HomeTheme.grey.withOpacity(0.5),
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 4),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 24,
-                                          height: 24,
-                                          child: Image.asset(
-                                              'assets/home/bell.png'),
-                                        ),
-                                        Flexible(
-                                          child: Text(
-                                            'Your bottle is empty, refill it!.',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontFamily:
-                                                  HomeTheme.fontName,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12,
-                                              letterSpacing: 0.0,
-                                              color: HexColor('#F65283'),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: Image.asset('assets/home/bell.png'),
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      'View : 21',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontFamily: HomeTheme.fontName,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
+                                        letterSpacing: 0.0,
+                                        color: HexColor('#F65283'),
+                                      ),
                                     ),
                                   ),
                                 ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 34,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: HomeTheme.nearlyWhite,
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: HomeTheme.nearlyDarkBlue
-                                          .withOpacity(0.4),
-                                      offset: const Offset(4.0, 4.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.add,
-                                  color: HomeTheme.nearlyDarkBlue,
-                                  size: 24,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 28,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: HomeTheme.nearlyWhite,
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: HomeTheme.nearlyDarkBlue
-                                          .withOpacity(0.4),
-                                      offset: const Offset(4.0, 4.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.remove,
-                                  color: HomeTheme.nearlyDarkBlue,
-                                  size: 24,
-                                ),
                               ),
                             ),
                           ],
@@ -276,7 +188,7 @@ class _RecentTogetherViewState extends State<RecentTogetherView> with TickerProv
                             ],
                           ),
                           child: WaveView(
-                            percentageValue: 60.0,
+                            percentageValue: 17.0,
                           ),
                         ),
                       )

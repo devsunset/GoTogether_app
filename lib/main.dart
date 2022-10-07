@@ -1,9 +1,11 @@
 import 'dart:io';
-import 'package:gotogether/app_theme.dart';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gotogether/app_theme.dart';
+
 import 'navigation_main_screen.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

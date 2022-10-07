@@ -1,12 +1,13 @@
-import 'package:gotogether/home/nitice_view.dart';
-import 'package:gotogether/home/title_view.dart';
+import 'package:flutter/material.dart';
 import 'package:gotogether/home/home_theme.dart';
 import 'package:gotogether/home/item_list_view.dart';
+import 'package:gotogether/home/notice_view.dart';
 import 'package:gotogether/home/recent_together_view.dart';
-import 'package:flutter/material.dart';
+import 'package:gotogether/home/title_view.dart';
 
 class StatisticsScreen extends StatefulWidget {
-  const StatisticsScreen({Key? key, this.animationController}) : super(key: key);
+  const StatisticsScreen({Key? key, this.animationController})
+      : super(key: key);
 
   final AnimationController? animationController;
   @override
@@ -150,8 +151,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
             padding: EdgeInsets.only(
               top: AppBar().preferredSize.height +
                   MediaQuery.of(context).padding.top +
-                  24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
+                  50,
+              bottom: 50 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,
@@ -184,8 +185,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: HomeTheme.grey
-                              .withOpacity(0.4 * topBarOpacity),
+                          color:
+                              HomeTheme.grey.withOpacity(0.4 * topBarOpacity),
                           offset: const Offset(1.1, 1.1),
                           blurRadius: 10.0),
                     ],

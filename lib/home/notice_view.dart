@@ -1,5 +1,5 @@
-import 'package:gotogether/main.dart';
 import 'package:flutter/material.dart';
+import 'package:gotogether/main.dart';
 
 import 'home_theme.dart';
 

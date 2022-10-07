@@ -3,7 +3,6 @@ import 'package:gotogether/home/models/home_list_data.dart';
 import 'package:gotogether/main.dart';
 import 'package:flutter/material.dart';
 
-
 class ItemListView extends StatefulWidget {
   const ItemListView(
       {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
@@ -68,7 +67,7 @@ class _ItemListViewState extends State<ItemListView>
                                   curve: Curves.fastOutSlowIn)));
                   animationController?.forward();
 
-                  return MealsView(
+                  return ItemsView(
                     mealsListData: mealsListData[index],
                     animation: animation,
                     animationController: animationController!,
@@ -83,8 +82,8 @@ class _ItemListViewState extends State<ItemListView>
   }
 }
 
-class MealsView extends StatelessWidget {
-  const MealsView(
+class ItemsView extends StatelessWidget {
+  const ItemsView(
       {Key? key, this.mealsListData, this.animationController, this.animation})
       : super(key: key);
 
@@ -193,10 +192,9 @@ class MealsView extends StatelessWidget {
                                         padding: const EdgeInsets.only(
                                             left: 4, bottom: 3),
                                         child: Text(
-                                          'kcal',
+                                          '',
                                           style: TextStyle(
-                                            fontFamily:
-                                                HomeTheme.fontName,
+                                            fontFamily: HomeTheme.fontName,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 10,
                                             letterSpacing: 0.2,
@@ -222,7 +220,8 @@ class MealsView extends StatelessWidget {
                                       padding: const EdgeInsets.all(6.0),
                                       child: Icon(
                                         Icons.add,
-                                        color: HexColor(mealsListData!.endColor),
+                                        color:
+                                            HexColor(mealsListData!.endColor),
                                         size: 24,
                                       ),
                                     ),
@@ -244,15 +243,15 @@ class MealsView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 0,
-                    left: 8,
-                    child: SizedBox(
-                      width: 80,
-                      height: 80,
-                      child: Image.asset(mealsListData!.imagePath),
-                    ),
-                  )
+                  // Positioned(
+                  //   top: 0,
+                  //   left: 8,
+                  //   child: SizedBox(
+                  //     width: 80,
+                  //     height: 80,
+                  //     child: Image.asset(mealsListData!.imagePath),
+                  //   ),
+                  // )
                 ],
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:gotogether/app_theme.dart';
 import 'package:gotogether/custom_drawer/drawer_user_controller.dart';
 import 'package:gotogether/custom_drawer/home_drawer.dart';
 import 'package:gotogether/home/home_screen.dart';
+import 'package:gotogether/profile/profile_screen.dart';
 import 'package:gotogether/member/member_screen.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
@@ -70,12 +71,12 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           break;
         case DrawerIndex.MEMO:
           setState(() {
-            screenView = HomeScreen();
+            screenView = MemberScreen();
           });
           break;
         case DrawerIndex.PROFILE:
           setState(() {
-            screenView = HomeScreen();
+            screenView = ProfileScreen();
           });
           break;
         default:

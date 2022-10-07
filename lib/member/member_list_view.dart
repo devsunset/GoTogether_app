@@ -8,14 +8,14 @@ import 'model/member_list_data.dart';
 class MemberListView extends StatelessWidget {
   const MemberListView(
       {Key? key,
-      this.hotelData,
+      this.memberData,
       this.animationController,
       this.animation,
       this.callback})
       : super(key: key);
 
   final VoidCallback? callback;
-  final MemberListData? hotelData;
+  final MemberListData? memberData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -71,7 +71,7 @@ class MemberListView extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              hotelData!.titleTxt,
+                                              memberData!.titleTxt,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -85,7 +85,7 @@ class MemberListView extends StatelessWidget {
                                                   MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Text(
-                                                  hotelData!.subTxt,
+                                                  memberData!.subTxt,
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       color: Colors.grey
@@ -103,7 +103,7 @@ class MemberListView extends StatelessWidget {
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    '${hotelData!.dist.toStringAsFixed(1)} km to city',
+                                                    '${memberData!.dist.toStringAsFixed(1)} km to city',
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
@@ -121,7 +121,7 @@ class MemberListView extends StatelessWidget {
                                                 children: <Widget>[
                                                   RatingBar(
                                                     initialRating:
-                                                        hotelData!.rating,
+                                                        memberData!.rating,
                                                     direction: Axis.horizontal,
                                                     allowHalfRating: true,
                                                     itemCount: 5,
@@ -154,7 +154,7 @@ class MemberListView extends StatelessWidget {
                                                     },
                                                   ),
                                                   Text(
-                                                    ' ${hotelData!.reviews} Reviews',
+                                                    ' ${memberData!.reviews} Reviews',
                                                     style: TextStyle(
                                                         fontSize: 14,
                                                         color: Colors.grey
@@ -166,33 +166,6 @@ class MemberListView extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 16, top: 8),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        Text(
-                                          '\$${hotelData!.perNight}',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 22,
-                                          ),
-                                        ),
-                                        Text(
-                                          '/per night',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.grey.withOpacity(0.8)),
-                                        ),
-                                      ],
                                     ),
                                   ),
                                 ],

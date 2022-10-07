@@ -93,7 +93,7 @@ class _MemberScreenState extends State<MemberScreen>
                               animationController?.forward();
                               return MemberListView(
                                 callback: () {},
-                                hotelData: hotelList[index],
+                                memberData: hotelList[index],
                                 animation: animation,
                                 animationController: animationController!,
                               );
@@ -149,7 +149,7 @@ class _MemberScreenState extends State<MemberScreen>
 
                       return MemberListView(
                         callback: () {},
-                        hotelData: hotelList[index],
+                        memberData: hotelList[index],
                         animation: animation,
                         animationController: animationController!,
                       );
@@ -178,7 +178,7 @@ class _MemberScreenState extends State<MemberScreen>
       hotelListViews.add(
         MemberListView(
           callback: () {},
-          hotelData: hotelList[i],
+          memberData: hotelList[i],
           animation: animation,
           animationController: animationController!,
         ),

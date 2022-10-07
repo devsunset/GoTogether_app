@@ -52,13 +52,6 @@ class MemberListView extends StatelessWidget {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            AspectRatio(
-                              aspectRatio: 2,
-                              child: Image.asset(
-                                hotelData!.imagePath,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
                             Container(
                               color:
                                   MemberTheme.buildLightTheme().backgroundColor,

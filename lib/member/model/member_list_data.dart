@@ -1,6 +1,5 @@
 class MemberListData {
   MemberListData({
-    this.imagePath = '',
     this.titleTxt = '',
     this.subTxt = "",
     this.dist = 1.8,
@@ -9,7 +8,6 @@ class MemberListData {
     this.perNight = 180,
   });
 
-  String imagePath;
   String titleTxt;
   String subTxt;
   double dist;
@@ -19,7 +17,6 @@ class MemberListData {
 
   static List<MemberListData> hotelList = <MemberListData>[
     MemberListData(
-      imagePath: 'assets/member/hotel_1.png',
       titleTxt: 'Grand Royal Hotel',
       subTxt: 'Wembley, London',
       dist: 2.0,
@@ -28,7 +25,6 @@ class MemberListData {
       perNight: 180,
     ),
     MemberListData(
-      imagePath: 'assets/member/hotel_2.png',
       titleTxt: 'Queen Hotel',
       subTxt: 'Wembley, London',
       dist: 4.0,
@@ -37,7 +33,6 @@ class MemberListData {
       perNight: 200,
     ),
     MemberListData(
-      imagePath: 'assets/member/hotel_3.png',
       titleTxt: 'Grand Royal Hotel',
       subTxt: 'Wembley, London',
       dist: 3.0,
@@ -46,7 +41,6 @@ class MemberListData {
       perNight: 60,
     ),
     MemberListData(
-      imagePath: 'assets/member/hotel_4.png',
       titleTxt: 'Queen Hotel',
       subTxt: 'Wembley, London',
       dist: 7.0,
@@ -55,7 +49,6 @@ class MemberListData {
       perNight: 170,
     ),
     MemberListData(
-      imagePath: 'assets/member/hotel_5.png',
       titleTxt: 'Grand Royal Hotel',
       subTxt: 'Wembley, London',
       dist: 2.0,

@@ -49,7 +49,7 @@ class _ItemListViewState extends State<ItemListView>
             transform: Matrix4.translationValues(
                 0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
             child: Container(
-              height: 216,
+              height: 186,
               width: double.infinity,
               child: ListView.builder(
                 padding: const EdgeInsets.only(
@@ -102,7 +102,7 @@ class ItemsView extends StatelessWidget {
             transform: Matrix4.translationValues(
                 100 * (1.0 - animation!.value), 0.0, 0.0),
             child: SizedBox(
-              width: 130,
+              width: 110,
               child: Stack(
                 children: <Widget>[
                   Padding(
@@ -145,7 +145,7 @@ class ItemsView extends StatelessWidget {
                               style: TextStyle(
                                 fontFamily: HomeTheme.fontName,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 12,
                                 letterSpacing: 0.2,
                                 color: HomeTheme.white,
                               ),

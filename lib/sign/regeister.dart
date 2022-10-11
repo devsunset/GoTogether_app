@@ -9,7 +9,6 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   bool _isPasswordVisible = false;
-  bool _rememberMe = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -29,7 +28,7 @@ class _RegisterState extends State<Register> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const FlutterLogo(size: 100),
+                    Image.asset('assets/images/userImage.png'),
                     _gap(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -100,19 +99,9 @@ class _RegisterState extends State<Register> {
                           )),
                     ),
                     _gap(),
-                    CheckboxListTile(
-                      value: _rememberMe,
-                      onChanged: (value) {
-                        if (value == null) return;
-                        setState(() {
-                          _rememberMe = value;
-                        });
-                      },
-                      title: const Text('Remember me'),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      dense: true,
-                      contentPadding: const EdgeInsets.all(0),
-                    ),
+
+                    const Text('Remember me'),
+
                     _gap(),
                     SizedBox(
                       width: double.infinity,

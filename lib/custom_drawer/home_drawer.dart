@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gotogether/app_theme.dart';
+import 'package:gotogether/sign/sign.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer(
@@ -187,6 +188,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
   void onTapped() {
     print('Doing Something...'); // Print to console.
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
   }
 
   Widget inkwell(DrawerList listData) {

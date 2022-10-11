@@ -29,19 +29,19 @@ class _SignInState extends State<SignIn> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const FlutterLogo(size: 100),
+                    Image.asset('assets/images/userImage.png'),
                     _gap(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        "Welcome to Flutter!",
+                        "GoTogether",
                         style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        "Enter your email and password to continue.",
+                        "Enter your userId and password to continue.",
                         style: Theme.of(context).textTheme.caption,
                         textAlign: TextAlign.center,
                       ),
@@ -54,19 +54,16 @@ class _SignInState extends State<SignIn> {
                           return 'Please enter some text';
                         }
 
-                        bool _emailValid = RegExp(
-                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(value);
-                        if (!_emailValid) {
-                          return 'Please enter a valid email';
+                        if (value.length < 6) {
+                          return 'userId must be at least 2 characters';
                         }
 
                         return null;
                       },
                       decoration: const InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'Enter your email',
-                        prefixIcon: Icon(Icons.email_outlined),
+                        labelText: 'UserId',
+                        hintText: 'Enter your userId',
+                        prefixIcon: Icon(Icons.person),
                         border: OutlineInputBorder(),
                       ),
                     ),

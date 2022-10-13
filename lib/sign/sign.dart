@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gotogether/sign/register.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -100,8 +102,10 @@ class _SignInState extends State<SignIn> {
                     _gap(),
                     new InkWell(
                         child: new Text('Register a new membership'),
-                        onTap: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => Register()))
-                    ),
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Register()))),
                     _gap(),
                     SizedBox(
                       width: double.infinity,
@@ -118,10 +122,22 @@ class _SignInState extends State<SignIn> {
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
+                          showToast('toast');
                           if (_formKey.currentState?.validate() ?? false) {
                             /// do something
                           }
+
+                          if (await confirm(
+                            context,
+                            title: const Text('Confirm'),
+                            content: const Text('Would you like to remove?'),
+                            textOK: const Text('Yes'),
+                            textCancel: const Text('No'),
+                          )) {
+                            return print('pressedOK');
+                          }
+                          return print('pressedCancel');
                         },
                       ),
                     ),
@@ -133,6 +149,17 @@ class _SignInState extends State<SignIn> {
         ),
       ),
     );
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM_RIGHT,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
   Widget _gap() => const SizedBox(height: 16);

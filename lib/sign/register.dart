@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gotogether/sign/sign.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -9,6 +10,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   bool _isPasswordVisible = false;
+  bool _isPasswordConfirmVisible = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -33,16 +35,38 @@ class _RegisterState extends State<Register> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        "Welcome to Flutter!",
+                        "GoTogether",
                         style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        "Enter your email and password to continue.",
+                        "Enter your information to continue.",
                         style: Theme.of(context).textTheme.caption,
                         textAlign: TextAlign.center,
+                      ),
+                    ),
+
+                    _gap(),
+                    TextFormField(
+                      validator: (value) {
+                        // add email validation
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+
+                        if (value.length < 3) {
+                          return 'userid must be at least 3 characters';
+                        }
+
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'userid',
+                        hintText: 'Enter your userid',
+                        prefixIcon: Icon(Icons.person),
+                        border: OutlineInputBorder(),
                       ),
                     ),
                     _gap(),
@@ -53,22 +77,42 @@ class _RegisterState extends State<Register> {
                           return 'Please enter some text';
                         }
 
-                        bool _emailValid = RegExp(
-                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(value);
-                        if (!_emailValid) {
-                          return 'Please enter a valid email';
+                        if (value.length < 2) {
+                          return 'nickname must be at least 2 characters';
                         }
 
                         return null;
                       },
                       decoration: const InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'Enter your email',
-                        prefixIcon: Icon(Icons.email_outlined),
+                        labelText: 'nickname',
+                        hintText: 'Enter your nickname',
+                        prefixIcon: Icon(Icons.person),
                         border: OutlineInputBorder(),
                       ),
                     ),
+                    // TextFormField(
+                    //   validator: (value) {
+                    //     // add email validation
+                    //     if (value == null || value.isEmpty) {
+                    //       return 'Please enter some text';
+                    //     }
+                    //
+                    //     bool _emailValid = RegExp(
+                    //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                    //         .hasMatch(value);
+                    //     if (!_emailValid) {
+                    //       return 'Please enter a valid email';
+                    //     }
+                    //
+                    //     return null;
+                    //   },
+                    //   decoration: const InputDecoration(
+                    //     labelText: 'Email',
+                    //     hintText: 'Enter your email',
+                    //     prefixIcon: Icon(Icons.email_outlined),
+                    //     border: OutlineInputBorder(),
+                    //   ),
+                    // ),
                     _gap(),
                     TextFormField(
                       validator: (value) {
@@ -99,9 +143,39 @@ class _RegisterState extends State<Register> {
                           )),
                     ),
                     _gap(),
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
 
-                    const Text('Remember me'),
-
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
+                      obscureText: !_isPasswordConfirmVisible,
+                      decoration: InputDecoration(
+                          labelText: 'Retype Password',
+                          hintText: 'Enter your retype password',
+                          prefixIcon: const Icon(Icons.lock_outline_rounded),
+                          border: const OutlineInputBorder(),
+                          suffixIcon: IconButton(
+                            icon: Icon(_isPasswordConfirmVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordConfirmVisible = !_isPasswordConfirmVisible;
+                              });
+                            },
+                          )),
+                    ),
+                    _gap(),
+                    new InkWell(
+                        child: new Text('I already have a membership '),
+                        onTap: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()))
+                    ),
                     _gap(),
                     SizedBox(
                       width: double.infinity,
@@ -113,7 +187,7 @@ class _RegisterState extends State<Register> {
                         child: const Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
-                            'Sign in',
+                            'Register',
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),

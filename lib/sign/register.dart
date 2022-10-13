@@ -32,6 +32,14 @@ class _RegisterState extends State<Register> {
                   children: [
                     Image.asset('assets/images/userImage.png'),
                     _gap(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "GoTogether",
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ),
+                    _gap(),
                     TextFormField(
                       validator: (value) {
                         // add email validation

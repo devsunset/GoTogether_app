@@ -42,7 +42,7 @@ class _SignInState extends State<SignIn> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        "Enter your userId and password to continue.",
+                        "Enter your userid and password to continue.",
                         style: Theme.of(context).textTheme.caption,
                         textAlign: TextAlign.center,
                       ),
@@ -56,7 +56,7 @@ class _SignInState extends State<SignIn> {
                         }
 
                         if (value.length < 3) {
-                          return 'userId must be at least 3 characters';
+                          return 'userid must be at least 3 characters';
                         }
 
                         return null;
@@ -76,13 +76,13 @@ class _SignInState extends State<SignIn> {
                         }
 
                         if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
+                          return 'password must be at least 6 characters';
                         }
                         return null;
                       },
                       obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
-                          labelText: 'Password',
+                          labelText: 'password',
                           hintText: 'Enter your password',
                           prefixIcon: const Icon(Icons.lock_outline_rounded),
                           border: const OutlineInputBorder(),

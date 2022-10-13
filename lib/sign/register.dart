@@ -121,13 +121,13 @@ class _RegisterState extends State<Register> {
                         }
 
                         if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
+                          return 'password must be at least 6 characters';
                         }
                         return null;
                       },
                       obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
-                          labelText: 'Password',
+                          labelText: 'password',
                           hintText: 'Enter your password',
                           prefixIcon: const Icon(Icons.lock_outline_rounded),
                           border: const OutlineInputBorder(),
@@ -150,13 +150,13 @@ class _RegisterState extends State<Register> {
                         }
 
                         if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
+                          return 'password must be at least 6 characters';
                         }
                         return null;
                       },
                       obscureText: !_isPasswordConfirmVisible,
                       decoration: InputDecoration(
-                          labelText: 'Retype Password',
+                          labelText: 'retype password',
                           hintText: 'Enter your retype password',
                           prefixIcon: const Icon(Icons.lock_outline_rounded),
                           border: const OutlineInputBorder(),

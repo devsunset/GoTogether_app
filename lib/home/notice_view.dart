@@ -50,7 +50,7 @@ class NoticeView extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                     left: 68, bottom: 12, right: 16, top: 12),
                                 child: Text(
-                                  'Go Together notice   ',
+                                  '함께 공부해요 ^^',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontFamily: HomeTheme.fontName,

@@ -94,7 +94,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Recent Together Top 3',
+        titleTxt: 'Recent Together',
         subTxt: '',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
@@ -210,7 +210,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                               child: Padding(
                                 padding: const EdgeInsets.all(0.0),
                                 child: Text(
-                                  'GoTogether',
+                                  '         GoTogether',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: HomeTheme.fontName,

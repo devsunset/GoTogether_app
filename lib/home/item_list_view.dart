@@ -18,7 +18,7 @@ class ItemListView extends StatefulWidget {
 class _ItemListViewState extends State<ItemListView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  List<HomeData> mealsListData = HomeData.tabIconsList;
+  List<HomeData> homeListData = HomeData.tabIconsList;
 
   @override
   void initState() {
@@ -54,11 +54,11 @@ class _ItemListViewState extends State<ItemListView>
               child: ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: mealsListData.length,
+                itemCount: homeListData.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   final int count =
-                      mealsListData.length > 10 ? 10 : mealsListData.length;
+                      homeListData.length > 10 ? 10 : homeListData.length;
                   final Animation<double> animation =
                       Tween<double>(begin: 0.0, end: 1.0).animate(
                           CurvedAnimation(
@@ -68,7 +68,7 @@ class _ItemListViewState extends State<ItemListView>
                   animationController?.forward();
 
                   return ItemsView(
-                    mealsListData: mealsListData[index],
+                    homeListData: homeListData[index],
                     animation: animation,
                     animationController: animationController!,
                   );
@@ -84,10 +84,10 @@ class _ItemListViewState extends State<ItemListView>
 
 class ItemsView extends StatelessWidget {
   const ItemsView(
-      {Key? key, this.mealsListData, this.animationController, this.animation})
+      {Key? key, this.homeListData, this.animationController, this.animation})
       : super(key: key);
 
-  final HomeData? mealsListData;
+  final HomeData? homeListData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -102,7 +102,7 @@ class ItemsView extends StatelessWidget {
             transform: Matrix4.translationValues(
                 100 * (1.0 - animation!.value), 0.0, 0.0),
             child: SizedBox(
-              width: 110,
+              width: 96,
               child: Stack(
                 children: <Widget>[
                   Padding(
@@ -112,15 +112,15 @@ class ItemsView extends StatelessWidget {
                       decoration: BoxDecoration(
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: HexColor(mealsListData!.endColor)
+                              color: HexColor(homeListData!.endColor)
                                   .withOpacity(0.6),
                               offset: const Offset(1.1, 4.0),
                               blurRadius: 8.0),
                         ],
                         gradient: LinearGradient(
                           colors: <HexColor>[
-                            HexColor(mealsListData!.startColor),
-                            HexColor(mealsListData!.endColor),
+                            HexColor(homeListData!.startColor),
+                            HexColor(homeListData!.endColor),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -140,7 +140,7 @@ class ItemsView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              mealsListData!.titleTxt,
+                              homeListData!.titleTxt,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: HomeTheme.fontName,
@@ -159,7 +159,7 @@ class ItemsView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      mealsListData!.legend!.join('\n'),
+                                      homeListData!.legend!.join('\n'),
                                       style: TextStyle(
                                         fontFamily: HomeTheme.fontName,
                                         fontWeight: FontWeight.w500,
@@ -172,13 +172,13 @@ class ItemsView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            mealsListData?.count != 0
+                            homeListData?.count != 0
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Text(
-                                        mealsListData!.count.toString(),
+                                        homeListData!.count.toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: HomeTheme.fontName,
@@ -221,7 +221,7 @@ class ItemsView extends StatelessWidget {
                                       child: Icon(
                                         Icons.add,
                                         color:
-                                            HexColor(mealsListData!.endColor),
+                                            HexColor(homeListData!.endColor),
                                         size: 24,
                                       ),
                                     ),
@@ -249,7 +249,7 @@ class ItemsView extends StatelessWidget {
                   //   child: SizedBox(
                   //     width: 80,
                   //     height: 80,
-                  //     child: Image.asset(mealsListData!.imagePath),
+                  //     child: Image.asset(homeListData!.imagePath),
                   //   ),
                   // )
                 ],

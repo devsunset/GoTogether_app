@@ -102,7 +102,7 @@ class ItemsView extends StatelessWidget {
             transform: Matrix4.translationValues(
                 100 * (1.0 - animation!.value), 0.0, 0.0),
             child: SizedBox(
-              width: 96,
+              width: 98,
               child: Stack(
                 children: <Widget>[
                   Padding(

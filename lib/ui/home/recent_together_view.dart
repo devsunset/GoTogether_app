@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gotogether/home/home_theme.dart';
-import 'package:gotogether/home/wave_view.dart';
+import 'package:gotogether/ui/home/home_theme.dart';
+import 'package:gotogether/ui/home/wave_view.dart';
 import 'package:gotogether/main.dart';
 
 class RecentTogetherView extends StatefulWidget {

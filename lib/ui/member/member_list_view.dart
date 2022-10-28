@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gotogether/member/member_theme.dart';
+import 'package:gotogether/ui/member/member_theme.dart';
 
 import 'model/member_list_data.dart';
 

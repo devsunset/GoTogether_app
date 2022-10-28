@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gotogether/app_theme.dart';
-import 'package:gotogether/custom_drawer/home_drawer.dart';
+import 'package:gotogether/ui/app_theme.dart';
+import 'package:gotogether/ui/custom_drawer/home_drawer.dart';
 
 class DrawerUserController extends StatefulWidget {
   const DrawerUserController({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gotogether/app_theme.dart';
-import 'package:gotogether/sign/sign.dart';
+import 'package:gotogether/ui/app_theme.dart';
+import 'package:gotogether/ui/sign/sign.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer(

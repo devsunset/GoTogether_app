@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gotogether/member/member_list_view.dart';
-import 'package:gotogether/member/model/member_list_data.dart';
+import 'package:gotogether/ui/member/member_list_view.dart';
+import 'package:gotogether/ui/member/model/member_list_data.dart';
 
 import 'member_theme.dart';
 

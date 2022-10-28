@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:gotogether/sign/sign.dart';
+import 'package:gotogether/ui/sign/register.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 
-class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+class SignIn extends StatefulWidget {
+  const SignIn({Key? key}) : super(key: key);
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<SignIn> createState() => _SignInState();
 }
 
-class _RegisterState extends State<Register> {
+class _SignInState extends State<SignIn> {
   bool _isPasswordVisible = false;
-  bool _isPasswordConfirmVisible = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -39,6 +40,14 @@ class _RegisterState extends State<Register> {
                         style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        "Enter your userid and password to continue.",
+                        style: Theme.of(context).textTheme.caption,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     _gap(),
                     TextFormField(
                       validator: (value) {
@@ -60,50 +69,6 @@ class _RegisterState extends State<Register> {
                         border: OutlineInputBorder(),
                       ),
                     ),
-                    _gap(),
-                    TextFormField(
-                      validator: (value) {
-                        // add email validation
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-
-                        if (value.length < 2) {
-                          return 'nickname must be at least 2 characters';
-                        }
-
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'nickname',
-                        hintText: 'Enter your nickname',
-                        prefixIcon: Icon(Icons.person),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    // TextFormField(
-                    //   validator: (value) {
-                    //     // add email validation
-                    //     if (value == null || value.isEmpty) {
-                    //       return 'Please enter some text';
-                    //     }
-                    //
-                    //     bool _emailValid = RegExp(
-                    //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                    //         .hasMatch(value);
-                    //     if (!_emailValid) {
-                    //       return 'Please enter a valid email';
-                    //     }
-                    //
-                    //     return null;
-                    //   },
-                    //   decoration: const InputDecoration(
-                    //     labelText: 'Email',
-                    //     hintText: 'Enter your email',
-                    //     prefixIcon: Icon(Icons.email_outlined),
-                    //     border: OutlineInputBorder(),
-                    //   ),
-                    // ),
                     _gap(),
                     TextFormField(
                       validator: (value) {
@@ -134,39 +99,12 @@ class _RegisterState extends State<Register> {
                           )),
                     ),
                     _gap(),
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-
-                        if (value.length < 6) {
-                          return 'password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                      obscureText: !_isPasswordConfirmVisible,
-                      decoration: InputDecoration(
-                          labelText: 'retype password',
-                          hintText: 'Enter your retype password',
-                          prefixIcon: const Icon(Icons.lock_outline_rounded),
-                          border: const OutlineInputBorder(),
-                          suffixIcon: IconButton(
-                            icon: Icon(_isPasswordConfirmVisible
-                                ? Icons.visibility_off
-                                : Icons.visibility),
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordConfirmVisible = !_isPasswordConfirmVisible;
-                              });
-                            },
-                          )),
-                    ),
-                    _gap(),
                     new InkWell(
-                        child: new Text('I already have a membership '),
-                        onTap: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()))
-                    ),
+                        child: new Text('Register a new membership'),
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Register()))),
                     _gap(),
                     SizedBox(
                       width: double.infinity,
@@ -178,15 +116,27 @@ class _RegisterState extends State<Register> {
                         child: const Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
-                            'Register',
+                            'Sign in',
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
+                          showToast('toast');
                           if (_formKey.currentState?.validate() ?? false) {
                             /// do something
                           }
+
+                          if (await confirm(
+                            context,
+                            title: const Text('Confirm'),
+                            content: const Text('Would you like to remove?'),
+                            textOK: const Text('Yes'),
+                            textCancel: const Text('No'),
+                          )) {
+                            return print('pressedOK');
+                          }
+                          return print('pressedCancel');
                         },
                       ),
                     ),
@@ -198,6 +148,17 @@ class _RegisterState extends State<Register> {
         ),
       ),
     );
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM_RIGHT,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
   Widget _gap() => const SizedBox(height: 16);

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gotogether/app_theme.dart';
+import 'package:gotogether/ui/app_theme.dart';
 
-import 'navigation_main_screen.dart';
+import 'ui/navigation_main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

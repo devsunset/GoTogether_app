@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gotogether/app_theme.dart';
-import 'package:gotogether/custom_drawer/drawer_user_controller.dart';
-import 'package:gotogether/custom_drawer/home_drawer.dart';
-import 'package:gotogether/home/home_screen.dart';
-import 'package:gotogether/profile/profile_screen.dart';
-import 'package:gotogether/member/member_screen.dart';
+import 'package:gotogether/ui/app_theme.dart';
+import 'package:gotogether/ui/custom_drawer/drawer_user_controller.dart';
+import 'package:gotogether/ui/custom_drawer/home_drawer.dart';
+import 'package:gotogether/ui/home/home_screen.dart';
+import 'package:gotogether/ui/profile/profile_screen.dart';
+import 'package:gotogether/ui/member/member_screen.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override

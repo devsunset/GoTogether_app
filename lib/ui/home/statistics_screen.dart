@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gotogether/home/home_theme.dart';
-import 'package:gotogether/home/item_list_view.dart';
-import 'package:gotogether/home/notice_view.dart';
-import 'package:gotogether/home/recent_together_view.dart';
-import 'package:gotogether/home/title_view.dart';
+import 'package:gotogether/ui/home/home_theme.dart';
+import 'package:gotogether/ui/home/item_list_view.dart';
+import 'package:gotogether/ui/home/notice_view.dart';
+import 'package:gotogether/ui/home/recent_together_view.dart';
+import 'package:gotogether/ui/home/title_view.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({Key? key, this.animationController})

@@ -6,8 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:gotogether/ui/app_theme.dart';
 
 import 'ui/navigation_main_screen.dart';
+import 'package:gotogether/data/di/service_locator.dart';
 
 void main() async {
+  setup();
   WidgetsFlutterBinding.ensureInitialized();
   // disable landscape
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[

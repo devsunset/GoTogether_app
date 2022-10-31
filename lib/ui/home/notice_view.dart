@@ -6,8 +6,9 @@ import 'home_theme.dart';
 class NoticeView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final String noticeText;
 
-  const NoticeView({Key? key, this.animationController, this.animation})
+  const NoticeView({Key? key, this.noticeText:"", this.animationController, this.animation})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,8 @@ class NoticeView extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                     left: 68, bottom: 12, right: 16, top: 12),
                                 child: Text(
-                                  '함께 공부해요 ^^',
+                                  // '함께 공부해요 ^^',
+                                  noticeText,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontFamily: HomeTheme.fontName,

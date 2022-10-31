@@ -4,6 +4,7 @@ import 'package:gotogether/data/models/home/home_list_data.dart';
 import 'package:gotogether/main.dart';
 
 class StatisticsView extends StatefulWidget {
+
   const StatisticsView(
       {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
       : super(key: key);
@@ -18,7 +19,7 @@ class StatisticsView extends StatefulWidget {
 class _StatisticsViewState extends State<StatisticsView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  List<HomeListData> homeListData = HomeListData.tabIconsList;
+  List<HomeListData> homeListData =  HomeListData.tabIconsList;
 
   @override
   void initState() {

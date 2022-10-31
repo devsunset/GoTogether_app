@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
-import 'package:gotogether/data/models/home/home_list_data.dart';
+import 'package:gotogether/data/models/home/statistics_data.dart';
 import 'package:gotogether/main.dart';
 
 class StatisticsView extends StatefulWidget {
 
   const StatisticsView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation,  required this.homeListData})
+      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation,  required this.statisticsData})
       : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
-  final List<HomeListData> homeListData;
+  final List<StatisticsData> statisticsData;
 
   @override
   _StatisticsViewState createState() => _StatisticsViewState();
@@ -46,7 +46,7 @@ class _StatisticsViewState extends State<StatisticsView>
     return AnimatedBuilder(
       animation: widget.mainScreenAnimationController!,
       builder: (BuildContext context, Widget? child) {
-        List<HomeListData> homeListData =  widget.homeListData;
+        List<StatisticsData> statisticsData =  widget.statisticsData;
         return FadeTransition(
           opacity: widget.mainScreenAnimation!,
           child: Transform(
@@ -58,11 +58,11 @@ class _StatisticsViewState extends State<StatisticsView>
               child: ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: homeListData.length,
+                itemCount: statisticsData.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   final int count =
-                      homeListData.length > 10 ? 10 : homeListData.length;
+                      statisticsData.length > 10 ? 10 : statisticsData.length;
                   final Animation<double> animation =
                       Tween<double>(begin: 0.0, end: 1.0).animate(
                           CurvedAnimation(
@@ -72,7 +72,7 @@ class _StatisticsViewState extends State<StatisticsView>
                   animationController?.forward();
 
                   return ItemsView(
-                    homeListData: homeListData[index],
+                    statisticsData: statisticsData[index],
                     animation: animation,
                     animationController: animationController!,
                   );
@@ -88,10 +88,10 @@ class _StatisticsViewState extends State<StatisticsView>
 
 class ItemsView extends StatelessWidget {
   const ItemsView(
-      {Key? key, this.homeListData, this.animationController, this.animation})
+      {Key? key, this.statisticsData, this.animationController, this.animation})
       : super(key: key);
 
-  final HomeListData? homeListData;
+  final StatisticsData? statisticsData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -116,15 +116,15 @@ class ItemsView extends StatelessWidget {
                       decoration: BoxDecoration(
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: HexColor(homeListData!.endColor)
+                              color: HexColor(statisticsData!.endColor)
                                   .withOpacity(0.6),
                               offset: const Offset(1.1, 4.0),
                               blurRadius: 8.0),
                         ],
                         gradient: LinearGradient(
                           colors: <HexColor>[
-                            HexColor(homeListData!.startColor),
-                            HexColor(homeListData!.endColor),
+                            HexColor(statisticsData!.startColor),
+                            HexColor(statisticsData!.endColor),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -144,7 +144,7 @@ class ItemsView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              homeListData!.titleTxt,
+                              statisticsData!.titleTxt,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: HomeTheme.fontName,
@@ -163,7 +163,7 @@ class ItemsView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      homeListData!.legend!.join('\n'),
+                                      statisticsData!.legend!.join('\n'),
                                       style: TextStyle(
                                         fontFamily: HomeTheme.fontName,
                                         fontWeight: FontWeight.w500,
@@ -176,13 +176,13 @@ class ItemsView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            homeListData?.count != 0
+                            statisticsData?.count != 0
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Text(
-                                        homeListData!.count.toString(),
+                                        statisticsData!.count.toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: HomeTheme.fontName,
@@ -225,7 +225,7 @@ class ItemsView extends StatelessWidget {
                                       child: Icon(
                                         Icons.add,
                                         color:
-                                            HexColor(homeListData!.endColor),
+                                            HexColor(statisticsData!.endColor),
                                         size: 24,
                                       ),
                                     ),

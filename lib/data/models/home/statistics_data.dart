@@ -1,5 +1,5 @@
-class HomeListData {
-  HomeListData({
+class StatisticsData {
+  StatisticsData({
     this.imagePath = '',
     this.titleTxt = '',
     this.startColor = '',
@@ -16,10 +16,10 @@ class HomeListData {
   int count;
 
 
-  static List<HomeListData> tabIconsList(int a,int b, int c,int d) {
+  static List<StatisticsData> tabIconsList(int a,int b, int c,int d) {
     return
-      <HomeListData>[
-        HomeListData(
+      <StatisticsData>[
+        StatisticsData(
           imagePath: 'assets/home/together.png',
           titleTxt: 'Together',
           count: a,
@@ -27,7 +27,7 @@ class HomeListData {
           startColor: '#FFC107',
           endColor: '#FFC107',
         ),
-        HomeListData(
+        StatisticsData(
           imagePath: 'assets/home/together.png',
           titleTxt: 'Member',
           count: b,
@@ -35,7 +35,7 @@ class HomeListData {
           startColor: '#17A2B8',
           endColor: '#17A2B8',
         ),
-        HomeListData(
+        StatisticsData(
           imagePath: 'assets/home/together.png',
           titleTxt: 'Talk',
           count: c,
@@ -43,7 +43,7 @@ class HomeListData {
           startColor: '#28A745',
           endColor: '#28A745',
         ),
-        HomeListData(
+        StatisticsData(
           imagePath: 'assets/home/together.png',
           titleTxt: 'Q&A',
           count: d,

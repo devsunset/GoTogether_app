@@ -7,6 +7,11 @@ import 'package:gotogether/ui/home/recent_together_view.dart';
 import 'package:gotogether/ui/home/title_view.dart';
 import 'package:gotogether/data/models/home/statistics_data.dart';
 
+import 'package:gotogether/data/di/service_locator.dart';
+import '../../data/models/datat_model.dart';
+import 'home_controller.dart';
+
+
 class LayoutScreen extends StatefulWidget {
   const LayoutScreen({Key? key, this.animationController})
       : super(key: key);
@@ -59,6 +64,16 @@ class _LayoutScreenState extends State<LayoutScreen>
 
   void addAllListData() {
     const int count = 9;
+
+    final homeController = getIt<HomeController>();
+
+    print("##########################");
+    DataModel dm = homeController.getHome() as DataModel;
+    print(homeController.getHome());
+    print(dm.data);
+    print(dm.status);
+    print(dm.result);
+    print("##########################");
 
     List<StatisticsData> statisticsData =  StatisticsData.tabIconsList(4,3,2,1);
 

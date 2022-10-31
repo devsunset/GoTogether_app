@@ -8,11 +8,11 @@ class HomeRepository {
 
   HomeRepository(this.homeApi);
 
-  Future<List<DataModel>> getHome() async {
+  Future<DataModel> getHome() async {
     try {
       final response = await homeApi.getHomeApi();
       final data = (response as List)
-          .map((e) => DataModel.fromJson(e))
+          .map((e) => DataModel.fromJson(response))
           .toList();
       return data;
     } on DioError catch (e) {

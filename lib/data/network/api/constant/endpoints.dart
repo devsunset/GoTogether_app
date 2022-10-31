@@ -10,5 +10,5 @@ class Endpoints {
   // connectTimeout
   static const int connectionTimeout = 30000;
 
-  static const String home = '/home';
+  static const String home = '/common/home';
 }

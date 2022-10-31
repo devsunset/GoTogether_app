@@ -2,10 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:gotogether/data/network/api/constant/endpoints.dart';
 
 class DioClient {
-  // dio instance
   final Dio _dio;
 
-  // injecting dio instance
   DioClient(this._dio) {
     _dio
       ..options.baseUrl = Endpoints.baseUrl
@@ -20,7 +18,7 @@ class DioClient {
         responseBody: true,
       ));
   }
-  // Get:-----------------------------------------------------------------------
+
   Future<Response> get(
     String url, {
     Map<String, dynamic>? queryParameters,
@@ -42,7 +40,6 @@ class DioClient {
     }
   }
 
-  // Post:----------------------------------------------------------------------
   Future<Response> post(
     String uri, {
     data,
@@ -68,7 +65,6 @@ class DioClient {
     }
   }
 
-  // Put:-----------------------------------------------------------------------
   Future<Response> put(
     String uri, {
     data,
@@ -94,7 +90,6 @@ class DioClient {
     }
   }
 
-  // Delete:--------------------------------------------------------------------
   Future<dynamic> delete(
     String uri, {
     data,

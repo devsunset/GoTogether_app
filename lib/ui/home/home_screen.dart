@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'home_theme.dart';
-import 'statistics_screen.dart';
+import 'layout_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void initState() {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = StatisticsScreen(animationController: animationController);
+    tabBody = LayoutScreen(animationController: animationController);
     super.initState();
   }
 
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
+    await Future<dynamic>.delayed(const Duration(milliseconds: 1));
     return true;
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
-import 'package:gotogether/ui/home/models/home_list_data.dart';
+import 'package:gotogether/data/models/home/home_list_data.dart';
 import 'package:gotogether/main.dart';
 
-class ItemListView extends StatefulWidget {
-  const ItemListView(
+class StatisticsView extends StatefulWidget {
+  const StatisticsView(
       {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
       : super(key: key);
 
@@ -12,13 +12,13 @@ class ItemListView extends StatefulWidget {
   final Animation<double>? mainScreenAnimation;
 
   @override
-  _ItemListViewState createState() => _ItemListViewState();
+  _StatisticsViewState createState() => _StatisticsViewState();
 }
 
-class _ItemListViewState extends State<ItemListView>
+class _StatisticsViewState extends State<StatisticsView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  List<HomeData> homeListData = HomeData.tabIconsList;
+  List<HomeListData> homeListData = HomeListData.tabIconsList;
 
   @override
   void initState() {
@@ -87,7 +87,7 @@ class ItemsView extends StatelessWidget {
       {Key? key, this.homeListData, this.animationController, this.animation})
       : super(key: key);
 
-  final HomeData? homeListData;
+  final HomeListData? homeListData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 

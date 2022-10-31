@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
-import 'package:gotogether/ui/home/item_list_view.dart';
+import 'package:gotogether/ui/home/statistics_view.dart';
 import 'package:gotogether/ui/home/notice_view.dart';
 import 'package:gotogether/ui/home/recent_together_view.dart';
 import 'package:gotogether/ui/home/title_view.dart';
 
-class StatisticsScreen extends StatefulWidget {
-  const StatisticsScreen({Key? key, this.animationController})
+class LayoutScreen extends StatefulWidget {
+  const LayoutScreen({Key? key, this.animationController})
       : super(key: key);
 
   final AnimationController? animationController;
   @override
-  _StatisticsScreenState createState() => _StatisticsScreenState();
+  _LayoutScreenState createState() => _LayoutScreenState();
 }
 
-class _StatisticsScreenState extends State<StatisticsScreen>
+class _LayoutScreenState extends State<LayoutScreen>
     with TickerProviderStateMixin {
   Animation<double>? topBarAnimation;
 
@@ -72,7 +72,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
     );
 
     listViews.add(
-      ItemListView(
+      StatisticsView(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController!,

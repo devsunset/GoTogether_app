@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gotogether/ui/member/member_theme.dart';
 
-import 'model/member_list_data.dart';
+import '../../data/models/member/member_list_data.dart';
 
 class MemberListView extends StatelessWidget {
   const MemberListView(

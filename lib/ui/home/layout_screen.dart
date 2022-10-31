@@ -5,7 +5,7 @@ import 'package:gotogether/ui/home/statistics_view.dart';
 import 'package:gotogether/ui/home/notice_view.dart';
 import 'package:gotogether/ui/home/recent_together_view.dart';
 import 'package:gotogether/ui/home/title_view.dart';
-// import 'package:gotogether/data/models/home/home_list_data.dart';
+import 'package:gotogether/data/models/home/home_list_data.dart';
 
 class LayoutScreen extends StatefulWidget {
   const LayoutScreen({Key? key, this.animationController})
@@ -60,7 +60,7 @@ class _LayoutScreenState extends State<LayoutScreen>
   void addAllListData() {
     const int count = 9;
 
-    // List<HomeListData> homeListData = HomeListData.tabIconsList;
+    List<HomeListData> homeListData =  HomeListData.tabIconsList(4,3,2,1);
 
     listViews.add(
       TitleView(
@@ -76,6 +76,7 @@ class _LayoutScreenState extends State<LayoutScreen>
 
     listViews.add(
       StatisticsView(
+        homeListData : homeListData,
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController!,

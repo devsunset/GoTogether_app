@@ -6,11 +6,12 @@ import 'package:gotogether/main.dart';
 class StatisticsView extends StatefulWidget {
 
   const StatisticsView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
+      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation,  required this.homeListData})
       : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
+  final List<HomeListData> homeListData;
 
   @override
   _StatisticsViewState createState() => _StatisticsViewState();
@@ -19,7 +20,8 @@ class StatisticsView extends StatefulWidget {
 class _StatisticsViewState extends State<StatisticsView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  List<HomeListData> homeListData =  HomeListData.tabIconsList;
+
+  // List<HomeListData> homeListData =  HomeListData.tabIconsList;
 
   @override
   void initState() {
@@ -44,6 +46,7 @@ class _StatisticsViewState extends State<StatisticsView>
     return AnimatedBuilder(
       animation: widget.mainScreenAnimationController!,
       builder: (BuildContext context, Widget? child) {
+        List<HomeListData> homeListData =  widget.homeListData;
         return FadeTransition(
           opacity: widget.mainScreenAnimation!,
           child: Transform(

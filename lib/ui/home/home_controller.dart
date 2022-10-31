@@ -5,7 +5,7 @@ import 'package:gotogether/data/di/service_locator.dart';
 class HomeController {
   final homeRepository = getIt.get<HomeRepository>();
 
-  Future<List<DataModel>> getHome() async {
+  Future<DataModel> getHome() async {
     final response = await homeRepository.getHome();
     return response;
   }

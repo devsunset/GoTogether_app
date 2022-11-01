@@ -16,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "devsunset",
+                    "Anonymous",
                     style: Theme.of(context)
                         .textTheme
                         .headline6

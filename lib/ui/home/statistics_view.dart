@@ -21,8 +21,6 @@ class _StatisticsViewState extends State<StatisticsView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
 
-  // List<HomeListData> homeListData =  HomeListData.tabIconsList;
-
   @override
   void initState() {
     animationController = AnimationController(

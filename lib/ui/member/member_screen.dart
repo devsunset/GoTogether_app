@@ -304,7 +304,7 @@ class _MemberScreenState extends State<MemberScreen>
             Expanded(
               child: Center(
                 child: Text(
-                  'Member',
+                  'To-Do',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 22,

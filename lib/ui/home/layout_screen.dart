@@ -9,6 +9,7 @@ import 'package:gotogether/data/models/home/statistics_data.dart';
 
 import 'package:gotogether/data/di/service_locator.dart';
 import '../../data/models/datat_model.dart';
+import '../../data/models/home/recent_together_data.dart';
 import 'home_controller.dart';
 
 class LayoutScreen extends StatefulWidget {
@@ -62,7 +63,7 @@ class _LayoutScreenState extends State<LayoutScreen>
   Future<bool> getData() async {
     const int count = 9;
 
-    if (listViews.length > 0){
+    if (listViews.length > 0) {
       return true;
     }
 
@@ -71,8 +72,11 @@ class _LayoutScreenState extends State<LayoutScreen>
     try {
       DataModel dataModel = await homeController.getHome();
 
-      List<StatisticsData> statisticsData =
-          StatisticsData.tabIconsList(int.parse(dataModel.data?['TOGETHER']), int.parse(dataModel.data?['USER']), int.parse(dataModel.data?['TALK']), int.parse(dataModel.data?['QA']));
+      List<StatisticsData> statisticsData = StatisticsData.getData(
+          int.parse(dataModel.data?['TOGETHER']),
+          int.parse(dataModel.data?['USER']),
+          int.parse(dataModel.data?['TALK']),
+          int.parse(dataModel.data?['QA']));
 
       listViews.add(
         TitleView(
@@ -123,41 +127,28 @@ class _LayoutScreenState extends State<LayoutScreen>
         ),
       );
 
-      listViews.add(
-        RecentTogetherView(
-          mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController!,
-                  curve: Interval((1 / count) * 7, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          mainScreenAnimationController: widget.animationController!,
-        ),
-      );
+      final recentTogetherDataList =
+          (dataModel.data?['RECENT_TOGETHER'] as List)
+              .map((e) => RecentTogetherData.fromJson(e))
+              .toList();
 
-      listViews.add(
-        RecentTogetherView(
-          mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController!,
-                  curve: Interval((1 / count) * 7, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          mainScreenAnimationController: widget.animationController!,
-        ),
-      );
-
-      listViews.add(
-        RecentTogetherView(
-          mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController!,
-                  curve: Interval((1 / count) * 7, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          mainScreenAnimationController: widget.animationController!,
-        ),
-      );
+      if (recentTogetherDataList.length > 0) {
+        for(int i=0 ; i< recentTogetherDataList.length;i++){
+          listViews.add(
+            RecentTogetherView(
+              recentTogetherData : recentTogetherDataList[i],
+              mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                  CurvedAnimation(
+                      parent: widget.animationController!,
+                      curve: Interval((1 / count) * 7, 1.0,
+                          curve: Curves.fastOutSlowIn))),
+              mainScreenAnimationController: widget.animationController!,
+            ),
+          );
+        }
+      }
     } catch (e) {
-      List<StatisticsData> statisticsData =
-          StatisticsData.tabIconsList(0, 0, 0, 0);
+      List<StatisticsData> statisticsData = StatisticsData.getData(0, 0, 0, 0);
 
       listViews.add(
         TitleView(

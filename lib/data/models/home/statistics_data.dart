@@ -16,7 +16,7 @@ class StatisticsData {
   int count;
 
 
-  static List<StatisticsData> tabIconsList(int a,int b, int c,int d) {
+  static List<StatisticsData> getData(int a,int b, int c,int d) {
     return
       <StatisticsData>[
         StatisticsData(

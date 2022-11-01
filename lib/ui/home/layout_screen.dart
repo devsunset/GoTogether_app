@@ -11,10 +11,8 @@ import 'package:gotogether/data/di/service_locator.dart';
 import '../../data/models/datat_model.dart';
 import 'home_controller.dart';
 
-
 class LayoutScreen extends StatefulWidget {
-  const LayoutScreen({Key? key, this.animationController})
-      : super(key: key);
+  const LayoutScreen({Key? key, this.animationController}) : super(key: key);
 
   final AnimationController? animationController;
   @override
@@ -35,7 +33,6 @@ class _LayoutScreenState extends State<LayoutScreen>
         CurvedAnimation(
             parent: widget.animationController!,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    addAllListData();
 
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
@@ -62,104 +59,138 @@ class _LayoutScreenState extends State<LayoutScreen>
     super.initState();
   }
 
-  void addAllListData() {
+  Future<bool> getData() async {
     const int count = 9;
 
     final homeController = getIt<HomeController>();
 
-    print("##########################");
-    DataModel dm = homeController.getHome() as DataModel;
-    print(homeController.getHome());
-    print(dm.data);
-    print(dm.status);
-    print(dm.result);
-    print("##########################");
+    try {
+      DataModel dataModel = await homeController.getHome();
 
-    List<StatisticsData> statisticsData =  StatisticsData.tabIconsList(4,3,2,1);
+      List<StatisticsData> statisticsData =
+          StatisticsData.tabIconsList(int.parse(dataModel.data?['TOGETHER']), int.parse(dataModel.data?['USER']), int.parse(dataModel.data?['TALK']), int.parse(dataModel.data?['QA']));
 
-    listViews.add(
-      TitleView(
-        titleTxt: 'Statistics',
-        subTxt: '',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController!,
-            curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController!,
-      ),
-    );
-
-    listViews.add(
-      StatisticsView(
-        statisticsData : statisticsData,
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: Interval((1 / count) * 3, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      NoticeView(
-          noticeText : "함께 공부해요 ^^",
+      listViews.add(
+        TitleView(
+          titleTxt: 'Statistics',
+          subTxt: '',
           animation: Tween<double>(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
                   parent: widget.animationController!,
-                  curve: Interval((1 / count) * 8, 1.0,
+                  curve: Interval((1 / count) * 2, 1.0,
                       curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController!),
-    );
+          animationController: widget.animationController!,
+        ),
+      );
 
-    listViews.add(
-      TitleView(
-        titleTxt: 'Recent Together Top 3',
-        subTxt: '',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController!,
-            curve:
-                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController!,
-      ),
-    );
+      listViews.add(
+        StatisticsView(
+          statisticsData: statisticsData,
+          mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: Interval((1 / count) * 3, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          mainScreenAnimationController: widget.animationController,
+        ),
+      );
 
-    listViews.add(
-      RecentTogetherView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: Interval((1 / count) * 7, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController!,
-      ),
-    );
+      listViews.add(
+        NoticeView(
+            noticeText: dataModel.data?['NOTICE'],
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: widget.animationController!,
+                    curve: Interval((1 / count) * 8, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController!),
+      );
 
-    listViews.add(
-      RecentTogetherView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: Interval((1 / count) * 7, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController!,
-      ),
-    );
+      listViews.add(
+        TitleView(
+          titleTxt: 'Recent Together Top 3',
+          subTxt: '',
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: Interval((1 / count) * 4, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController!,
+        ),
+      );
 
-    listViews.add(
-      RecentTogetherView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: Interval((1 / count) * 7, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController!,
-      ),
-    );
-  }
+      listViews.add(
+        RecentTogetherView(
+          mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: Interval((1 / count) * 7, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          mainScreenAnimationController: widget.animationController!,
+        ),
+      );
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
+      listViews.add(
+        RecentTogetherView(
+          mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: Interval((1 / count) * 7, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          mainScreenAnimationController: widget.animationController!,
+        ),
+      );
+
+      listViews.add(
+        RecentTogetherView(
+          mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: Interval((1 / count) * 7, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          mainScreenAnimationController: widget.animationController!,
+        ),
+      );
+    } catch (e) {
+      List<StatisticsData> statisticsData =
+          StatisticsData.tabIconsList(0, 0, 0, 0);
+
+      listViews.add(
+        TitleView(
+          titleTxt: 'Statistics',
+          subTxt: '',
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: Interval((1 / count) * 2, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController!,
+        ),
+      );
+
+      listViews.add(
+        StatisticsView(
+          statisticsData: statisticsData,
+          mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: Interval((1 / count) * 3, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          mainScreenAnimationController: widget.animationController,
+        ),
+      );
+
+      listViews.add(
+        NoticeView(
+            noticeText: "Network Error",
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: widget.animationController!,
+                    curve: Interval((1 / count) * 8, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController!),
+      );
+    }
     return true;
   }
 

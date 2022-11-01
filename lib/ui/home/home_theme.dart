@@ -6,6 +6,9 @@ class HomeTheme {
   static const Color white = Color(0xFFFFFFFF);
   static const Color background = Color(0xFFF2F3F8);
   static const Color nearlyDarkBlue = Color(0xFF2633C5);
+  static const Color nearlyYellow = Color(0xFFFFEB3B);
+  static const Color nearlyRed = Color(0xFFF44336);
+  static const Color nearlyGreen = Color(0xFF4CAF50);
 
   static const Color nearlyBlue = Color(0xFF00B6F0);
   static const Color nearlyBlack = Color(0xFF213333);

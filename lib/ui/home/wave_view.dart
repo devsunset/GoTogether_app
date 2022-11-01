@@ -74,6 +74,18 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  Color getColor(double percentageValue) {
+    if (percentageValue > 0 && percentageValue <= 25) {
+      return HomeTheme.nearlyRed;
+    } else if (percentageValue > 25 && percentageValue <= 50) {
+      return HomeTheme.nearlyYellow;
+    } else if (percentageValue > 50 && percentageValue <= 75) {
+      return HomeTheme.nearlyDarkBlue;
+    } else {
+      return HomeTheme.nearlyGreen;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -88,7 +100,7 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
             new ClipPath(
               child: new Container(
                 decoration: BoxDecoration(
-                  color: HomeTheme.nearlyDarkBlue.withOpacity(0.5),
+                  color: getColor(widget.percentageValue).withOpacity(0.5),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(80.0),
                       bottomLeft: Radius.circular(80.0),
@@ -96,8 +108,8 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
                       topRight: Radius.circular(80.0)),
                   gradient: LinearGradient(
                     colors: [
-                      HomeTheme.nearlyDarkBlue.withOpacity(0.2),
-                      HomeTheme.nearlyDarkBlue.withOpacity(0.5)
+                      getColor(widget.percentageValue).withOpacity(0.2),
+                      getColor(widget.percentageValue).withOpacity(0.5)
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -109,11 +121,11 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
             new ClipPath(
               child: new Container(
                 decoration: BoxDecoration(
-                  color: HomeTheme.nearlyDarkBlue,
+                  color: getColor(widget.percentageValue),
                   gradient: LinearGradient(
                     colors: [
-                      HomeTheme.nearlyDarkBlue.withOpacity(0.4),
-                      HomeTheme.nearlyDarkBlue
+                      getColor(widget.percentageValue).withOpacity(0.4),
+                      getColor(widget.percentageValue)
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,

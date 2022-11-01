@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gotogether/data/di/service_locator.dart';
+import 'package:gotogether/data/models/home/statistics_data.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
-import 'package:gotogether/ui/home/statistics_view.dart';
 import 'package:gotogether/ui/home/notice_view.dart';
 import 'package:gotogether/ui/home/recent_together_view.dart';
+import 'package:gotogether/ui/home/statistics_view.dart';
 import 'package:gotogether/ui/home/title_view.dart';
-import 'package:gotogether/data/models/home/statistics_data.dart';
 
-import 'package:gotogether/data/di/service_locator.dart';
 import '../../data/models/datat_model.dart';
 import '../../data/models/home/recent_together_data.dart';
 import 'home_controller.dart';
@@ -133,10 +133,10 @@ class _LayoutScreenState extends State<LayoutScreen>
               .toList();
 
       if (recentTogetherDataList.length > 0) {
-        for(int i=0 ; i< recentTogetherDataList.length;i++){
+        for (int i = 0; i < recentTogetherDataList.length; i++) {
           listViews.add(
             RecentTogetherView(
-              recentTogetherData : recentTogetherDataList[i],
+              recentTogetherData: recentTogetherDataList[i],
               mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
                   CurvedAnimation(
                       parent: widget.animationController!,

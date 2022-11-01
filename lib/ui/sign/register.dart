@@ -157,7 +157,8 @@ class _RegisterState extends State<Register> {
                                 : Icons.visibility),
                             onPressed: () {
                               setState(() {
-                                _isPasswordConfirmVisible = !_isPasswordConfirmVisible;
+                                _isPasswordConfirmVisible =
+                                    !_isPasswordConfirmVisible;
                               });
                             },
                           )),
@@ -165,8 +166,8 @@ class _RegisterState extends State<Register> {
                     _gap(),
                     new InkWell(
                         child: new Text('I already have a membership '),
-                        onTap: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()))
-                    ),
+                        onTap: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignIn()))),
                     _gap(),
                     SizedBox(
                       width: double.infinity,

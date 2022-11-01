@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:gotogether/data/network/api/home/home_api.dart';
 import 'package:gotogether/data/network/dio_client.dart';
 import 'package:gotogether/data/repository/home_repository.dart';
 import 'package:gotogether/ui/home/home_controller.dart';
-import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 

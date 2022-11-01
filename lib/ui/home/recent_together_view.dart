@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gotogether/data/models/home/recent_together_data.dart';
+import 'package:gotogether/main.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
 import 'package:gotogether/ui/home/wave_view.dart';
-import 'package:gotogether/main.dart';
 
 class RecentTogetherView extends StatefulWidget {
   const RecentTogetherView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation, required this.recentTogetherData})
+      {Key? key,
+      this.mainScreenAnimationController,
+      this.mainScreenAnimation,
+      required this.recentTogetherData})
       : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
@@ -108,22 +111,24 @@ class _RecentTogetherViewState extends State<RecentTogetherView>
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Padding(
                                         padding: const EdgeInsets.only(left: 4),
                                         child: Icon(
                                           Icons.person,
                                           color:
-                                          HomeTheme.grey.withOpacity(0.5),
+                                              HomeTheme.grey.withOpacity(0.5),
                                           size: 16,
                                         ),
                                       ),
                                       Padding(
                                         padding:
-                                        const EdgeInsets.only(left: 4.0),
+                                            const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Nickname : '+recentTogetherData.nickname.toString(),
+                                          'Nickname : ' +
+                                              recentTogetherData.nickname
+                                                  .toString(),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: HomeTheme.fontName,
@@ -131,7 +136,7 @@ class _RecentTogetherViewState extends State<RecentTogetherView>
                                             fontSize: 14,
                                             letterSpacing: 0.0,
                                             color:
-                                            HomeTheme.grey.withOpacity(0.5),
+                                                HomeTheme.grey.withOpacity(0.5),
                                           ),
                                         ),
                                       ),
@@ -164,7 +169,9 @@ class _RecentTogetherViewState extends State<RecentTogetherView>
                                         padding:
                                             const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Created Date : '+recentTogetherData.createdDate.toString(),
+                                          'Created Date : ' +
+                                              recentTogetherData.createdDate
+                                                  .toString(),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: HomeTheme.fontName,
@@ -190,22 +197,23 @@ class _RecentTogetherViewState extends State<RecentTogetherView>
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Padding(
                                         padding: const EdgeInsets.only(left: 4),
                                         child: Icon(
                                           Icons.remove_red_eye,
                                           color:
-                                          HomeTheme.grey.withOpacity(0.5),
+                                              HomeTheme.grey.withOpacity(0.5),
                                           size: 16,
                                         ),
                                       ),
                                       Padding(
                                         padding:
-                                        const EdgeInsets.only(left: 4.0),
+                                            const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Hit : '+recentTogetherData.hit.toString(),
+                                          'Hit : ' +
+                                              recentTogetherData.hit.toString(),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: HomeTheme.fontName,
@@ -213,7 +221,7 @@ class _RecentTogetherViewState extends State<RecentTogetherView>
                                             fontSize: 14,
                                             letterSpacing: 0.0,
                                             color:
-                                            HomeTheme.grey.withOpacity(0.5),
+                                                HomeTheme.grey.withOpacity(0.5),
                                           ),
                                         ),
                                       ),
@@ -231,22 +239,25 @@ class _RecentTogetherViewState extends State<RecentTogetherView>
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Padding(
                                         padding: const EdgeInsets.only(left: 4),
                                         child: Icon(
                                           Icons.thumb_up_rounded,
                                           color:
-                                          HomeTheme.grey.withOpacity(0.5),
+                                              HomeTheme.grey.withOpacity(0.5),
                                           size: 16,
                                         ),
                                       ),
                                       Padding(
                                         padding:
-                                        const EdgeInsets.only(left: 4.0),
+                                            const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Commment : '+recentTogetherData.togetherComment_count.toString(),
+                                          'Commment : ' +
+                                              recentTogetherData
+                                                  .togetherComment_count
+                                                  .toString(),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: HomeTheme.fontName,
@@ -254,7 +265,7 @@ class _RecentTogetherViewState extends State<RecentTogetherView>
                                             fontSize: 14,
                                             letterSpacing: 0.0,
                                             color:
-                                            HomeTheme.grey.withOpacity(0.5),
+                                                HomeTheme.grey.withOpacity(0.5),
                                           ),
                                         ),
                                       ),

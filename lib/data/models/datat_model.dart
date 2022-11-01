@@ -8,7 +8,15 @@ class DataModel {
   String? timestamp;
   Map<String, dynamic>? data;
 
-  DataModel({this.status, this.result, this.code, this.error, this.message, this.description, this.timestamp, this.data});
+  DataModel(
+      {this.status,
+      this.result,
+      this.code,
+      this.error,
+      this.message,
+      this.description,
+      this.timestamp,
+      this.data});
 
   DataModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];

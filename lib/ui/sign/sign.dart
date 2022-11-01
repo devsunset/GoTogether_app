@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:gotogether/ui/sign/register.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gotogether/ui/sign/register.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);

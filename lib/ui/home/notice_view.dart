@@ -8,7 +8,8 @@ class NoticeView extends StatelessWidget {
   final Animation<double>? animation;
   final String noticeText;
 
-  const NoticeView({Key? key, this.noticeText:"", this.animationController, this.animation})
+  const NoticeView(
+      {Key? key, this.noticeText: "", this.animationController, this.animation})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

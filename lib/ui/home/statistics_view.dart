@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:gotogether/ui/home/home_theme.dart';
 import 'package:gotogether/data/models/home/statistics_data.dart';
 import 'package:gotogether/main.dart';
+import 'package:gotogether/ui/home/home_theme.dart';
 
 class StatisticsView extends StatefulWidget {
-
   const StatisticsView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation,  required this.statisticsData})
+      {Key? key,
+      this.mainScreenAnimationController,
+      this.mainScreenAnimation,
+      required this.statisticsData})
       : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
@@ -44,7 +46,7 @@ class _StatisticsViewState extends State<StatisticsView>
     return AnimatedBuilder(
       animation: widget.mainScreenAnimationController!,
       builder: (BuildContext context, Widget? child) {
-        List<StatisticsData> statisticsData =  widget.statisticsData;
+        List<StatisticsData> statisticsData = widget.statisticsData;
         return FadeTransition(
           opacity: widget.mainScreenAnimation!,
           child: Transform(

@@ -13,7 +13,7 @@ class HomeRepository {
   Future<DataModel> getHome() async {
     try {
       final response = await homeApi.getHomeApi();
-      Map<String,dynamic> jsonData = jsonDecode(response.toString());
+      Map<String, dynamic> jsonData = jsonDecode(response.toString());
       return DataModel.fromJson(jsonData);
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();

@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/ui/app_theme.dart';
 
 import 'ui/navigation_main_screen.dart';
-import 'package:gotogether/data/di/service_locator.dart';
 
 void main() async {
   setup();

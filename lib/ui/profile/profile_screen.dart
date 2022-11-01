@@ -33,7 +33,6 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-
 class _TopPortion extends StatelessWidget {
   const _TopPortion({Key? key}) : super(key: key);
 
@@ -68,8 +67,7 @@ class _TopPortion extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(
-                            'assets/images/userImage.png')),
+                        image: AssetImage('assets/images/userImage.png')),
                   ),
                 ),
                 Positioned(

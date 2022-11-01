@@ -298,7 +298,7 @@ class _RecentTogetherViewState extends State<RecentTogetherView>
                             ],
                           ),
                           child: WaveView(
-                            percentageValue: 17.0,
+                            percentageValue: recentTogetherData.progress!.toDouble(),
                           ),
                         ),
                       )

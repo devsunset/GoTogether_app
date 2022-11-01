@@ -62,6 +62,10 @@ class _LayoutScreenState extends State<LayoutScreen>
   Future<bool> getData() async {
     const int count = 9;
 
+    if (listViews.length > 0){
+      return true;
+    }
+
     final homeController = getIt<HomeController>();
 
     try {
@@ -189,6 +193,19 @@ class _LayoutScreenState extends State<LayoutScreen>
                     curve: Interval((1 / count) * 8, 1.0,
                         curve: Curves.fastOutSlowIn))),
             animationController: widget.animationController!),
+      );
+
+      listViews.add(
+        TitleView(
+          titleTxt: 'Recent Together Top 3',
+          subTxt: '',
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: Interval((1 / count) * 4, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController!,
+        ),
       );
     }
     return true;

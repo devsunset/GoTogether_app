@@ -10,23 +10,23 @@ class MemberListData {
   static List<MemberListData> hotelList = <MemberListData>[
     MemberListData(
       titleTxt: 'To-Do',
-      subTxt: 'Join Date : 22/10/01',
+      subTxt: 'Date : 22/10/01',
     ),
     MemberListData(
       titleTxt: 'To-Do',
-      subTxt: 'Join Date : 22/10/01',
+      subTxt: 'Date : 22/10/01',
     ),
     MemberListData(
       titleTxt: 'To-Do',
-      subTxt: 'Join Date : 22/10/01',
+      subTxt: 'Date : 22/10/01',
     ),
     MemberListData(
       titleTxt: 'To-Do',
-      subTxt: 'Join Date : 22/10/01',
+      subTxt: 'Date : 22/10/01',
     ),
     MemberListData(
       titleTxt: 'To-Do',
-      subTxt: 'Join Date : 22/10/01',
+      subTxt: 'Date : 22/10/01',
     ),
   ];
 }

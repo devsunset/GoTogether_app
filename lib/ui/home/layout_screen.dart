@@ -222,8 +222,6 @@ class _LayoutScreenState extends State<LayoutScreen>
     );
   }
 
-
-
   Widget getMainListViewUI() {
     return FutureBuilder<bool>(
       future: getData(),
@@ -252,7 +250,8 @@ class _LayoutScreenState extends State<LayoutScreen>
   }
 
   void goMemo() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MemberScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MemberScreen()));
   }
 
   Widget getAppBarUI() {

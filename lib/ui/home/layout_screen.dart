@@ -10,6 +10,7 @@ import 'package:gotogether/ui/home/title_view.dart';
 
 import '../../data/models/datat_model.dart';
 import '../../data/models/home/recent_together_data.dart';
+import '../member/member_screen.dart';
 import 'home_controller.dart';
 
 class LayoutScreen extends StatefulWidget {
@@ -221,6 +222,8 @@ class _LayoutScreenState extends State<LayoutScreen>
     );
   }
 
+
+
   Widget getMainListViewUI() {
     return FutureBuilder<bool>(
       future: getData(),
@@ -246,6 +249,10 @@ class _LayoutScreenState extends State<LayoutScreen>
         }
       },
     );
+  }
+
+  void goMemo() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MemberScreen()));
   }
 
   Widget getAppBarUI() {
@@ -316,7 +323,9 @@ class _LayoutScreenState extends State<LayoutScreen>
                                       borderRadius: const BorderRadius.all(
                                         Radius.circular(0.0),
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        goMemo();
+                                      },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Icon(FontAwesomeIcons.envelope),

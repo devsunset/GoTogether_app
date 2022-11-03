@@ -122,21 +122,20 @@ class _SignInState extends State<SignIn> {
                           ),
                         ),
                         onPressed: () async {
-                          showToast('toast');
                           if (_formKey.currentState?.validate() ?? false) {
                             /// do something
+                            if (await confirm(
+                              context,
+                              title: const Text('Confirm'),
+                              content: const Text('Do you want login ?'),
+                              textOK: const Text('Yes'),
+                              textCancel: const Text('No'),
+                            )) {
+                              showToast('Yes Click');
+                            }else{
+                              showToast('Cancle Click');
+                            }
                           }
-
-                          if (await confirm(
-                            context,
-                            title: const Text('Confirm'),
-                            content: const Text('Would you like to remove?'),
-                            textOK: const Text('Yes'),
-                            textCancel: const Text('No'),
-                          )) {
-                            return print('pressedOK');
-                          }
-                          return print('pressedCancel');
                         },
                       ),
                     ),
@@ -155,7 +154,7 @@ class _SignInState extends State<SignIn> {
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM_RIGHT,
-        timeInSecForIosWeb: 1,
+        timeInSecForIosWeb: 3,
         backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 16.0);

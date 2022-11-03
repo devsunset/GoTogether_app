@@ -18,6 +18,5 @@ class RecentTogetherData {
     hit = json['hit'];
     togetherComment_count = json['togetherComment_count'];
     progress = json['progress'];
-    print(progress);
   }
 }

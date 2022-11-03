@@ -10,5 +10,9 @@ class Endpoints {
   // connectTimeout
   static const int connectionTimeout = 30000;
 
+  static const String signin = '/auth/signin';
+
+  static const String refreshtoken = '/auth/refreshtoken';
+
   static const String home = '/common/home';
 }

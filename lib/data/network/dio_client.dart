@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:gotogether/data/network/api/constant/endpoints.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:gotogether/data/network/api/constant/endpoints.dart';
 
 class DioClient {
   final Dio _dio;
@@ -22,10 +22,9 @@ class DioClient {
     final storage = new FlutterSecureStorage();
     // _dio.interceptors.clear();
 
-    _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) async {
-      // 기기에 저장된 AccessToken 로드
-      // To-Do login token save
-      await storage.write(key: 'ACCESS_TOKEN', value: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkZXZzdW5zZXQiLCJpYXQiOjE2Njc0NTA1NDQsImV4cCI6MTY2NzUzNjk0NH0.BN-fIH5ggqX2xmuu09GdsOPm7-yhkUuUlJX6dO291htxoC5UyrGoIj_YrK_8bYJa34DdFnaWmFcTfyyZBdQJNw');
+    _dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (options, handler) async {
+      // 저장된 AccessToken 로드
       final accessToken = await storage.read(key: 'ACCESS_TOKEN');
       options.headers['Authorization'] = 'Bearer $accessToken';
       return handler.next(options);
@@ -34,22 +33,22 @@ class DioClient {
       if (error.response?.statusCode == 401) {
         // 기기에 저장된 AccessToken과 RefreshToken 로드
         final accessToken = await storage.read(key: 'ACCESS_TOKEN');
-        final refreshToken = await storage.read(key: 'REFRESH_TOKEN');
+        // final refreshToken = await storage.read(key: 'REFRESH_TOKEN');
 
         // 토큰 갱신 요청을 담당할 dio 객체 구현 후 그에 따른 interceptor 정의
         var refreshDio = Dio();
-            refreshDio
-              ..options.baseUrl = Endpoints.baseUrl
-              ..options.connectTimeout = Endpoints.connectionTimeout
-              ..options.receiveTimeout = Endpoints.receiveTimeout
-              ..options.responseType = ResponseType.json
-              ..interceptors.add(LogInterceptor(
-              request: true,
-              requestHeader: true,
-              requestBody: true,
-              responseHeader: true,
-              responseBody: true,
-              ));
+        refreshDio
+          ..options.baseUrl = Endpoints.baseUrl
+          ..options.connectTimeout = Endpoints.connectionTimeout
+          ..options.receiveTimeout = Endpoints.receiveTimeout
+          ..options.responseType = ResponseType.json
+          ..interceptors.add(LogInterceptor(
+            request: true,
+            requestHeader: true,
+            requestBody: true,
+            responseHeader: true,
+            responseBody: true,
+          ));
 
         // refreshDio.interceptors.clear();
 
@@ -71,7 +70,7 @@ class DioClient {
         // refreshDio.options.headers['Refresh'] = 'Bearer $refreshToken';
 
         // 토큰 갱신 API 요청
-        final refreshResponse = await refreshDio.get('/auth/refreshtoken');
+        final refreshResponse = await refreshDio.get(Endpoints.refreshtoken);
 
         // response로부터 새로 갱신된 AccessToken과 RefreshToken 파싱
         final newAccessToken = ''; //refreshResponse.data.data;
@@ -81,7 +80,8 @@ class DioClient {
         // await storage.write(key: 'REFRESH_TOKEN', value: newRefreshToken);
 
         // AccessToken의 만료로 수행하지 못했던 API 요청에 담겼던 AccessToken 갱신
-        error.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+        error.requestOptions.headers['Authorization'] =
+            'Bearer $newAccessToken';
 
         // 수행하지 못했던 API 요청 복사본 생성
         final clonedRequest = await _dio.request(error.requestOptions.path,
@@ -193,5 +193,3 @@ class DioClient {
     }
   }
 }
-
-

@@ -1,7 +1,12 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotogether/ui/sign/register.dart';
+
+import '../../data/di/service_locator.dart';
+import '../../data/models/datat_model.dart';
+import 'auth_controller.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -12,6 +17,8 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   bool _isPasswordVisible = false;
+  String username = '';
+  String password = '';
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -59,7 +66,7 @@ class _SignInState extends State<SignIn> {
                         if (value.length < 3) {
                           return 'userid must be at least 3 characters';
                         }
-
+                        username = value;
                         return null;
                       },
                       decoration: const InputDecoration(
@@ -79,6 +86,8 @@ class _SignInState extends State<SignIn> {
                         if (value.length < 6) {
                           return 'password must be at least 6 characters';
                         }
+
+                        password = value;
                         return null;
                       },
                       obscureText: !_isPasswordVisible,
@@ -131,8 +140,41 @@ class _SignInState extends State<SignIn> {
                               textOK: const Text('Yes'),
                               textCancel: const Text('No'),
                             )) {
-                              showToast('Yes Click');
-                            }else{
+                              final authController = getIt<AuthController>();
+
+                              try {
+                                DataModel dataModel = await authController
+                                    .singIn(username, password);
+
+                                final storage = new FlutterSecureStorage();
+                                // showToast(dataModel.data.toString());
+
+                                if (dataModel.status == 200) {
+                                  await storage.write(
+                                      key: 'ACCESS_TOKEN',
+                                      value: dataModel.data?['token']);
+                                  await storage.write(
+                                      key: 'REFRESH_TOKEN',
+                                      value: dataModel.data?['refreshToken']);
+                                  await storage.write(
+                                      key: 'USER_NAME',
+                                      value: dataModel.data?['username']);
+                                  await storage.write(
+                                      key: 'NICK_NAME',
+                                      value: dataModel.data?['nickname']);
+                                  await storage.write(
+                                      key: 'ROLE',
+                                      value: dataModel.data?['roles'][0]);
+
+                                  showToast("Success");
+                                } else {
+                                  showToast("Invalid User Info.");
+                                }
+                              } catch (e) {
+                                print(e.toString());
+                                showToast("Invalid User Info.");
+                              }
+                            } else {
                               showToast('Cancle Click');
                             }
                           }

@@ -32,8 +32,8 @@ class DioClient {
       // 인증 오류가 발생했을 경우: AccessToken의 만료
       if (error.response?.statusCode == 401) {
         // 기기에 저장된 AccessToken과 RefreshToken 로드
-        final accessToken = await storage.read(key: 'ACCESS_TOKEN');
-        // final refreshToken = await storage.read(key: 'REFRESH_TOKEN');
+        //final accessToken = await storage.read(key: 'ACCESS_TOKEN');
+        final refreshToken = await storage.read(key: 'REFRESH_TOKEN');
 
         // 토큰 갱신 요청을 담당할 dio 객체 구현 후 그에 따른 interceptor 정의
         var refreshDio = Dio();

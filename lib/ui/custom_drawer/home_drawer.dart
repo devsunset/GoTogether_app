@@ -116,6 +116,29 @@ class _HomeDrawerState extends State<HomeDrawer> {
         ),
       ];
     });
+
+    drawerList = <DrawerList>[
+      DrawerList(
+        index: DrawerIndex.HOME,
+        labelName: 'Home',
+        icon: Icon(Icons.home),
+      ),
+      DrawerList(
+        index: DrawerIndex.TOGETHER,
+        labelName: 'Together',
+        icon: Icon(Icons.add_circle),
+      ),
+      DrawerList(
+        index: DrawerIndex.MEMBER,
+        labelName: 'Member',
+        icon: Icon(Icons.group),
+      ),
+      DrawerList(
+        index: DrawerIndex.POST,
+        labelName: 'Post',
+        icon: Icon(Icons.post_add),
+      ),
+    ];
   }
 
   Future<String> getNickanme() async {

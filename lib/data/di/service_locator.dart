@@ -4,9 +4,12 @@ import 'package:gotogether/data/network/api/auth/auth_api.dart';
 import 'package:gotogether/data/network/api/home/home_api.dart';
 import 'package:gotogether/data/network/dio_client.dart';
 import 'package:gotogether/data/repository/home/home_repository.dart';
+import 'package:gotogether/data/repository/user/user_repository.dart';
 import 'package:gotogether/ui/home/home_controller.dart';
 import 'package:gotogether/ui/sign/auth_controller.dart';
 
+import '../../ui/profile/user_controller.dart';
+import '../network/api/user/user_api.dart';
 import '../repository/auth/auth_repository.dart';
 
 final getIt = GetIt.instance;
@@ -21,6 +24,10 @@ Future<void> setup() async {
   getIt.registerSingleton(HomeApi(dioClient: getIt<DioClient>()));
   getIt.registerSingleton(HomeRepository(getIt.get<HomeApi>()));
 
+  getIt.registerSingleton(UserApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(UserRepository(getIt.get<UserApi>()));
+
   getIt.registerSingleton(AuthController());
   getIt.registerSingleton(HomeController());
+  getIt.registerSingleton(UserController());
 }

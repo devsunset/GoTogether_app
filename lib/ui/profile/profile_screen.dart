@@ -1,10 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gotogether/data/di/service_locator.dart';
+import 'package:gotogether/ui/profile/user_controller.dart';
+
+import '../../data/models/datat_model.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
+  void getUserInfo() async {
+    final userController = getIt<UserController>();
+    try {
+      DataModel dataModel = await userController.getUserInfo();
+      showToast(dataModel.data.toString());
+    } catch (e) {
+      showToast(e.toString());
+    }
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM_RIGHT,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
   @override
   Widget build(BuildContext context) {
+    getUserInfo();
     return Scaffold(
       body: Column(
         children: [
@@ -16,7 +43,7 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "Anonymous",
+                    "-",
                     style: Theme.of(context)
                         .textTheme
                         .headline6

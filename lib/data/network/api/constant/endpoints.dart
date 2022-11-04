@@ -15,4 +15,6 @@ class Endpoints {
   static const String refreshtoken = '/auth/refreshtoken';
 
   static const String home = '/common/home';
+
+  static const String userinfo = '/userinfo/';
 }

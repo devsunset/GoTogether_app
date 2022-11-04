@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/sign/sign.dart';
+
+import '../navigation_main_screen.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer(
@@ -27,41 +30,102 @@ class _HomeDrawerState extends State<HomeDrawer> {
   }
 
   void setDrawerListArray() {
-    drawerList = <DrawerList>[
-      DrawerList(
-        index: DrawerIndex.HOME,
-        labelName: 'Home',
-        icon: Icon(Icons.home),
-      ),
-      DrawerList(
-        index: DrawerIndex.TOGETHER,
-        labelName: 'Together',
-        icon: Icon(Icons.add_circle),
-      ),
-      DrawerList(
-        index: DrawerIndex.MEMBER,
-        labelName: 'Member',
-        icon: Icon(Icons.group),
-      ),
-      DrawerList(
-        index: DrawerIndex.POST,
-        labelName: 'Post',
-        icon: Icon(Icons.post_add),
-      ),
-      DrawerList(
-        index: DrawerIndex.MEMO,
-        labelName: 'Memo',
-        icon: Icon(Icons.edit),
-      ),
-      DrawerList(
-        index: DrawerIndex.PROFILE,
-        labelName: 'Profile',
-        icon: Icon(Icons.account_box),
-        // image example
-        // isAssetsImage: true,
-        // imageName: 'assets/images/supportIcon.png',
-      ),
-    ];
+    Future<String> future = getNickanme();
+    future.then((val) {
+      if (val == 'Anonymous') {
+        drawerList = <DrawerList>[
+          DrawerList(
+            index: DrawerIndex.HOME,
+            labelName: 'Home',
+            icon: Icon(Icons.home),
+          ),
+          DrawerList(
+            index: DrawerIndex.TOGETHER,
+            labelName: 'Together',
+            icon: Icon(Icons.add_circle),
+          ),
+          DrawerList(
+            index: DrawerIndex.MEMBER,
+            labelName: 'Member',
+            icon: Icon(Icons.group),
+          ),
+          DrawerList(
+            index: DrawerIndex.POST,
+            labelName: 'Post',
+            icon: Icon(Icons.post_add),
+          ),
+        ];
+      } else {
+        drawerList = <DrawerList>[
+          DrawerList(
+            index: DrawerIndex.HOME,
+            labelName: 'Home',
+            icon: Icon(Icons.home),
+          ),
+          DrawerList(
+            index: DrawerIndex.TOGETHER,
+            labelName: 'Together',
+            icon: Icon(Icons.add_circle),
+          ),
+          DrawerList(
+            index: DrawerIndex.MEMBER,
+            labelName: 'Member',
+            icon: Icon(Icons.group),
+          ),
+          DrawerList(
+            index: DrawerIndex.POST,
+            labelName: 'Post',
+            icon: Icon(Icons.post_add),
+          ),
+          DrawerList(
+            index: DrawerIndex.MEMO,
+            labelName: 'Memo',
+            icon: Icon(Icons.edit),
+          ),
+          DrawerList(
+            index: DrawerIndex.PROFILE,
+            labelName: 'Profile',
+            icon: Icon(Icons.account_box),
+            // image example
+            // isAssetsImage: true,
+            // imageName: 'assets/images/supportIcon.png',
+          ),
+        ];
+      }
+    }).catchError((error) {
+      drawerList = <DrawerList>[
+        DrawerList(
+          index: DrawerIndex.HOME,
+          labelName: 'Home',
+          icon: Icon(Icons.home),
+        ),
+        DrawerList(
+          index: DrawerIndex.TOGETHER,
+          labelName: 'Together',
+          icon: Icon(Icons.add_circle),
+        ),
+        DrawerList(
+          index: DrawerIndex.MEMBER,
+          labelName: 'Member',
+          icon: Icon(Icons.group),
+        ),
+        DrawerList(
+          index: DrawerIndex.POST,
+          labelName: 'Post',
+          icon: Icon(Icons.post_add),
+        ),
+      ];
+    });
+  }
+
+  Future<String> getNickanme() async {
+    final storage = new FlutterSecureStorage();
+    String? nickname = await storage.read(key: 'NICK_NAME');
+
+    if (nickname == null || nickname == '') {
+      nickname = 'Anonymous';
+    }
+    return nickname;
   }
 
   @override
@@ -119,17 +183,46 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       );
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 4),
-                    child: Text(
-                      'Anonymous',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: isLightMode ? AppTheme.grey : AppTheme.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
+                  FutureBuilder(
+                      future: getNickanme(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
+                        if (snapshot.hasData == false) {
+                          return CircularProgressIndicator();
+                        }
+                        //error가 발생하게 될 경우 반환하게 되는 부분
+                        else if (snapshot.hasError) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 4),
+                            child: Text(
+                              'Anonymous',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: isLightMode
+                                    ? AppTheme.grey
+                                    : AppTheme.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                          );
+                        }
+                        // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+                        else {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 4),
+                            child: Text(
+                              snapshot.data.toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: isLightMode
+                                    ? AppTheme.grey
+                                    : AppTheme.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                          );
+                        }
+                      }),
                 ],
               ),
             ),
@@ -157,25 +250,60 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Column(
             children: <Widget>[
-              ListTile(
-                title: Text(
-                  'Sign In',
-                  style: TextStyle(
-                    fontFamily: AppTheme.fontName,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: AppTheme.darkText,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-                trailing: Icon(
-                  Icons.power_settings_new,
-                  color: Colors.red,
-                ),
-                onTap: () {
-                  onTapped();
-                },
-              ),
+              FutureBuilder(
+                  future: getNickanme(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
+                    if (snapshot.hasData == false) {
+                      return CircularProgressIndicator();
+                    }
+                    //error가 발생하게 될 경우 반환하게 되는 부분
+                    else if (snapshot.hasError) {
+                      return ListTile(
+                        title: Text(
+                          'Sign In',
+                          style: TextStyle(
+                            fontFamily: AppTheme.fontName,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: AppTheme.darkText,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                        trailing: Icon(
+                          Icons.power_settings_new,
+                          color: Colors.red,
+                        ),
+                        onTap: () {
+                          onTapped('');
+                        },
+                      );
+                    }
+                    // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+                    else {
+                      return ListTile(
+                        title: Text(
+                          snapshot.data.toString() == 'Anonymous'
+                              ? 'Sign In'
+                              : 'Log Out',
+                          style: TextStyle(
+                            fontFamily: AppTheme.fontName,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: AppTheme.darkText,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                        trailing: Icon(
+                          Icons.power_settings_new,
+                          color: Colors.red,
+                        ),
+                        onTap: () {
+                          onTapped(snapshot.data.toString());
+                        },
+                      );
+                    }
+                  }),
               SizedBox(
                 height: MediaQuery.of(context).padding.bottom,
               )
@@ -186,8 +314,16 @@ class _HomeDrawerState extends State<HomeDrawer> {
     );
   }
 
-  void onTapped() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+  void onTapped(String nickname) async {
+    if (nickname == 'Anonymous') {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => SignIn()));
+    } else {
+      final storage = new FlutterSecureStorage();
+      await storage.deleteAll();
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => NavigationHomeScreen()));
+    }
   }
 
   Widget inkwell(DrawerList listData) {

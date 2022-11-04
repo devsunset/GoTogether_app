@@ -6,6 +6,7 @@ import 'package:gotogether/ui/sign/register.dart';
 
 import '../../data/di/service_locator.dart';
 import '../../data/models/datat_model.dart';
+import '../navigation_main_screen.dart';
 import 'auth_controller.dart';
 
 class SignIn extends StatefulWidget {
@@ -167,6 +168,11 @@ class _SignInState extends State<SignIn> {
                                       value: dataModel.data?['roles'][0]);
 
                                   showToast("Success");
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              NavigationHomeScreen()));
                                 } else {
                                   showToast("Invalid User Info.");
                                 }

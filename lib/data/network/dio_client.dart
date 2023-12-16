@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -20,6 +23,14 @@ class DioClient {
         responseHeader: true,
         responseBody: true,
       ));
+
+    // SSL 인증서 검증 무시
+     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+         (client) {
+       client.badCertificateCallback =
+           (X509Certificate cert, String host, int port) => true;
+     };
+
 
     final storage = new FlutterSecureStorage();
     // _dio.interceptors.clear();

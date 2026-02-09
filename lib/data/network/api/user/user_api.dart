@@ -15,7 +15,7 @@ class UserApi {
     return dioClient.post(
       Endpoints.userinfoList,
       queryParameters: {'page': page, 'size': size},
-      data: body ?? {'category': null, 'keyword': null},
+      data: body ?? {'category': null, 'keyword': ''},
     );
   }
 

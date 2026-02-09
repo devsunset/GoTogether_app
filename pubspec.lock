@@ -347,10 +347,9 @@ packages:
   html_editor_enhanced:
     dependency: "direct main"
     description:
-      name: html_editor_enhanced
-      sha256: c2a0d0a50970fe4aa565e79e57081c8a69c3b2e94162e8f1df3e1b750c7aeb5e
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/html_editor_enhanced"
+      relative: true
+    source: path
     version: "2.5.1"
   http_parser:
     dependency: transitive

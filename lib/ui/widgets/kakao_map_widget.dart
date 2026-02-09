@@ -31,11 +31,13 @@ class _KakaoMapWidgetState extends State<KakaoMapWidget> {
   static const double _seoulLat = 37.56683319828021;
   static const double _seoulLng = 126.97857302284947;
 
-  late final WebViewController _controller;
+  /// 웹에서는 WebView 플랫폼 미지원으로 생성하지 않음(폴백 UI만 사용).
+  WebViewController? _controller;
 
   @override
   void initState() {
     super.initState();
+    if (kIsWeb) return;
     final lat = widget.lat ?? _seoulLat;
     final lng = widget.lng ?? _seoulLng;
     final mode = widget.mode;
@@ -115,12 +117,12 @@ class _KakaoMapWidgetState extends State<KakaoMapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
+    if (kIsWeb || _controller == null) {
       return _buildWebFallback();
     }
     return SizedBox(
       height: widget.height,
-      child: WebViewWidget(controller: _controller),
+      child: WebViewWidget(controller: _controller!),
     );
   }
 

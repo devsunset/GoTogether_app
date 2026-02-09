@@ -25,8 +25,9 @@ class MemoApi {
     );
   }
 
+  /// Vue: api.post("/memo/", ...)
   Future<Response> send(Map<String, dynamic> data) async {
-    return dioClient.post(Endpoints.memo, data: data);
+    return dioClient.post(Endpoints.memoPost, data: data);
   }
 
   Future<Response> updateRead(int memoId) async {

@@ -23,7 +23,7 @@ class UserRepository {
 
   Future<UserInfoListPage> getUserInfoList(int page, int size, {String? keyword}) async {
     try {
-      final response = await userApi.getUserInfoList(page, size, {'category': null, 'keyword': keyword});
+      final response = await userApi.getUserInfoList(page, size, {'category': null, 'keyword': keyword ?? ''});
       final body = response.data;
       final data = body is Map && body.containsKey('data') ? body['data'] : body;
       return UserInfoListPage.fromJson(data as Map<String, dynamic>);

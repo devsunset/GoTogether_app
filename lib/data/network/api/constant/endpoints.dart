@@ -1,9 +1,9 @@
-/// 백엔드 API 경로·타임아웃 상수
-///
-/// gotogether-backend 기준. baseUrl만 변경하면 다른 서버 연동 가능.
+/// 백엔드 API 경로·타임아웃 상수.
+/// Vue (gotogether-frontend-vue) services와 동일 경로·메서드 기준.
 class Endpoints {
   Endpoints._();
 
+  /// Vue api.js baseURL: http://193.123.252.22:8282/api (동일 호스트·포트, https 사용)
   static const String baseUrl = "https://193.123.252.22:8282/api";
   static const int receiveTimeout = 30000;
   static const int connectionTimeout = 30000;
@@ -43,8 +43,10 @@ class Endpoints {
   static const String postComment = '/postcomment/';
   static String postCommentDelete(int id) => '/postcomment/$id';
 
-  // --- Memo ---
+  // --- Memo (Vue memo.service.js·백엔드 MemoController 기준) ---
   static const String memo = '/memo';
+  /// Vue: POST "/memo/", 백엔드: @PostMapping("/")
+  static const String memoPost = '/memo/';
   static String memoUpdateread(int memoId) => '/memo/updateread/$memoId';
   static const String memoNewreceive = '/memo/newreceive';
   static const String memoReceivelist = '/memo/receivelist';

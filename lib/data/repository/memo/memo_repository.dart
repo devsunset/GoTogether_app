@@ -61,6 +61,12 @@ class MemoRepository {
       return _toDataModel(response);
     } on DioError catch (e) {
       throw DioExceptions.fromDioError(e).toString();
+    } on StateError catch (e) {
+      // 웹에서 404 등 시 Dio 내부 "Future already completed" 방지
+      if (e.message.contains('Future already completed')) {
+        throw '요청 처리 중 오류가 발생했습니다. 서버 주소·메모 API 경로를 확인해 주세요.';
+      }
+      rethrow;
     }
   }
 

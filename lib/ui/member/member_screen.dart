@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/models/user/user_info_item.dart';
 import 'package:gotogether/data/repository/user/user_repository.dart';
-import 'package:gotogether/ui/member/member_theme.dart';
+import 'package:gotogether/ui/app_theme.dart';
+import 'package:gotogether/ui/widgets/screen_helpers.dart';
 
 class MemberScreen extends StatefulWidget {
+  const MemberScreen({Key? key}) : super(key: key);
+
   @override
-  _MemberScreenState createState() => _MemberScreenState();
+  State<MemberScreen> createState() => _MemberScreenState();
 }
 
 class _MemberScreenState extends State<MemberScreen> {
@@ -58,177 +60,88 @@ class _MemberScreenState extends State<MemberScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: MemberTheme.buildLightTheme(),
-      child: Scaffold(
-        body: Column(
-          children: [
-            getAppBarUI(),
-            getSearchBarUI(),
-            if (_error != null)
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(_error!, style: const TextStyle(color: Colors.red)),
-              ),
-            if (_loading)
-              const Expanded(child: Center(child: CircularProgressIndicator()))
-            else
-              Expanded(
-                child: _list.isEmpty
-                    ? const Center(child: Text('No Data.'))
-                    : ListView.builder(
-                        itemCount: _list.length + (_totalPages > 1 ? 1 : 0),
-                        padding: const EdgeInsets.all(16),
-                        itemBuilder: (context, index) {
-                          if (index == _list.length) {
-                            return Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (_page > 0)
-                                    TextButton(
-                                        onPressed: () {
-                                          _page--;
-                                          _load();
-                                        },
-                                        child: const Text('Prev')),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                                    child: Text('${_page + 1} / $_totalPages'),
-                                  ),
-                                  if (_page < _totalPages - 1)
-                                    TextButton(
-                                        onPressed: () {
-                                          _page++;
-                                          _load();
-                                        },
-                                        child: const Text('Next')),
-                                ],
-                              ),
-                            );
-                          }
-                          final item = _list[index];
-                          return Card(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            child: ListTile(
-                              title: Text(item.nickname ?? item.username ?? ''),
-                              subtitle: Text(item.introduce ?? item.username ?? ''),
-                              trailing: const Icon(Icons.chevron_right),
-                            ),
-                          );
-                        },
-                      ),
-              ),
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: AppTheme.notWhite,
+      appBar: AppBar(
+        title: const Text('멤버', style: TextStyle(fontWeight: FontWeight.w600)),
+        centerTitle: true,
+        elevation: 0,
+        scrolledUnderElevation: 2,
       ),
-    );
-  }
-
-  Widget getSearchBarUI() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-      child: Row(
+      body: Column(
         children: [
-          Expanded(
-            child: TextField(
-              controller: _keywordController,
-              decoration: const InputDecoration(
-                hintText: 'Search...',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              ),
-              onSubmitted: (_) {
-                _page = 0;
-                _load();
-              },
-            ),
-          ),
-          const SizedBox(width: 8),
-          IconButton(
-            icon: Icon(FontAwesomeIcons.magnifyingGlass, size: 20, color: MemberTheme.buildLightTheme().primaryColor),
-            onPressed: () {
+          ModernSearchBar(
+            controller: _keywordController,
+            hintText: '닉네임·아이디 검색',
+            onSearch: () {
               _page = 0;
               _load();
             },
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget getAppBarUI() {
-    return Container(
-      decoration: BoxDecoration(
-        color: MemberTheme.buildLightTheme().backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, 2),
-              blurRadius: 8.0),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
-        child: Row(
-          children: <Widget>[
-            Container(
-              alignment: Alignment.centerLeft,
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(32.0),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  // child: Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Icon(Icons.arrow_back),
-                  // ),
-                ),
-              ),
-            ),
+          if (_error != null)
             Expanded(
-              child: Center(
-                child: Text(
-                  'Member',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(32.0),
-                      ),
-                      onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              child: ErrorView(message: _error!, onRetry: () { _page = 0; _load(); }),
             )
-          ],
-        ),
+          else if (_loading)
+            const Expanded(child: LoadingView())
+          else
+            Expanded(
+              child: _list.isEmpty
+                  ? const EmptyView(message: '멤버가 없습니다.', icon: Icons.people_outline)
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: _list.length + (_totalPages > 1 ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == _list.length) {
+                          return PaginationBar(
+                            page: _page,
+                            totalPages: _totalPages,
+                            onPrev: _page > 0 ? () { _page--; _load(); } : null,
+                            onNext: _page < _totalPages - 1 ? () { _page++; _load(); } : null,
+                          );
+                        }
+                        final item = _list[index];
+                        return ModernListCard(
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: AppTheme.chipBackground,
+                                child: Text(
+                                  (item.nickname ?? item.username ?? '?').substring(0, 1).toUpperCase(),
+                                  style: const TextStyle(color: AppTheme.grey),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.nickname ?? item.username ?? '',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15,
+                                        color: AppTheme.darkerText,
+                                      ),
+                                    ),
+                                    if (item.introduce != null && item.introduce!.isNotEmpty)
+                                      Text(
+                                        item.introduce!,
+                                        style: const TextStyle(fontSize: 13, color: AppTheme.lightText),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              const Icon(Icons.chevron_right, color: AppTheme.lightText),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+        ],
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/repository/together/together_repository.dart';
 import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/together/together_edit_screen.dart';
+import 'package:gotogether/ui/widgets/html_content_view.dart';
 
 class TogetherDetailScreen extends StatefulWidget {
   final int togetherId;
@@ -139,7 +140,7 @@ class _TogetherDetailScreenState extends State<TogetherDetailScreen> {
             const SizedBox(height: 8),
             Text('${d['nickname'] ?? ''} · ${d['createdDate'] ?? ''}'),
             const Divider(),
-            Text(d['content']?.toString() ?? ''),
+            HtmlContentView(content: d['content']?.toString()),
             if (d['openKakaoChat']?.toString().isNotEmpty == true)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
@@ -150,7 +151,7 @@ class _TogetherDetailScreenState extends State<TogetherDetailScreen> {
             ..._comments.map((c) {
               final map = c is Map ? c : {};
               return ListTile(
-                title: Text(map['content']?.toString() ?? ''),
+                title: HtmlContentView(content: map['content']?.toString()),
                 subtitle: Text(map['nickname']?.toString() ?? ''),
               );
             }),

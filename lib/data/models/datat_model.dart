@@ -30,15 +30,15 @@ class DataModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
-    data['result'] = result;
-    data['code'] = code;
-    data['error'] = error;
-    data['message'] = message;
-    data['description'] = description;
-    data['timestamp'] = timestamp;
-    data['data'] = data;
-    return data;
+    final Map<String, dynamic> map = <String, dynamic>{};
+    map['status'] = status;
+    map['result'] = result;
+    map['code'] = code;
+    map['error'] = error;
+    map['message'] = message;
+    map['description'] = description;
+    map['timestamp'] = timestamp;
+    map['data'] = data;
+    return map;
   }
 }

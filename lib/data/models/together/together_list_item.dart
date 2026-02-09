@@ -51,7 +51,7 @@ class TogetherListItem {
       progress: json['progress'] as int?,
       progressLegend: json['progressLegend'] as String?,
       skill: json['skill'] as String?,
-      togetherComment_count: json['togetherComment_count'] as int?,
+      togetherComment_count: json['togetherCommentCount'] as int? ?? json['togetherComment_count'] as int?,
       createdDate: json['createdDate'] as String?,
       modifiedDate: json['modifiedDate'] as String?,
       nickname: json['nickname'] as String?,

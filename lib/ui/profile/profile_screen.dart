@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotogether/data/di/service_locator.dart';
+import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/profile/user_controller.dart';
 import 'package:gotogether/ui/profile/profile_edit_screen.dart';
+import 'package:gotogether/ui/widgets/screen_helpers.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -69,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: Column(
           children: [
             const Expanded(flex: 2, child: _TopPortion()),
-            const Expanded(flex: 8, child: Center(child: CircularProgressIndicator())),
+            const Expanded(flex: 8, child: LoadingView()),
           ],
         ),
       );
@@ -79,13 +81,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: Column(
           children: [
             const Expanded(flex: 2, child: _TopPortion()),
-            Expanded(flex: 8, child: Center(child: Text(_error!))),
+            Expanded(flex: 8, child: ErrorView(message: _error!, onRetry: _load)),
           ],
         ),
       );
     }
     final d = _data ?? {};
     return Scaffold(
+      backgroundColor: AppTheme.notWhite,
       body: Column(
         children: [
           const Expanded(flex: 2, child: _TopPortion()),
@@ -96,42 +99,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        d['nickname']?.toString() ?? '-',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                  Card(
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                d['nickname']?.toString() ?? '-',
+                                style: Theme.of(context).textTheme.headline6?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.darkerText,
+                                ),
+                              ),
+                              FilledButton.tonal(
+                                onPressed: _edit,
+                                child: const Text('수정'),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          ..._profileRows(d),
+                        ],
                       ),
-                      TextButton(onPressed: _edit, child: const Text('Edit')),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 8),
-                  if (d['introduce']?.toString().isNotEmpty == true)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text('Introduce: ${d['introduce']}'),
-                    ),
-                  if (d['note']?.toString().isNotEmpty == true)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text('Note: ${d['note']}'),
-                    ),
-                  if (d['github']?.toString().isNotEmpty == true)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text('Github: ${d['github']}'),
-                    ),
-                  if (d['homepage']?.toString().isNotEmpty == true)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text('Homepage: ${d['homepage']}'),
-                    ),
-                  if (d['skill']?.toString().isNotEmpty == true)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text('Skill: ${d['skill']}'),
-                    ),
                 ],
               ),
             ),
@@ -139,6 +136,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
+  }
+
+  List<Widget> _profileRows(Map<String, dynamic> d) {
+    final list = <Widget>[];
+    void add(String label, String? value) {
+      if (value != null && value.isNotEmpty) {
+        list.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.lightText,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(fontSize: 14, color: AppTheme.darkText),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+    add('소개', d['introduce']?.toString());
+    add('메모', d['note']?.toString());
+    add('Github', d['github']?.toString());
+    add('홈페이지', d['homepage']?.toString());
+    add('스킬', d['skill']?.toString());
+    return list;
   }
 }
 

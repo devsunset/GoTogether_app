@@ -3,6 +3,7 @@ import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/models/together/together_list_item.dart';
 import 'package:gotogether/data/repository/together/together_repository.dart';
 import 'package:gotogether/ui/app_theme.dart';
+import 'package:gotogether/ui/widgets/screen_helpers.dart';
 import 'package:gotogether/ui/together/together_detail_screen.dart';
 import 'package:gotogether/ui/together/together_edit_screen.dart';
 
@@ -74,109 +75,96 @@ class _TogetherScreenState extends State<TogetherScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.nearlyWhite,
+      backgroundColor: AppTheme.notWhite,
       appBar: AppBar(
-        title: const Text('Together'),
-        backgroundColor: AppTheme.nearlyWhite,
+        title: const Text('Together', style: TextStyle(fontWeight: FontWeight.w600)),
+        centerTitle: true,
         elevation: 0,
+        scrolledUnderElevation: 2,
         actions: [
-          IconButton(icon: const Icon(Icons.add_circle), onPressed: _goNew),
+          IconButton(
+            icon: const Icon(Icons.add_circle_outline),
+            onPressed: _goNew,
+            tooltip: '새 글',
+          ),
         ],
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _keywordController,
-                    decoration: const InputDecoration(
-                      hintText: 'Search',
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    ),
-                    onSubmitted: (_) {
-                      _page = 0;
-                      _load();
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () {
-                    _page = 0;
-                    _load();
-                  },
-                  child: const Icon(Icons.search),
-                ),
-              ],
-            ),
+          ModernSearchBar(
+            controller: _keywordController,
+            hintText: '제목·키워드 검색',
+            onSearch: () {
+              _page = 0;
+              _load();
+            },
           ),
           if (_error != null)
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(_error!, style: const TextStyle(color: Colors.red)),
-            ),
-          if (_loading)
-            const Expanded(child: Center(child: CircularProgressIndicator()))
+            Expanded(
+              child: ErrorView(message: _error!, onRetry: () { _page = 0; _load(); }),
+            )
+          else if (_loading)
+            const Expanded(child: LoadingView())
           else
             Expanded(
               child: _list.isEmpty
-                  ? const Center(child: Text('No Data.'))
+                  ? const EmptyView(message: '함께할 글이 없습니다.', icon: Icons.group_work_outlined)
                   : ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: _list.length + (_totalPages > 1 ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index == _list.length) {
-                          return Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (_page > 0)
-                                  TextButton(
-                                    onPressed: () {
-                                      _page--;
-                                      _load();
-                                    },
-                                    child: const Text('Prev'),
-                                  ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                                  child: Text('${_page + 1} / $_totalPages'),
-                                ),
-                                if (_page < _totalPages - 1)
-                                  TextButton(
-                                    onPressed: () {
-                                      _page++;
-                                      _load();
-                                    },
-                                    child: const Text('Next'),
-                                  ),
-                              ],
-                            ),
+                          return PaginationBar(
+                            page: _page,
+                            totalPages: _totalPages,
+                            onPrev: _page > 0 ? () { _page--; _load(); } : null,
+                            onNext: _page < _totalPages - 1 ? () { _page++; _load(); } : null,
                           );
                         }
                         final item = _list[index];
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          child: ListTile(
-                            title: Text(item.title ?? ''),
-                            subtitle: Text('${item.nickname ?? ''} · ${item.createdDate?.substring(0, item.createdDate!.length > 16 ? 16 : item.createdDate!.length) ?? ''}'),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (item.progress != null)
-                                  Chip(
-                                    label: Text('${item.progress}%'),
-                                    backgroundColor: _progressColor(item.progressLegend),
-                                  ),
-                                const Icon(Icons.chevron_right),
+                        final dateStr = item.createdDate ?? '';
+                        final shortDate = dateStr.length > 16 ? dateStr.substring(0, 16) : dateStr;
+                        return ModernListCard(
+                          onTap: () => _goDetail(item),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.title ?? '',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15,
+                                        color: AppTheme.darkerText,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      '${item.nickname ?? ''} · $shortDate',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: AppTheme.lightText,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (item.progress != null) ...[
+                                const SizedBox(width: 8),
+                                Chip(
+                                  label: Text('${item.progress}%', style: const TextStyle(fontSize: 12)),
+                                  backgroundColor: _progressColor(item.progressLegend).withOpacity(0.2),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
                               ],
-                            ),
-                            onTap: () => _goDetail(item),
+                              const SizedBox(width: 4),
+                              const Icon(Icons.chevron_right, color: AppTheme.lightText),
+                            ],
                           ),
                         );
                       },

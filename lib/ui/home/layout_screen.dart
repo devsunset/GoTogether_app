@@ -10,7 +10,7 @@ import 'package:gotogether/ui/home/title_view.dart';
 
 import '../../data/models/datat_model.dart';
 import '../../data/models/home/recent_together_data.dart';
-import '../member/member_screen.dart';
+import '../memo/memo_screen.dart';
 import 'home_controller.dart';
 
 class LayoutScreen extends StatefulWidget {
@@ -72,12 +72,18 @@ class _LayoutScreenState extends State<LayoutScreen>
 
     try {
       DataModel dataModel = await homeController.getHome();
+      final d = dataModel.data ?? {};
+      int _parseCount(dynamic v) {
+        if (v == null) return 0;
+        if (v is int) return v;
+        return int.tryParse(v.toString().replaceAll(',', '')) ?? 0;
+      }
 
       List<StatisticsData> statisticsData = StatisticsData.getData(
-          int.parse(dataModel.data?['TOGETHER']),
-          int.parse(dataModel.data?['USER']),
-          int.parse(dataModel.data?['TALK']),
-          int.parse(dataModel.data?['QA']));
+          _parseCount(d['TOGETHER']),
+          _parseCount(d['USER']),
+          _parseCount(d['TALK']),
+          _parseCount(d['QA']));
 
       listViews.add(
         TitleView(
@@ -106,7 +112,7 @@ class _LayoutScreenState extends State<LayoutScreen>
 
       listViews.add(
         NoticeView(
-            noticeText: dataModel.data?['NOTICE'],
+            noticeText: d['NOTICE']?.toString() ?? '',
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(
                 CurvedAnimation(
                     parent: widget.animationController!,
@@ -128,12 +134,12 @@ class _LayoutScreenState extends State<LayoutScreen>
         ),
       );
 
-      final recentTogetherDataList =
-          (dataModel.data?['RECENT_TOGETHER'] as List)
-              .map((e) => RecentTogetherData.fromJson(e))
-              .toList();
+      final rawRecent = d['RECENT_TOGETHER'];
+      final recentTogetherDataList = rawRecent is List
+          ? rawRecent.map((e) => RecentTogetherData.fromJson(e as Map<String, dynamic>)).toList()
+          : <RecentTogetherData>[];
 
-      if (recentTogetherDataList.length > 0) {
+      if (recentTogetherDataList.isNotEmpty) {
         for (int i = 0; i < recentTogetherDataList.length; i++) {
           listViews.add(
             RecentTogetherView(
@@ -251,7 +257,7 @@ class _LayoutScreenState extends State<LayoutScreen>
 
   void goMemo() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MemberScreen()));
+        context, MaterialPageRoute(builder: (context) => const MemoScreen()));
   }
 
   Widget getAppBarUI() {
@@ -269,14 +275,14 @@ class _LayoutScreenState extends State<LayoutScreen>
                   decoration: BoxDecoration(
                     color: HomeTheme.white.withOpacity(topBarOpacity),
                     borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(32.0),
+                      bottomLeft: Radius.circular(24.0),
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color:
-                              HomeTheme.grey.withOpacity(0.4 * topBarOpacity),
-                          offset: const Offset(1.1, 1.1),
-                          blurRadius: 10.0),
+                        color: HomeTheme.grey.withOpacity(0.08 * topBarOpacity),
+                        offset: const Offset(0, 2),
+                        blurRadius: 12,
+                      ),
                     ],
                   ),
                   child: Column(
@@ -286,52 +292,39 @@ class _LayoutScreenState extends State<LayoutScreen>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left: 16,
-                            right: 16,
-                            top: 16 - 8.0 * topBarOpacity,
-                            bottom: 12 - 8.0 * topBarOpacity),
+                            left: 20,
+                            right: 20,
+                            top: 14 - 6.0 * topBarOpacity,
+                            bottom: 14 - 6.0 * topBarOpacity),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: Text(
-                                  '         GoTogether',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: HomeTheme.fontName,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 22 + 6 - 6 * topBarOpacity,
-                                    letterSpacing: 1.2,
-                                    color: HomeTheme.darkerText,
-                                  ),
+                              child: Text(
+                                'GoTogether',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: HomeTheme.fontName,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20 + 4 - 4 * topBarOpacity,
+                                  letterSpacing: 0.5,
+                                  color: HomeTheme.darkerText,
                                 ),
                               ),
                             ),
-                            Container(
-                              width: AppBar().preferredSize.height,
-                              height: AppBar().preferredSize.height,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(0.0),
-                                      ),
-                                      onTap: () {
-                                        goMemo();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Icon(FontAwesomeIcons.envelope),
-                                      ),
-                                    ),
+                            Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: goMemo,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Icon(
+                                    FontAwesomeIcons.envelope,
+                                    size: 20,
+                                    color: HomeTheme.dark_grey,
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           ],

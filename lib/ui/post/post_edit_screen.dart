@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/repository/post/post_repository.dart';
+import 'package:gotogether/ui/widgets/html_editor_field.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 
 class PostEditScreen extends StatefulWidget {
   final int? postId;
@@ -17,7 +19,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
   final PostRepository _repo = getIt<PostRepository>();
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
-  final _contentController = TextEditingController();
+  final _contentEditorController = HtmlEditorController();
   String _category = 'TALK';
   bool _saving = false;
 
@@ -29,7 +31,6 @@ class _PostEditScreenState extends State<PostEditScreen> {
     final d = widget.initialData;
     if (d != null) {
       _titleController.text = d['title']?.toString() ?? '';
-      _contentController.text = d['content']?.toString() ?? '';
       _category = d['category']?.toString() ?? 'TALK';
     }
   }
@@ -37,17 +38,21 @@ class _PostEditScreenState extends State<PostEditScreen> {
   @override
   void dispose() {
     _titleController.dispose();
-    _contentController.dispose();
     super.dispose();
   }
 
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    final contentHtml = (await _contentEditorController.getText()).trim();
+    if (contentHtml.isEmpty) {
+      Fluttertoast.showToast(msg: '본문을 입력하세요.');
+      return;
+    }
     setState(() => _saving = true);
     try {
       final data = {
         'title': _titleController.text.trim(),
-        'content': _contentController.text.trim(),
+        'content': contentHtml,
         'category': _category,
       };
       if (isEdit) {
@@ -55,7 +60,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
       } else {
         await _repo.create(data);
       }
-      Fluttertoast.showToast(msg: 'Saved');
+      Fluttertoast.showToast(msg: '저장되었습니다.');
       if (mounted) Navigator.pop(context, true);
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
@@ -67,7 +72,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(isEdit ? 'Edit Post' : 'New Post')),
+      appBar: AppBar(title: Text(isEdit ? 'Post 수정' : 'Post 작성')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -86,16 +91,18 @@ class _PostEditScreenState extends State<PostEditScreen> {
               onChanged: (v) => setState(() => _category = v ?? 'TALK'),
             ),
             const SizedBox(height: 12),
-            TextFormField(
-              controller: _contentController,
-              decoration: const InputDecoration(labelText: 'Content'),
-              maxLines: 5,
-              validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+            const Text('본문 (HTML 에디터)', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
+            const SizedBox(height: 8),
+            HtmlEditorField(
+              controller: _contentEditorController,
+              initialHtml: widget.initialData?['content']?.toString(),
+              hint: '본문을 입력하세요. 서식·링크·이미지 등을 사용할 수 있습니다.',
+              height: 320,
             ),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: _saving ? null : _save,
-              child: _saving ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)) : const Text('Save'),
+              child: _saving ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)) : const Text('저장'),
             ),
           ],
         ),

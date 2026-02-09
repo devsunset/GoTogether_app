@@ -16,7 +16,7 @@ class RecentTogetherData {
     nickname = json['nickname'];
     createdDate = json['createdDate'];
     hit = json['hit'];
-    togetherComment_count = json['togetherComment_count'];
+    togetherComment_count = json['togetherCommentCount'] ?? json['togetherComment_count'];
     progress = json['progress'];
   }
 }

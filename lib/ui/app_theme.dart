@@ -3,21 +3,30 @@ import 'package:flutter/material.dart';
 class AppTheme {
   AppTheme._();
 
-  static const Color notWhite = Color(0xFFEDF0F2);
-  static const Color nearlyWhite = Color(0xFFFEFEFE);
+  // 배경·표면
+  static const Color notWhite = Color(0xFFF8FAFC);
+  static const Color nearlyWhite = Color(0xFFF8FAFC);
   static const Color white = Color(0xFFFFFFFF);
-  static const Color nearlyBlack = Color(0xFF213333);
-  static const Color grey = Color(0xFF3A5160);
-  static const Color dark_grey = Color(0xFF313A44);
+  static const Color nearlyBlack = Color(0xFF0F172A);
+  static const Color grey = Color(0xFF64748B);
+  static const Color dark_grey = Color(0xFF334155);
 
-  static const Color darkText = Color(0xFF253840);
-  static const Color darkerText = Color(0xFF17262A);
-  static const Color lightText = Color(0xFF4A6572);
-  static const Color deactivatedText = Color(0xFF767676);
-  static const Color dismissibleBackground = Color(0xFF364A54);
-  static const Color chipBackground = Color(0xFFEEF1F3);
-  static const Color spacer = Color(0xFFF2F2F2);
+  // 텍스트
+  static const Color darkText = Color(0xFF334155);
+  static const Color darkerText = Color(0xFF1E293B);
+  static const Color lightText = Color(0xFF64748B);
+  static const Color deactivatedText = Color(0xFF94A3B8);
+  static const Color dismissibleBackground = Color(0xFF475569);
+  static const Color chipBackground = Color(0xFFF1F5F9);
+  static const Color spacer = Color(0xFFE2E8F0);
   static const String fontName = 'WorkSans';
+
+  // 모던 액센트
+  static const Color primary = Color(0xFF6366F1);
+  static const Color primaryLight = Color(0xFF818CF8);
+  static const Color surface = Color(0xFFF8FAFC);
+  static const Color cardSurface = Color(0xFFFFFFFF);
+  static const Color border = Color(0xFFE2E8F0);
 
   static const TextTheme textTheme = TextTheme(
     headline4: display1,

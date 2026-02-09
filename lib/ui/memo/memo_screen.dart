@@ -3,6 +3,7 @@ import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/models/memo/memo_list_item.dart';
 import 'package:gotogether/data/repository/memo/memo_repository.dart';
 import 'package:gotogether/ui/app_theme.dart';
+import 'package:gotogether/ui/widgets/screen_helpers.dart';
 import 'package:gotogether/ui/memo/memo_compose_screen.dart';
 
 class MemoScreen extends StatefulWidget {
@@ -95,21 +96,35 @@ class _MemoScreenState extends State<MemoScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.nearlyWhite,
+      backgroundColor: AppTheme.notWhite,
       appBar: AppBar(
-        title: const Text('Memo'),
-        backgroundColor: AppTheme.nearlyWhite,
+        title: const Text('쪽지', style: TextStyle(fontWeight: FontWeight.w600)),
+        centerTitle: true,
         elevation: 0,
+        scrolledUnderElevation: 2,
         bottom: TabBar(
           controller: _tabController,
-          tabs: const [Tab(text: 'Received'), Tab(text: 'Sent')],
+          tabs: const [
+            Tab(text: '받은 쪽지'),
+            Tab(text: '보낸 쪽지'),
+          ],
         ),
         actions: [
-          IconButton(icon: const Icon(Icons.edit), onPressed: _goCompose),
+          IconButton(
+            icon: const Icon(Icons.edit_note),
+            onPressed: _goCompose,
+            tooltip: '쪽지 쓰기',
+          ),
         ],
       ),
       body: _error != null
-          ? Center(child: Text(_error!, style: const TextStyle(color: Colors.red)))
+          ? ErrorView(
+              message: _error!,
+              onRetry: () {
+                _loadReceive();
+                _loadSend();
+              },
+            )
           : TabBarView(
               controller: _tabController,
               children: [
@@ -122,7 +137,7 @@ class _MemoScreenState extends State<MemoScreen> with SingleTickerProviderStateM
                     _receivePage = p;
                     _loadReceive();
                   },
-                  subtitle: (item) => 'From: ${item.senderNickname ?? item.senderUsername ?? ''}',
+                  subtitle: (item) => '보낸 사람: ${item.senderNickname ?? item.senderUsername ?? ''}',
                 ),
                 _buildList(
                   list: _sendList,
@@ -133,7 +148,7 @@ class _MemoScreenState extends State<MemoScreen> with SingleTickerProviderStateM
                     _sendPage = p;
                     _loadSend();
                   },
-                  subtitle: (item) => 'To: ${item.receiverNickname ?? item.receiverUsername ?? ''}',
+                  subtitle: (item) => '받는 사람: ${item.receiverNickname ?? item.receiverUsername ?? ''}',
                 ),
               ],
             ),
@@ -148,36 +163,41 @@ class _MemoScreenState extends State<MemoScreen> with SingleTickerProviderStateM
     required void Function(int) onPageChange,
     required String Function(MemoListItem) subtitle,
   }) {
-    if (loading) return const Center(child: CircularProgressIndicator());
-    if (list.isEmpty) return const Center(child: Text('No Data.'));
+    if (loading) return const LoadingView();
+    if (list.isEmpty) return const EmptyView(message: '쪽지가 없습니다.', icon: Icons.mail_outline);
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: list.length + (totalPages > 1 ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == list.length) {
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (page > 0)
-                  TextButton(onPressed: () => onPageChange(page - 1), child: const Text('Prev')),
-                Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Text('${page + 1} / $totalPages')),
-                if (page < totalPages - 1)
-                  TextButton(onPressed: () => onPageChange(page + 1), child: const Text('Next')),
-              ],
-            ),
+          return PaginationBar(
+            page: page,
+            totalPages: totalPages,
+            onPrev: page > 0 ? () => onPageChange(page - 1) : null,
+            onNext: page < totalPages - 1 ? () => onPageChange(page + 1) : null,
           );
         }
         final item = list[index];
+        final memo = item.memo ?? '';
+        final preview = memo.length > 50 ? '${memo.substring(0, 50)}...' : memo;
         final dateStr = item.createdDate ?? '';
         final shortDate = dateStr.length > 16 ? dateStr.substring(0, 16) : dateStr;
-        return Card(
-          margin: const EdgeInsets.only(bottom: 8),
-          child: ListTile(
-            title: Text((item.memo ?? '').length > 50 ? '${(item.memo ?? '').substring(0, 50)}...' : (item.memo ?? '')),
-            subtitle: Text('${subtitle(item)} · $shortDate'),
-            onTap: () {},
+        return ModernListCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                preview,
+                style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppTheme.darkerText),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                '${subtitle(item)} · $shortDate',
+                style: const TextStyle(fontSize: 12, color: AppTheme.lightText),
+              ),
+            ],
           ),
         );
       },

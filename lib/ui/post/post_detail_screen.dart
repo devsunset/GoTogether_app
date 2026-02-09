@@ -4,6 +4,7 @@ import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/repository/post/post_repository.dart';
 import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/post/post_edit_screen.dart';
+import 'package:gotogether/ui/widgets/html_content_view.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final int postId;
@@ -136,13 +137,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             const SizedBox(height: 8),
             Text('${d['nickname'] ?? ''} · ${d['createdDate'] ?? ''}'),
             const Divider(),
-            Text(d['content']?.toString() ?? ''),
+            HtmlContentView(content: d['content']?.toString()),
             const SizedBox(height: 16),
             const Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
             ..._comments.map((c) {
               final map = c is Map ? c : {};
               return ListTile(
-                title: Text(map['content']?.toString() ?? ''),
+                title: HtmlContentView(content: map['content']?.toString()),
                 subtitle: Text(map['nickname']?.toString() ?? ''),
               );
             }),

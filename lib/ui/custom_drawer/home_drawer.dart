@@ -155,182 +155,136 @@ class _HomeDrawerState extends State<HomeDrawer> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isLightMode = brightness == Brightness.light;
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppTheme.notWhite.withOpacity(0.5),
+      backgroundColor: AppTheme.surface,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.only(top: 40.0),
-            child: Container(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  AnimatedBuilder(
-                    animation: widget.iconAnimationController!,
-                    builder: (BuildContext context, Widget? child) {
-                      return ScaleTransition(
-                        scale: AlwaysStoppedAnimation<double>(1.0 -
-                            (widget.iconAnimationController!.value) * 0.2),
-                        child: RotationTransition(
-                          turns: AlwaysStoppedAnimation<double>(Tween<double>(
-                                      begin: 0.0, end: 24.0)
-                                  .animate(CurvedAnimation(
-                                      parent: widget.iconAnimationController!,
-                                      curve: Curves.fastOutSlowIn))
-                                  .value /
-                              360),
-                          child: Container(
-                            height: 120,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: AppTheme.grey.withOpacity(0.6),
-                                    offset: const Offset(2.0, 4.0),
-                                    blurRadius: 8),
-                              ],
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top + 24,
+              left: 20,
+              right: 20,
+              bottom: 20,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                AnimatedBuilder(
+                  animation: widget.iconAnimationController!,
+                  builder: (BuildContext context, Widget? child) {
+                    return ScaleTransition(
+                      scale: AlwaysStoppedAnimation<double>(1.0 -
+                          (widget.iconAnimationController!.value) * 0.1),
+                      child: Container(
+                        height: 72,
+                        width: 72,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primary.withOpacity(0.15),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
                             ),
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.asset('assets/images/userImage.png'),
-                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(36),
+                          child: Image.asset(
+                            'assets/images/userImage.png',
+                            fit: BoxFit.cover,
                           ),
                         ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                FutureBuilder<String>(
+                  future: getNickanme(),
+                  builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (!snapshot.hasData && !snapshot.hasError) {
+                      return SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: theme.colorScheme.primary),
                       );
-                    },
-                  ),
-                  FutureBuilder(
-                      future: getNickanme(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
-                        if (snapshot.hasData == false) {
-                          return CircularProgressIndicator();
-                        }
-                        //error가 발생하게 될 경우 반환하게 되는 부분
-                        else if (snapshot.hasError) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 8, left: 4),
-                            child: Text(
-                              'Anonymous',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: isLightMode
-                                    ? AppTheme.grey
-                                    : AppTheme.white,
-                                fontSize: 18,
-                              ),
-                            ),
-                          );
-                        }
-                        // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
-                        else {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 8, left: 4),
-                            child: Text(
-                              snapshot.data.toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: isLightMode
-                                    ? AppTheme.grey
-                                    : AppTheme.white,
-                                fontSize: 18,
-                              ),
-                            ),
-                          );
-                        }
-                      }),
-                ],
-              ),
+                    }
+                    final name = snapshot.data ?? 'Anonymous';
+                    return Text(
+                      name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: isLightMode ? AppTheme.darkerText : AppTheme.white,
+                        fontSize: 18,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
-          const SizedBox(
-            height: 4,
-          ),
-          Divider(
-            height: 1,
-            color: AppTheme.grey.withOpacity(0.6),
-          ),
+          Divider(height: 1, color: AppTheme.border),
           Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              itemCount: drawerList?.length,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              itemCount: drawerList?.length ?? 0,
               itemBuilder: (BuildContext context, int index) {
                 return inkwell(drawerList![index]);
               },
             ),
           ),
-          Divider(
-            height: 1,
-            color: AppTheme.grey.withOpacity(0.6),
-          ),
-          Column(
-            children: <Widget>[
-              FutureBuilder(
-                  future: getNickanme(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
-                    if (snapshot.hasData == false) {
-                      return CircularProgressIndicator();
-                    }
-                    //error가 발생하게 될 경우 반환하게 되는 부분
-                    else if (snapshot.hasError) {
-                      return ListTile(
-                        title: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            fontFamily: AppTheme.fontName,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: AppTheme.darkText,
+          Divider(height: 1, color: AppTheme.border),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+            child: FutureBuilder<String>(
+              future: getNickanme(),
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (!snapshot.hasData) {
+                  return const SizedBox(height: 48);
+                }
+                final isAnonymous = snapshot.data == 'Anonymous';
+                return Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => onTapped(snapshot.data ?? ''),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: isAnonymous
+                            ? theme.colorScheme.primary.withOpacity(0.12)
+                            : AppTheme.chipBackground,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            isAnonymous ? Icons.login_rounded : Icons.logout_rounded,
+                            size: 22,
+                            color: isAnonymous ? theme.colorScheme.primary : AppTheme.darkText,
                           ),
-                          textAlign: TextAlign.left,
-                        ),
-                        trailing: Icon(
-                          Icons.power_settings_new,
-                          color: Colors.red,
-                        ),
-                        onTap: () {
-                          onTapped('');
-                        },
-                      );
-                    }
-                    // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
-                    else {
-                      return ListTile(
-                        title: Text(
-                          snapshot.data.toString() == 'Anonymous'
-                              ? 'Sign In'
-                              : 'Log Out',
-                          style: TextStyle(
-                            fontFamily: AppTheme.fontName,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: AppTheme.darkText,
+                          const SizedBox(width: 12),
+                          Text(
+                            isAnonymous ? 'Sign In' : 'Log Out',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: isAnonymous ? theme.colorScheme.primary : AppTheme.darkText,
+                            ),
                           ),
-                          textAlign: TextAlign.left,
-                        ),
-                        trailing: Icon(
-                          Icons.power_settings_new,
-                          color: Colors.red,
-                        ),
-                        onTap: () {
-                          onTapped(snapshot.data.toString());
-                        },
-                      );
-                    }
-                  }),
-              SizedBox(
-                height: MediaQuery.of(context).padding.bottom,
-              )
-            ],
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -350,102 +304,41 @@ class _HomeDrawerState extends State<HomeDrawer> {
   }
 
   Widget inkwell(DrawerList listData) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        splashColor: Colors.grey.withOpacity(0.1),
-        highlightColor: Colors.transparent,
-        onTap: () {
-          navigationtoScreen(listData.index!);
-        },
-        child: Stack(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 6.0,
-                    height: 46.0,
-                    // decoration: BoxDecoration(
-                    //   color: widget.screenIndex == listData.index
-                    //       ? Colors.blue
-                    //       : Colors.transparent,
-                    //   borderRadius: new BorderRadius.only(
-                    //     topLeft: Radius.circular(0),
-                    //     topRight: Radius.circular(16),
-                    //     bottomLeft: Radius.circular(0),
-                    //     bottomRight: Radius.circular(16),
-                    //   ),
-                    // ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(4.0),
-                  ),
-                  listData.isAssetsImage
-                      ? Container(
-                          width: 24,
-                          height: 24,
-                          child: Image.asset(listData.imageName,
-                              color: widget.screenIndex == listData.index
-                                  ? Colors.blue
-                                  : AppTheme.nearlyBlack),
-                        )
-                      : Icon(listData.icon?.icon,
-                          color: widget.screenIndex == listData.index
-                              ? Colors.blue
-                              : AppTheme.nearlyBlack),
-                  const Padding(
-                    padding: EdgeInsets.all(4.0),
-                  ),
-                  Text(
-                    listData.labelName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: widget.screenIndex == listData.index
-                          ? Colors.black
-                          : AppTheme.nearlyBlack,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
+    final theme = Theme.of(context);
+    final isSelected = widget.screenIndex == listData.index;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => navigationtoScreen(listData.index!),
+          borderRadius: BorderRadius.circular(12),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: isSelected ? theme.colorScheme.primary.withOpacity(0.12) : Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
             ),
-            widget.screenIndex == listData.index
-                ? AnimatedBuilder(
-                    animation: widget.iconAnimationController!,
-                    builder: (BuildContext context, Widget? child) {
-                      return Transform(
-                        transform: Matrix4.translationValues(
-                            (MediaQuery.of(context).size.width * 0.75 - 64) *
-                                (1.0 -
-                                    widget.iconAnimationController!.value -
-                                    1.0),
-                            0.0,
-                            0.0),
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 8, bottom: 8),
-                          child: Container(
-                            width:
-                                MediaQuery.of(context).size.width * 0.75 - 64,
-                            height: 46,
-                            decoration: BoxDecoration(
-                              color: Colors.blue.withOpacity(0.2),
-                              borderRadius: new BorderRadius.only(
-                                topLeft: Radius.circular(0),
-                                topRight: Radius.circular(28),
-                                bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(28),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                : const SizedBox()
-          ],
+            child: Row(
+              children: [
+                Icon(
+                  listData.icon?.icon ?? Icons.circle,
+                  size: 24,
+                  color: isSelected ? theme.colorScheme.primary : AppTheme.dark_grey,
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  listData.labelName,
+                  style: TextStyle(
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    fontSize: 15,
+                    color: isSelected ? theme.colorScheme.primary : AppTheme.darkerText,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

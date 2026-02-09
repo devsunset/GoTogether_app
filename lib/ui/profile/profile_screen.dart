@@ -95,15 +95,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Expanded(
             flex: 8,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(AppTheme.paddingCard),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    elevation: AppTheme.cardElevation,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
                     child: Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.all(AppTheme.paddingScreen),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:gotogether/data/models/home/recent_together_data.dart';
 import 'package:gotogether/main.dart';
+import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
 import 'package:gotogether/ui/home/wave_view.dart';
 
@@ -40,26 +41,32 @@ class _RecentTogetherViewState extends State<RecentTogetherView>
             transform: Matrix4.translationValues(
                 0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
             child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 24, right: 24, top: 16, bottom: 18),
+              padding: EdgeInsets.only(
+                  left: AppTheme.paddingScreen,
+                  right: AppTheme.paddingScreen,
+                  top: AppTheme.paddingCard,
+                  bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
                   color: HomeTheme.white,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8.0),
-                      bottomLeft: Radius.circular(8.0),
-                      bottomRight: Radius.circular(8.0),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(AppTheme.radiusSm),
+                      bottomLeft: Radius.circular(AppTheme.radiusSm),
+                      bottomRight: Radius.circular(AppTheme.radiusSm),
                       topRight: Radius.circular(68.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                        color: HomeTheme.grey.withOpacity(0.2),
-                        offset: const Offset(1.1, 1.1),
+                        color: HomeTheme.grey.withOpacity(0.12),
+                        offset: const Offset(0, 2),
                         blurRadius: 10.0),
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 16, left: 16, right: 16, bottom: 16),
+                  padding: EdgeInsets.only(
+                      top: AppTheme.paddingCard,
+                      left: AppTheme.paddingCard,
+                      right: AppTheme.paddingCard,
+                      bottom: AppTheme.paddingCard),
                   child: Row(
                     children: <Widget>[
                       Expanded(

@@ -137,7 +137,7 @@ class _PostScreenState extends State<PostScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            padding: EdgeInsets.fromLTRB(AppTheme.paddingCard, 8, AppTheme.paddingCard, 0),
             child: Row(
               children: [
                 SizedBox(
@@ -187,7 +187,7 @@ class _PostScreenState extends State<PostScreen> {
               child: _list.isEmpty
                   ? const EmptyView(message: '게시글이 없습니다.', icon: Icons.article_outlined)
                   : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(horizontal: AppTheme.paddingScreen),
                       itemCount: _list.length + (_totalPages > 1 ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index == _list.length) {

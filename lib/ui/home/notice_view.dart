@@ -1,8 +1,8 @@
 /// 홈 공지 영역. Vue Home 공지와 동일.
 import 'package:flutter/material.dart';
 import 'package:gotogether/main.dart';
-
-import 'home_theme.dart';
+import 'package:gotogether/ui/app_theme.dart';
+import 'package:gotogether/ui/home/home_theme.dart';
 
 class NoticeView extends StatelessWidget {
   final AnimationController? animationController;
@@ -25,21 +25,24 @@ class NoticeView extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(
-                      left: 24, right: 24, top: 0, bottom: 24),
+                  padding: EdgeInsets.only(
+                      left: AppTheme.paddingScreen,
+                      right: AppTheme.paddingScreen,
+                      top: 0,
+                      bottom: 24),
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top: 16),
+                        padding: EdgeInsets.only(top: AppTheme.paddingCard),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: HexColor("#D7E0F9"),
+                            color: HomeTheme.nearlyBlue.withOpacity(0.12),
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8.0),
-                                bottomLeft: Radius.circular(8.0),
-                                bottomRight: Radius.circular(8.0),
-                                topRight: Radius.circular(8.0)),
+                                topLeft: Radius.circular(AppTheme.radiusSm),
+                                bottomLeft: Radius.circular(AppTheme.radiusSm),
+                                bottomRight: Radius.circular(AppTheme.radiusSm),
+                                topRight: Radius.circular(AppTheme.radiusSm)),
                             // boxShadow: <BoxShadow>[
                             //   BoxShadow(
                             //       color: FitnessAppTheme.grey.withOpacity(0.2),

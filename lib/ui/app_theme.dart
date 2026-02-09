@@ -1,4 +1,4 @@
-/// 앱 전역 색상·타이포. Vue와 유사한 모던 톤.
+/// 앱 전역 색상·타이포·레이아웃 토큰. 세련된 모던 톤 통일.
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -28,6 +28,16 @@ class AppTheme {
   static const Color surface = Color(0xFFF8FAFC);
   static const Color cardSurface = Color(0xFFFFFFFF);
   static const Color border = Color(0xFFE2E8F0);
+
+  // 레이아웃 토큰 (일관된 여백·반경)
+  static const double radiusSm = 8.0;
+  static const double radiusMd = 12.0;
+  static const double radiusLg = 16.0;
+  static const double radiusXl = 20.0;
+  static const double cardElevation = 1.0;
+  static const double cardElevationHover = 2.0;
+  static const double paddingScreen = 20.0;
+  static const double paddingCard = 16.0;
 
   static const TextTheme textTheme = TextTheme(
     headlineMedium: display1,

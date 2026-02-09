@@ -2,6 +2,7 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/sign/register.dart';
 
 import '../../data/di/service_locator.dart';
@@ -30,9 +31,11 @@ class _SignInState extends State<SignIn> {
         key: _formKey,
         child: Center(
           child: Card(
-            elevation: 8,
+            elevation: AppTheme.cardElevationHover,
+            shadowColor: Colors.black.withOpacity(0.08),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
             child: Container(
-              padding: const EdgeInsets.all(32.0),
+              padding: EdgeInsets.all(AppTheme.paddingScreen + 12),
               constraints: const BoxConstraints(maxWidth: 350),
               child: SingleChildScrollView(
                 child: Column(
@@ -42,7 +45,7 @@ class _SignInState extends State<SignIn> {
                     Image.asset('assets/images/userImage.png'),
                     _gap(),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: EdgeInsets.symmetric(horizontal: AppTheme.paddingCard),
                       child: Text(
                         "GoTogether",
                         style: Theme.of(context).textTheme.headlineSmall,
@@ -121,9 +124,9 @@ class _SignInState extends State<SignIn> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
+                              borderRadius: BorderRadius.circular(AppTheme.radiusSm)),
                         ),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
                             'Sign in',

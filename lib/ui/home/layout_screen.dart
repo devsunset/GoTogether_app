@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/models/home/statistics_data.dart';
 import 'package:gotogether/ui/custom_drawer/home_drawer.dart';
+import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
 import 'package:gotogether/ui/home/notice_view.dart';
 import 'package:gotogether/ui/home/recent_together_view.dart';
@@ -266,8 +267,8 @@ class _LayoutScreenState extends State<LayoutScreen>
             padding: EdgeInsets.only(
               top: AppBar().preferredSize.height +
                   MediaQuery.of(context).padding.top +
-                  25,
-              bottom: 25 + MediaQuery.of(context).padding.bottom,
+                  AppTheme.paddingScreen,
+              bottom: AppTheme.paddingScreen + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,
@@ -300,12 +301,12 @@ class _LayoutScreenState extends State<LayoutScreen>
                 child: Container(
                   decoration: BoxDecoration(
                     color: HomeTheme.white.withOpacity(topBarOpacity),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(24.0),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(AppTheme.radiusXl),
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: HomeTheme.grey.withOpacity(0.08 * topBarOpacity),
+                        color: HomeTheme.grey.withOpacity(0.06 * topBarOpacity),
                         offset: const Offset(0, 2),
                         blurRadius: 12,
                       ),
@@ -318,8 +319,8 @@ class _LayoutScreenState extends State<LayoutScreen>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left: 20,
-                            right: 20,
+                            left: AppTheme.paddingScreen,
+                            right: AppTheme.paddingScreen,
                             top: 14 - 6.0 * topBarOpacity,
                             bottom: 14 - 6.0 * topBarOpacity),
                         child: Row(
@@ -342,7 +343,7 @@ class _LayoutScreenState extends State<LayoutScreen>
                               color: Colors.transparent,
                               child: InkWell(
                                 onTap: goMemo,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(AppTheme.radiusXl),
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Icon(

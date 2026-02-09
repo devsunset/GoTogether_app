@@ -55,46 +55,71 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           centerTitle: true,
           elevation: 0,
-          scrolledUnderElevation: 2,
+          scrolledUnderElevation: 1.5,
           backgroundColor: Colors.transparent,
           foregroundColor: Color(0xFF1E293B),
+          surfaceTintColor: Colors.transparent,
           titleTextStyle: TextStyle(
+            fontFamily: AppTheme.fontName,
             fontSize: 18,
             fontWeight: FontWeight.w600,
+            letterSpacing: 0.2,
             color: Color(0xFF1E293B),
           ),
+        ),
+        cardTheme: CardTheme(
+          elevation: AppTheme.cardElevation,
+          shadowColor: Colors.black26,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
+          margin: const EdgeInsets.symmetric(horizontal: AppTheme.paddingScreen, vertical: 6),
+          clipBehavior: Clip.antiAlias,
+        ),
+        listTileTheme: ListTileThemeData(
+          contentPadding: const EdgeInsets.symmetric(horizontal: AppTheme.paddingCard, vertical: 4),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
+          minLeadingWidth: 40,
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppTheme.radiusMd),
             borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppTheme.radiusMd),
             borderSide: const BorderSide(color: Color(0xFF6366F1), width: 2),
           ),
           hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
             elevation: 0,
+            textStyle: const TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.3),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
+            elevation: 0,
+            textStyle: const TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             foregroundColor: const Color(0xFF6366F1),
+            textStyle: const TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
         chipTheme: ChipThemeData(
           backgroundColor: const Color(0xFFF1F5F9),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusSm)),
         ),
         dividerColor: const Color(0xFFE2E8F0),
         textTheme: AppTheme.textTheme,

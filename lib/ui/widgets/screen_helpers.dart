@@ -111,7 +111,7 @@ class ModernSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: AppTheme.paddingCard, vertical: AppTheme.radiusMd),
       child: Row(
         children: [
           Expanded(
@@ -120,17 +120,17 @@ class ModernSearchBar extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: hintText,
                 prefixIcon: Icon(Icons.search_rounded, color: theme.colorScheme.onSurfaceVariant),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                contentPadding: EdgeInsets.symmetric(horizontal: AppTheme.paddingCard, vertical: 14),
               ),
               onSubmitted: onSubmitted != null ? (_) => onSearch() : null,
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: AppTheme.radiusMd),
           FilledButton(
             onPressed: onSearch,
             style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: EdgeInsets.symmetric(horizontal: AppTheme.paddingScreen, vertical: AppTheme.paddingCard),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusMd)),
             ),
             child: const Icon(Icons.search_rounded),
           ),
@@ -151,17 +151,17 @@ class ModernListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: margin ?? const EdgeInsets.only(bottom: 12),
+      margin: margin ?? const EdgeInsets.only(bottom: 6),
       elevation: 0,
       shadowColor: Colors.black.withOpacity(0.06),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppTheme.radiusLg),
         side: BorderSide(color: AppTheme.border, width: 1),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(padding: const EdgeInsets.all(18), child: child),
+        borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+        child: Padding(padding: EdgeInsets.all(AppTheme.paddingCard), child: child),
       ),
     );
   }

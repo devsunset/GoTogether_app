@@ -186,10 +186,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
           Container(
             width: double.infinity,
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 24,
-              left: 20,
-              right: 20,
-              bottom: 20,
+              top: MediaQuery.of(context).padding.top + AppTheme.paddingScreen,
+              left: AppTheme.paddingScreen,
+              right: AppTheme.paddingScreen,
+              bottom: AppTheme.paddingScreen,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,7 +253,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: AppTheme.radiusMd, vertical: 8),
               itemCount: drawerList?.length ?? 0,
               itemBuilder: (BuildContext context, int index) {
                 return inkwell(drawerList![index]);
@@ -262,7 +262,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Divider(height: 1, color: AppTheme.border),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+            padding: EdgeInsets.fromLTRB(AppTheme.paddingCard, AppTheme.radiusMd, AppTheme.paddingCard, 24),
             child: FutureBuilder<String>(
               future: getNickanme(),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -274,14 +274,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () => onTapped(snapshot.data ?? ''),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                      padding: EdgeInsets.symmetric(vertical: 14, horizontal: AppTheme.paddingCard),
                       decoration: BoxDecoration(
                         color: isAnonymous
                             ? theme.colorScheme.primary.withOpacity(0.12)
                             : AppTheme.chipBackground,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                       ),
                       child: Row(
                         children: [
@@ -333,13 +333,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => navigationtoScreen(listData.index!),
-          borderRadius: BorderRadius.circular(12),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isSelected ? theme.colorScheme.primary.withOpacity(0.12) : Colors.transparent,
-              borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: EdgeInsets.symmetric(horizontal: AppTheme.paddingCard, vertical: AppTheme.radiusMd),
+              decoration: BoxDecoration(
+                color: isSelected ? theme.colorScheme.primary.withOpacity(0.12) : Colors.transparent,
+                borderRadius: BorderRadius.circular(AppTheme.radiusMd),
             ),
             child: Row(
               children: [

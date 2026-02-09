@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotogether/data/di/service_locator.dart';
+import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/sign/sign.dart';
 import 'package:gotogether/ui/sign/auth_controller.dart';
 
@@ -39,9 +40,11 @@ class _RegisterState extends State<Register> {
         key: _formKey,
         child: Center(
           child: Card(
-            elevation: 8,
+            elevation: AppTheme.cardElevationHover,
+            shadowColor: Colors.black.withOpacity(0.08),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
             child: Container(
-              padding: const EdgeInsets.all(32.0),
+              padding: EdgeInsets.all(AppTheme.paddingScreen + 12),
               constraints: const BoxConstraints(maxWidth: 350),
               child: SingleChildScrollView(
                 child: Column(
@@ -51,7 +54,7 @@ class _RegisterState extends State<Register> {
                     Image.asset('assets/images/userImage.png'),
                     _gap(),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: EdgeInsets.symmetric(horizontal: AppTheme.paddingCard),
                       child: Text(
                         "GoTogether",
                         style: Theme.of(context).textTheme.headlineSmall,
@@ -154,7 +157,7 @@ class _RegisterState extends State<Register> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusSm)),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),

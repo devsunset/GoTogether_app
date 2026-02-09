@@ -129,7 +129,7 @@ class _TogetherScreenState extends State<TogetherScreen> {
               child: _list.isEmpty
                   ? const EmptyView(message: '함께할 글이 없습니다.', icon: Icons.group_work_outlined)
                   : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(horizontal: AppTheme.paddingScreen),
                       itemCount: _list.length + (_totalPages > 1 ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index == _list.length) {

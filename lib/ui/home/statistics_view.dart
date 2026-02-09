@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gotogether/data/models/home/statistics_data.dart';
 import 'package:gotogether/main.dart';
 import 'package:gotogether/ui/custom_drawer/home_drawer.dart';
+import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
 
 class StatisticsView extends StatefulWidget {
@@ -50,7 +51,7 @@ class _StatisticsViewState extends State<StatisticsView>
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     // 화면비율에 맞게: 4개 카드가 한 줄에 보이도록 카드 너비 계산 (좌우 16 + 카드 간 8)
-    const horizontalPadding = 16.0;
+    final horizontalPadding = AppTheme.paddingCard;
     const gap = 8.0;
     const cardCount = 4;
     final cardWidth = ((screenWidth - horizontalPadding * 2 - gap * (cardCount - 1)) / cardCount).clamp(90.0, 140.0);
@@ -69,7 +70,7 @@ class _StatisticsViewState extends State<StatisticsView>
               height: containerHeight,
               width: double.infinity,
               child: ListView.builder(
-                padding: const EdgeInsets.only(
+                padding: EdgeInsets.only(
                     top: 0, bottom: 0, right: horizontalPadding, left: horizontalPadding),
                 itemCount: statisticsData.length,
                 scrollDirection: Axis.horizontal,
@@ -183,9 +184,9 @@ class ItemsView extends StatelessWidget {
                             end: Alignment.bottomRight,
                           ),
                           borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(8.0 * (cardWidth / 98)),
-                            bottomLeft: Radius.circular(8.0 * (cardWidth / 98)),
-                            topLeft: Radius.circular(8.0 * (cardWidth / 98)),
+                            bottomRight: Radius.circular(AppTheme.radiusSm * (cardWidth / 98)),
+                            bottomLeft: Radius.circular(AppTheme.radiusSm * (cardWidth / 98)),
+                            topLeft: Radius.circular(AppTheme.radiusSm * (cardWidth / 98)),
                             topRight: Radius.circular(54.0 * (cardWidth / 98)),
                           ),
                         ),

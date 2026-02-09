@@ -47,6 +47,15 @@ class _StatisticsViewState extends State<StatisticsView>
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    // 화면비율에 맞게: 4개 카드가 한 줄에 보이도록 카드 너비 계산 (좌우 16 + 카드 간 8)
+    const horizontalPadding = 16.0;
+    const gap = 8.0;
+    const cardCount = 4;
+    final cardWidth = ((screenWidth - horizontalPadding * 2 - gap * (cardCount - 1)) / cardCount).clamp(90.0, 140.0);
+    final containerHeight = (cardWidth * (186 / 98)).clamp(170.0, 280.0);
+
     return AnimatedBuilder(
       animation: widget.mainScreenAnimationController!,
       builder: (BuildContext context, Widget? child) {
@@ -57,13 +66,14 @@ class _StatisticsViewState extends State<StatisticsView>
             transform: Matrix4.translationValues(
                 0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
             child: Container(
-              height: 186,
+              height: containerHeight,
               width: double.infinity,
               child: ListView.builder(
                 padding: const EdgeInsets.only(
-                    top: 0, bottom: 0, right: 16, left: 16),
+                    top: 0, bottom: 0, right: horizontalPadding, left: horizontalPadding),
                 itemCount: statisticsData.length,
                 scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   final int count =
                       statisticsData.length > 10 ? 10 : statisticsData.length;
@@ -75,11 +85,16 @@ class _StatisticsViewState extends State<StatisticsView>
                                   curve: Curves.fastOutSlowIn)));
                   animationController?.forward();
 
-                  return ItemsView(
-                    statisticsData: statisticsData[index],
-                    onNavigateToDrawerIndex: widget.onNavigateToDrawerIndex,
-                    animation: animation,
-                    animationController: animationController!,
+                  return Padding(
+                    padding: EdgeInsets.only(right: index < statisticsData.length - 1 ? gap : 0),
+                    child: ItemsView(
+                      statisticsData: statisticsData[index],
+                      onNavigateToDrawerIndex: widget.onNavigateToDrawerIndex,
+                      animation: animation,
+                      animationController: animationController!,
+                      cardWidth: cardWidth,
+                      cardHeight: containerHeight,
+                    ),
                   );
                 },
               ),
@@ -97,13 +112,17 @@ class ItemsView extends StatelessWidget {
       this.statisticsData,
       this.onNavigateToDrawerIndex,
       this.animationController,
-      this.animation})
+      this.animation,
+      this.cardWidth = 98,
+      this.cardHeight = 186})
       : super(key: key);
 
   final StatisticsData? statisticsData;
   final void Function(DrawerIndex)? onNavigateToDrawerIndex;
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final double cardWidth;
+  final double cardHeight;
 
   static DrawerIndex? _drawerIndexForTitle(String? title) {
     switch (title?.toLowerCase()) {
@@ -136,12 +155,16 @@ class ItemsView extends StatelessWidget {
                   ? () => onNavigateToDrawerIndex!(idx)
                   : null,
               child: SizedBox(
-                width: 98,
+                width: cardWidth,
+                height: cardHeight,
                 child: Stack(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(
-                          top: 32, left: 8, right: 8, bottom: 16),
+                      padding: EdgeInsets.only(
+                          top: cardWidth * 0.33,
+                          left: cardWidth * 0.08,
+                          right: cardWidth * 0.08,
+                          bottom: cardWidth * 0.16),
                       child: Container(
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
@@ -159,112 +182,118 @@ class ItemsView extends StatelessWidget {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(8.0),
-                            bottomLeft: Radius.circular(8.0),
-                            topLeft: Radius.circular(8.0),
-                            topRight: Radius.circular(54.0),
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(8.0 * (cardWidth / 98)),
+                            bottomLeft: Radius.circular(8.0 * (cardWidth / 98)),
+                            topLeft: Radius.circular(8.0 * (cardWidth / 98)),
+                            topRight: Radius.circular(54.0 * (cardWidth / 98)),
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 54, left: 16, right: 16, bottom: 8),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                statisticsData!.titleTxt,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: HomeTheme.fontName,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                  letterSpacing: 0.2,
-                                  color: HomeTheme.white,
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        statisticsData!.legend!.join('\n'),
-                                        style: TextStyle(
-                                          fontFamily: HomeTheme.fontName,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 10,
-                                          letterSpacing: 0.2,
-                                          color: HomeTheme.white,
-                                        ),
-                                      ),
-                                    ],
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final scale = cardWidth / 98;
+                            final titleSize = (12 * scale).clamp(11.0, 16.0);
+                            final legendSize = (10 * scale).clamp(9.0, 14.0);
+                            final countSize = (24 * scale).clamp(20.0, 32.0);
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  top: 54 * scale,
+                                  left: 16 * scale,
+                                  right: 16 * scale,
+                                  bottom: 8 * scale),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    statisticsData!.titleTxt,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: HomeTheme.fontName,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: titleSize,
+                                      letterSpacing: 0.2,
+                                      color: HomeTheme.white,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              statisticsData?.count != 0
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        Text(
-                                          statisticsData!.count.toString(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: HomeTheme.fontName,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 24,
-                                            letterSpacing: 0.2,
-                                            color: HomeTheme.white,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 4, bottom: 3),
-                                          child: Text(
-                                            '',
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 8 * scale, bottom: 8 * scale),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            statisticsData!.legend!.join('\n'),
                                             style: TextStyle(
                                               fontFamily: HomeTheme.fontName,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 10,
+                                              fontSize: legendSize,
                                               letterSpacing: 0.2,
                                               color: HomeTheme.white,
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    )
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        color: HomeTheme.nearlyWhite,
-                                        shape: BoxShape.circle,
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                              color: HomeTheme.nearlyBlack
-                                                  .withOpacity(0.4),
-                                              offset: Offset(8.0, 8.0),
-                                              blurRadius: 8.0),
                                         ],
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Icon(
-                                          Icons.add,
-                                          color: HexColor(
-                                              statisticsData!.endColor),
-                                          size: 24,
-                                        ),
-                                      ),
                                     ),
-                            ],
-                          ),
+                                  ),
+                                  statisticsData?.count != 0
+                                      ? Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            Text(
+                                              statisticsData!.count.toString(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: HomeTheme.fontName,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: countSize,
+                                                letterSpacing: 0.2,
+                                                color: HomeTheme.white,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 4 * scale, bottom: 3 * scale),
+                                              child: Text(
+                                                '',
+                                                style: TextStyle(
+                                                  fontFamily: HomeTheme.fontName,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: legendSize,
+                                                  letterSpacing: 0.2,
+                                                  color: HomeTheme.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            color: HomeTheme.nearlyWhite,
+                                            shape: BoxShape.circle,
+                                            boxShadow: <BoxShadow>[
+                                              BoxShadow(
+                                                  color: HomeTheme.nearlyBlack.withOpacity(0.4),
+                                                  offset: Offset(8.0, 8.0),
+                                                  blurRadius: 8.0),
+                                            ],
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(6.0 * scale),
+                                            child: Icon(
+                                              Icons.add,
+                                              color: HexColor(statisticsData!.endColor),
+                                              size: 24 * scale,
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -272,8 +301,8 @@ class ItemsView extends StatelessWidget {
                       top: 0,
                       left: 0,
                       child: Container(
-                        width: 84,
-                        height: 84,
+                        width: 84 * (cardWidth / 98),
+                        height: 84 * (cardWidth / 98),
                         decoration: BoxDecoration(
                           color: HomeTheme.nearlyWhite.withOpacity(0.2),
                           shape: BoxShape.circle,

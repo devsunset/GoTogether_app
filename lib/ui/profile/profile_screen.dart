@@ -112,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Text(
                                 d['nickname']?.toString() ?? '-',
-                                style: Theme.of(context).textTheme.headline6?.copyWith(
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: AppTheme.darkerText,
                                 ),

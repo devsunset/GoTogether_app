@@ -7,12 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/ui/app_theme.dart';
+import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
 import 'ui/navigation_main_screen.dart';
 
 void main() async {
   setup();
   WidgetsFlutterBinding.ensureInitialized();
+
+  await KakaoMapSdk.instance.initialize('66e0071736a9e3ccef3fa87fc5abacba');
 
   // 웹이 아닐 때만 화면 방향 고정 (웹에서는 setPreferredOrientations 미지원)
   if (!kIsWeb) {

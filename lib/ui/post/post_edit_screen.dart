@@ -100,6 +100,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
             const Text('본문 (HTML 에디터)', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
             const SizedBox(height: 8),
             HtmlEditorField(
+              key: ValueKey('post-edit-${widget.postId ?? "new"}'),
               controller: _contentEditorController,
               initialHtml: widget.initialData?['content']?.toString(),
               hint: '본문을 입력하세요. 서식·링크·이미지 등을 사용할 수 있습니다.',

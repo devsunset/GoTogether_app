@@ -225,7 +225,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     Expanded(
                       child: Text(
                         d['title']?.toString() ?? '',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     Row(

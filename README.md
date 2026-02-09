@@ -5,8 +5,8 @@ GoTogether 모바일/웹 클라이언트 (Flutter).
 
 ## 요구사항
 
-- Flutter SDK (stable)
-- Dart 2.17.5+ (3.x 권장)
+- Flutter SDK (stable, 3.33.x 이상 권장)
+- Dart 3.5+ (카카오맵 Flutter SDK 연동용)
 
 ## Cursor / VS Code에서 Git 인식
 
@@ -30,6 +30,11 @@ flutter config --enable-web
 
 # 웹 서버로 실행 후 브라우저에서 http://localhost:8080 접속
 flutter run -d web-server --web-port=8080
+
+# Firefox 등에서 개발자 도구 오류(embedded_views, Future already completed) 없이 실행하려면 HTML 렌더러 사용
+./run_web.sh
+# 또는
+flutter run -d web-server --web-port=8080 --web-renderer html
 
 # 또는 Chrome 디바이스로 실행
 flutter run -d chrome
@@ -83,7 +88,8 @@ lib/
 
 ## 웹 빌드 시 참고
 
-- **Future already completed**: 웹에서는 `LogInterceptor`를 비활성화해 두었습니다. (`dio_client.dart`)
+- **Future already completed**: 웹에서는 `LogInterceptor`를 비활성화해 두었으며, 401 재시도 시 handler 이중 완료를 방지합니다. (`dio_client.dart`)
+- **embedded_views assertion**: Together 상세 등에서 발생 시 `--web-renderer html`로 실행하거나 `./run_web.sh` 사용하면 해소됩니다.
 - **dart:io**: 웹에서는 사용하지 않으며, HTTP 클라이언트는 플랫폼별 스텁(`dio_client_stub` / `dio_client_io`)으로 분리되어 있습니다.
 - **카카오맵**: 웹에서는 WebView 미지원으로 지도 클릭 선택 불가. 좌표·카카오맵 링크 표시 및 편집 안내 UI 사용.
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카카오맵</title>
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=66e0071736a9e3ccef3fa87fc5abacba"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    #map { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var hasInitial = params.has('lat') && params.has('lng');
+      var lat = parseFloat(params.get('lat')) || 37.56683319828021;
+      var lng = parseFloat(params.get('lng')) || 126.97857302284947;
+      var editMode = params.get('edit') === '1';
+      // 카카오맵 JS API: level 1=가장 확대(가까움), 14=가장 축소(멀음). Vue와 동일하게 거리/동네 단위로 3 사용.
+      var level = parseInt(params.get('level'), 10) || 3;
+      if (level < 1) level = 1;
+      if (level > 14) level = 14;
+
+      kakao.maps.load(function() {
+        var container = document.getElementById('map');
+        var options = {
+          center: new kakao.maps.LatLng(lat, lng),
+          level: level
+        };
+        var map = new kakao.maps.Map(container, options);
+        var markerPosition = new kakao.maps.LatLng(lat, lng);
+        var marker = new kakao.maps.Marker({ position: markerPosition });
+        marker.setMap(map);
+
+        // Vue와 동일: 편집 모드에서 지도 클릭 시 마커 위치 변경 후 부모(Flutter)로 좌표 전달
+        if (editMode) {
+          kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+            var latlng = mouseEvent.latLng;
+            marker.setPosition(latlng);
+            map.setCenter(latlng);
+            if (window.parent && window.parent !== window) {
+              window.parent.postMessage({
+                type: 'kakao-map-location',
+                lat: latlng.getLat(),
+                lng: latlng.getLng()
+              }, '*');
+            }
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

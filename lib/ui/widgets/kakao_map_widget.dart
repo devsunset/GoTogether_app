@@ -1,15 +1,12 @@
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
-/// Vue와 동일: 카카오맵 연동 (상세=표시만, 편집=클릭으로 장소 선택)
-/// 모바일: WebView로 카카오맵 JS API 로드 후 지도 표시/클릭 이벤트 처리
-/// 웹: WebView 미지원으로 좌표·링크 표시 및 편집 시 수동 좌표 입력 안내
-///
-/// 카카오맵 Flutter SDK(kakao_map_sdk) 사용 시: Dart SDK 3.5+ 필요.
-/// 전환 방법은 doc/kakao_map_sdk_migration.md 참고.
+import 'kakao_map_widget_stub.dart' if (dart.library.html) 'kakao_map_widget_web.dart' as web_embed;
+
+/// 투게더/모임 장소 카카오맵 연동 (상세=표시만, 편집=클릭으로 장소 선택)
+/// 모바일: Flutter SDK(kakao_map_sdk)로 지도 표시. 웹: SDK 미지원으로 카카오맵 JavaScript API 임베드(iframe)로 동일하게 지도 표시.
 class KakaoMapWidget extends StatefulWidget {
   /// 'view': 마커만 표시, 'edit': 클릭 시 마커 이동 + onLocationSelected 콜백
   final String mode;
@@ -32,140 +29,83 @@ class KakaoMapWidget extends StatefulWidget {
 }
 
 class _KakaoMapWidgetState extends State<KakaoMapWidget> {
-  static const String _kakaoAppKey = '66e0071736a9e3ccef3fa87fc5abacba';
   static const double _seoulLat = 37.56683319828021;
   static const double _seoulLng = 126.97857302284947;
 
-  WebViewController? _controller;
+  KakaoMapController? _mapController;
+  Poi? _markerPoi;
 
-  @override
-  void initState() {
-    super.initState();
-    if (kIsWeb) return;
-    _initController();
-  }
+  double get _lat => widget.lat ?? _seoulLat;
+  double get _lng => widget.lng ?? _seoulLng;
 
-  void _initController() {
-    final lat = widget.lat ?? _seoulLat;
-    final lng = widget.lng ?? _seoulLng;
-    final mode = widget.mode;
-    final heightPx = widget.height.toInt();
-    final html = _buildHtml(lat: lat, lng: lng, mode: mode, heightPx: heightPx);
-
-    final ctrl = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onNavigationRequest: (request) {
-            if (request.url.startsWith('https://dapi.kakao.com') ||
-                request.url.startsWith('https://t1.kakaocdn.net') ||
-                request.url.startsWith('about:blank')) {
-              return NavigationDecision.navigate;
-            }
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..addJavaScriptChannel(
-        'MapClient',
-        onMessageReceived: (msg) {
-          try {
-            final map = jsonDecode(msg.message) as Map<String, dynamic>;
-            final latV = map['lat'];
-            final lngV = map['lng'];
-            if (latV != null && lngV != null && mounted) {
-              widget.onLocationSelected?.call(
-                (latV as num).toDouble(),
-                (lngV as num).toDouble(),
-              );
-            }
-          } catch (_) {}
-        },
-      )
-      ..loadHtmlString(html, baseUrl: 'https://dapi.kakao.com');
-
-    _controller = ctrl;
-  }
-
-  String _buildHtml({
-    required double lat,
-    required double lng,
-    required String mode,
-    required int heightPx,
-  }) {
-    final isEdit = mode == 'edit';
-    final isDefaultCenter =
-        (lat - _seoulLat).abs() < 1e-6 && (lng - _seoulLng).abs() < 1e-6;
-    final zoomLevel = (isEdit && isDefaultCenter) ? 9 : 4;
-    return '''
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; }
-    #map { width: 100%; height: ${heightPx}px; min-height: 200px; }
-  </style>
-</head>
-<body>
-  <div id="map"></div>
-  <script>
-    function runMap() {
-      if (typeof kakao === 'undefined') {
-        setTimeout(runMap, 100);
-        return;
-      }
-      var initialLat = $lat;
-      var initialLng = $lng;
-      var isEdit = $isEdit;
-      var zoomLevel = $zoomLevel;
-
-      kakao.maps.load(function() {
-        var container = document.getElementById('map');
-        if (!container) return;
-        var options = {
-          center: new kakao.maps.LatLng(initialLat, initialLng),
-          level: zoomLevel
-        };
-        var map = new kakao.maps.Map(container, options);
-        var markerPosition = new kakao.maps.LatLng(initialLat, initialLng);
-        var marker = new kakao.maps.Marker({ position: markerPosition });
-        marker.setMap(map);
-
-        if (isEdit) {
-          kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-            var latlng = mouseEvent.latLng;
-            marker.setPosition(latlng);
-            var lat = latlng.getLat();
-            var lng = latlng.getLng();
-            if (window.MapClient && window.MapClient.postMessage) {
-              window.MapClient.postMessage(JSON.stringify({ lat: lat, lng: lng }));
-            }
-          });
-        }
-      });
+  Future<void> _addMarkerAt(LatLng position) async {
+    final ctrl = _mapController;
+    if (ctrl == null) return;
+    if (_markerPoi != null) {
+      await ctrl.labelLayer.removePoi(_markerPoi!);
+      _markerPoi = null;
     }
-    var s = document.createElement('script');
-    s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=$_kakaoAppKey';
-    s.onload = runMap;
-    s.onerror = function() { setTimeout(runMap, 200); };
-    document.head.appendChild(s);
-  </script>
-</body>
-</html>
-''';
+    final style = PoiStyle(
+      icon: KImage.fromAsset('assets/icon/app_icon.png', 48, 48),
+    );
+    final poi = await ctrl.labelLayer.addPoi(
+      position,
+      style: style,
+      id: 'meeting_poi',
+    );
+    if (mounted) _markerPoi = poi;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb || _controller == null) {
+    if (kIsWeb) {
+      // 편집 모드: 초기 좌표 없어도 지도 표시 후 클릭으로 위치 선택 (Vue와 동일). 보기 모드: 좌표 있을 때만 지도 표시.
+      final showMap = widget.mode == 'edit' ||
+          (widget.lat != null && widget.lng != null);
+      if (showMap) {
+        return web_embed.WebKakaoMapEmbed(
+          lat: widget.lat ?? _seoulLat,
+          lng: widget.lng ?? _seoulLng,
+          height: widget.height,
+          mode: widget.mode,
+          onLocationSelected: widget.onLocationSelected,
+        );
+      }
       return _buildWebFallback();
     }
+
+    final option = KakaoMapOption(
+      position: LatLng(_lat, _lng),
+      zoomLevel: 14,
+    );
+
     return SizedBox(
       height: widget.height,
-      child: WebViewWidget(controller: _controller!),
+      child: KakaoMap(
+        option: option,
+        onMapReady: (KakaoMapController controller) async {
+          _mapController = controller;
+          await _addMarkerAt(LatLng(_lat, _lng));
+        },
+        onTerrainClick: widget.mode == 'edit'
+            ? (KPoint point, LatLng position) async {
+                await _addMarkerAt(position);
+                _mapController?.moveCamera(
+                  CameraUpdate.newCenterPosition(position, zoomLevel: 14),
+                );
+                widget.onLocationSelected?.call(
+                  position.latitude,
+                  position.longitude,
+                );
+              }
+            : null,
+        onMapError: (Error error) {
+          if (kDebugMode) {
+            // ignore: avoid_print
+            print('KakaoMap error: $error');
+          }
+        },
+      ),
     );
   }
 

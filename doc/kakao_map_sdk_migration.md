@@ -1,13 +1,11 @@
-# 카카오맵 Flutter SDK(kakao_map_sdk) 전환 가이드
+# 카카오맵 Flutter SDK(kakao_map_sdk) 연동
 
-현재 프로젝트는 **WebView + 카카오맵 JavaScript API**로 지도를 표시합니다.  
-**카카오맵 Flutter SDK**(`kakao_map_sdk`)를 쓰면 네이티브 지도 뷰로 더 안정적으로 연동할 수 있습니다.
+프로젝트는 **kakao_map_sdk**로 카카오맵을 연동합니다. (Flutter 3.33 / Dart 3.5+ 환경)
 
 ## 제약 사항
 
 - **kakao_map_sdk**는 **Dart SDK 3.5 이상**이 필요합니다.
-- 현재 프로젝트 Dart 버전이 3.5 미만이면 `flutter pub get` 시 의존성 해결에 실패합니다.
-- Flutter를 업그레이드해 Dart 3.5+ 환경을 만든 뒤 아래 단계를 적용하면 됩니다.
+- Flutter 3.33.x 이상(또는 Dart 3.5+ 포함 버전)에서 사용 가능합니다.
 
 ## 전환 절차 (Dart 3.5+ 환경에서)
 

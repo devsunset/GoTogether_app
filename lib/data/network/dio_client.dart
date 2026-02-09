@@ -110,7 +110,13 @@ class DioClient {
             queryParameters: error.requestOptions.queryParameters,
           );
 
-          return handler.resolve(clonedResponse);
+          // 웹에서 fetch 완료 후 handler.resolve 시 "Bad state: Future already completed" 방지
+          try {
+            return handler.resolve(clonedResponse);
+          } on StateError catch (e) {
+            if (e.message.contains('Future already completed')) return;
+            rethrow;
+          }
         } catch (_) {
           return handler.next(error);
         }

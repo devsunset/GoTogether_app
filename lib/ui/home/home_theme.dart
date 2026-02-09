@@ -1,3 +1,4 @@
+/// 홈 화면 전용 색상·타이포. layout_screen·statistics·recent_together·notice에서 사용.
 import 'package:flutter/material.dart';
 
 class HomeTheme {

@@ -1,3 +1,4 @@
+/// 좌측 드로어 메뉴. Vue menu-sidebar와 동일: Home, Together, Member, Post Talk, Post Q&A, Memo(로그인 시), Profile(로그인 시).
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gotogether/ui/app_theme.dart';
@@ -50,9 +51,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
             icon: Icon(Icons.group),
           ),
           DrawerList(
-            index: DrawerIndex.POST,
-            labelName: 'Post',
-            icon: Icon(Icons.post_add),
+            index: DrawerIndex.POST_TALK,
+            labelName: 'Post Talk',
+            icon: Icon(Icons.chat),
+          ),
+          DrawerList(
+            index: DrawerIndex.POST_QA,
+            labelName: 'Post Q&A',
+            icon: Icon(Icons.help_outline),
           ),
         ];
       } else {
@@ -73,9 +79,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
             icon: Icon(Icons.group),
           ),
           DrawerList(
-            index: DrawerIndex.POST,
-            labelName: 'Post',
-            icon: Icon(Icons.post_add),
+            index: DrawerIndex.POST_TALK,
+            labelName: 'Post Talk',
+            icon: Icon(Icons.chat),
+          ),
+          DrawerList(
+            index: DrawerIndex.POST_QA,
+            labelName: 'Post Q&A',
+            icon: Icon(Icons.help_outline),
           ),
           DrawerList(
             index: DrawerIndex.MEMO,
@@ -110,9 +121,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
           icon: Icon(Icons.group),
         ),
         DrawerList(
-          index: DrawerIndex.POST,
-          labelName: 'Post',
-          icon: Icon(Icons.post_add),
+          index: DrawerIndex.POST_TALK,
+          labelName: 'Post Talk',
+          icon: Icon(Icons.chat),
+        ),
+        DrawerList(
+          index: DrawerIndex.POST_QA,
+          labelName: 'Post Q&A',
+          icon: Icon(Icons.help_outline),
         ),
       ];
     });
@@ -134,9 +150,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
         icon: Icon(Icons.group),
       ),
       DrawerList(
-        index: DrawerIndex.POST,
-        labelName: 'Post',
-        icon: Icon(Icons.post_add),
+        index: DrawerIndex.POST_TALK,
+        labelName: 'Post Talk',
+        icon: Icon(Icons.chat),
+      ),
+      DrawerList(
+        index: DrawerIndex.POST_QA,
+        labelName: 'Post Q&A',
+        icon: Icon(Icons.help_outline),
       ),
     ];
   }
@@ -353,7 +374,8 @@ enum DrawerIndex {
   HOME,
   TOGETHER,
   MEMBER,
-  POST,
+  POST_TALK,
+  POST_QA,
   MEMO,
   PROFILE,
 }

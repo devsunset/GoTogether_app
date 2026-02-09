@@ -5,11 +5,13 @@ import 'package:gotogether/data/repository/post/post_repository.dart';
 import 'package:gotogether/ui/widgets/html_editor_field.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
+/// 유형(category): TALK | QA. 새 글은 [initialCategory]로 고정, 수정 시 기존 category 표시(비활성).
 class PostEditScreen extends StatefulWidget {
   final int? postId;
   final Map<String, dynamic>? initialData;
+  final String? initialCategory;
 
-  const PostEditScreen({Key? key, this.postId, this.initialData}) : super(key: key);
+  const PostEditScreen({Key? key, this.postId, this.initialData, this.initialCategory}) : super(key: key);
 
   @override
   State<PostEditScreen> createState() => _PostEditScreenState();
@@ -24,6 +26,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
   bool _saving = false;
 
   bool get isEdit => widget.postId != null;
+  String get _titleLabel => _category == 'QA' ? 'Post Edit Q&A' : 'Post Edit Talk';
 
   @override
   void initState() {
@@ -32,6 +35,8 @@ class _PostEditScreenState extends State<PostEditScreen> {
     if (d != null) {
       _titleController.text = d['title']?.toString() ?? '';
       _category = d['category']?.toString() ?? 'TALK';
+    } else {
+      _category = widget.initialCategory ?? 'TALK';
     }
   }
 
@@ -72,7 +77,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(isEdit ? 'Post 수정' : 'Post 작성')),
+      appBar: AppBar(title: Text(_titleLabel)),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -87,8 +92,8 @@ class _PostEditScreenState extends State<PostEditScreen> {
             DropdownButtonFormField<String>(
               value: _category,
               decoration: const InputDecoration(labelText: 'Category'),
-              items: ['TALK', 'QA'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-              onChanged: (v) => setState(() => _category = v ?? 'TALK'),
+              items: ['TALK', 'QA'].map((e) => DropdownMenuItem(value: e, child: Text(e == 'TALK' ? 'Talk' : 'Q&A'))).toList(),
+              onChanged: isEdit ? null : (v) => setState(() => _category = v ?? 'TALK'),
             ),
             const SizedBox(height: 12),
             const Text('본문 (HTML 에디터)', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),

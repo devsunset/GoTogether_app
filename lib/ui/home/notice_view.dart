@@ -1,3 +1,4 @@
+/// 홈 공지 영역. Vue Home 공지와 동일.
 import 'package:flutter/material.dart';
 import 'package:gotogether/main.dart';
 
@@ -9,7 +10,7 @@ class NoticeView extends StatelessWidget {
   final String noticeText;
 
   const NoticeView(
-      {Key? key, this.noticeText: "", this.animationController, this.animation})
+      {Key? key, this.noticeText = "", this.animationController, this.animation})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -18,8 +19,8 @@ class NoticeView extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         return FadeTransition(
           opacity: animation!,
-          child: new Transform(
-            transform: new Matrix4.translationValues(
+          child: Transform(
+            transform: Matrix4.translationValues(
                 0.0, 30 * (1.0 - animation!.value), 0.0),
             child: Column(
               children: <Widget>[

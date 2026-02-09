@@ -1,3 +1,4 @@
+/// 회원 목록·상세(멤버 화면). Vue userinfo 서비스와 동일.
 import 'package:dio/dio.dart';
 import 'package:gotogether/data/models/datat_model.dart';
 import 'package:gotogether/data/models/user/user_info_item.dart';

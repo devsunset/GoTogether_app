@@ -52,9 +52,10 @@ class MemoListPage {
   });
 
   factory MemoListPage.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> contentList = json['content'] ?? [];
+    final raw = json['content'];
+    final List<dynamic> contentList = raw is List ? raw : [];
     return MemoListPage(
-      content: contentList.map((e) => MemoListItem.fromJson(e as Map<String, dynamic>)).toList(),
+      content: contentList.map((e) => MemoListItem.fromJson(e is Map<String, dynamic> ? e : {})).toList(),
       totalPages: json['totalPages'] as int? ?? 0,
       totalElements: json['totalElements'] as int? ?? 0,
       number: json['number'] as int? ?? 0,

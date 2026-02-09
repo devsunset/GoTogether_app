@@ -1,19 +1,22 @@
+/// 홈 통계 카드 4개(Together/Member/Talk/Q&A). 탭 시 해당 메뉴로 이동. Vue와 동일.
 import 'package:flutter/material.dart';
 import 'package:gotogether/data/models/home/statistics_data.dart';
 import 'package:gotogether/main.dart';
+import 'package:gotogether/ui/custom_drawer/home_drawer.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
-import 'package:gotogether/ui/member/member_screen.dart';
 
 class StatisticsView extends StatefulWidget {
   const StatisticsView(
       {Key? key,
       this.mainScreenAnimationController,
       this.mainScreenAnimation,
+      this.onNavigateToDrawerIndex,
       required this.statisticsData})
       : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
+  final void Function(DrawerIndex)? onNavigateToDrawerIndex;
   final List<StatisticsData> statisticsData;
 
   @override
@@ -74,6 +77,7 @@ class _StatisticsViewState extends State<StatisticsView>
 
                   return ItemsView(
                     statisticsData: statisticsData[index],
+                    onNavigateToDrawerIndex: widget.onNavigateToDrawerIndex,
                     animation: animation,
                     animationController: animationController!,
                   );
@@ -89,28 +93,48 @@ class _StatisticsViewState extends State<StatisticsView>
 
 class ItemsView extends StatelessWidget {
   const ItemsView(
-      {Key? key, this.statisticsData, this.animationController, this.animation})
+      {Key? key,
+      this.statisticsData,
+      this.onNavigateToDrawerIndex,
+      this.animationController,
+      this.animation})
       : super(key: key);
 
   final StatisticsData? statisticsData;
+  final void Function(DrawerIndex)? onNavigateToDrawerIndex;
   final AnimationController? animationController;
   final Animation<double>? animation;
+
+  static DrawerIndex? _drawerIndexForTitle(String? title) {
+    switch (title?.toLowerCase()) {
+      case 'together':
+        return DrawerIndex.TOGETHER;
+      case 'member':
+        return DrawerIndex.MEMBER;
+      case 'talk':
+        return DrawerIndex.POST_TALK;
+      case 'q&a':
+        return DrawerIndex.POST_QA;
+      default:
+        return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animationController!,
       builder: (BuildContext context, Widget? child) {
+        final idx = _drawerIndexForTitle(statisticsData?.titleTxt);
         return FadeTransition(
           opacity: animation!,
           child: Transform(
             transform: Matrix4.translationValues(
                 100 * (1.0 - animation!.value), 0.0, 0.0),
             child: InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MemberScreen()));
-              },
+              onTap: idx != null && onNavigateToDrawerIndex != null
+                  ? () => onNavigateToDrawerIndex!(idx)
+                  : null,
               child: SizedBox(
                 width: 98,
                 child: Stack(

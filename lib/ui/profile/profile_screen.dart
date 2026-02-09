@@ -171,8 +171,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
     add('메모', d['note']?.toString());
     add('Github', d['github']?.toString());
     add('홈페이지', d['homepage']?.toString());
-    add('스킬', d['skill']?.toString());
+    _addSkillRow(list, d['skill']?.toString());
     return list;
+  }
+
+  /// Vue와 동일: "item^level|item^level" 파싱 후 레벨별 칩으로 표시
+  void _addSkillRow(List<Widget> list, String? skillStr) {
+    if (skillStr == null || skillStr.trim().isEmpty) return;
+    final parts = skillStr.split('|');
+    final chips = <Widget>[];
+    for (final s in parts) {
+      final sub = s.split('^');
+      if (sub.isEmpty) continue;
+      final item = sub[0].trim();
+      if (item.isEmpty) continue;
+      final level = sub.length > 1 ? sub[1] : 'INTEREST';
+      final color = _skillLevelColor(level);
+      chips.add(
+        Padding(
+          padding: const EdgeInsets.only(right: 6, bottom: 6),
+          child: Chip(
+            label: Text(item, style: const TextStyle(fontSize: 12)),
+            backgroundColor: color.withOpacity(0.2),
+            side: BorderSide(color: color.withOpacity(0.5)),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+        ),
+      );
+    }
+    if (chips.isEmpty) return;
+    list.add(
+      Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '스킬',
+              style: TextStyle(fontSize: 12, color: AppTheme.lightText, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 6),
+            Wrap(children: chips),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Color _skillLevelColor(String level) {
+    switch (level) {
+      case 'BASIC': return Colors.green;
+      case 'JOB': return Colors.red;
+      case 'TOY_PROJECT': return AppTheme.primary;
+      case 'INTEREST':
+      default: return Colors.grey;
+    }
   }
 }
 

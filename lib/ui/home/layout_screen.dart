@@ -1,22 +1,26 @@
+/// 홈 레이아웃. Vue Home과 동일: 통계(4칸)·공지·Recent Together Top 3.
+/// 통계 탭 시 해당 메뉴로 이동, Recent 탭 시 Together 상세로 이동.
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/models/home/statistics_data.dart';
+import 'package:gotogether/ui/custom_drawer/home_drawer.dart';
 import 'package:gotogether/ui/home/home_theme.dart';
 import 'package:gotogether/ui/home/notice_view.dart';
 import 'package:gotogether/ui/home/recent_together_view.dart';
 import 'package:gotogether/ui/home/statistics_view.dart';
 import 'package:gotogether/ui/home/title_view.dart';
+import 'package:gotogether/ui/together/together_detail_screen.dart';
 
 import '../../data/models/datat_model.dart';
 import '../../data/models/home/recent_together_data.dart';
-import '../memo/memo_screen.dart';
 import 'home_controller.dart';
 
 class LayoutScreen extends StatefulWidget {
-  const LayoutScreen({Key? key, this.animationController}) : super(key: key);
+  const LayoutScreen({Key? key, this.animationController, this.onNavigateToDrawerIndex}) : super(key: key);
 
   final AnimationController? animationController;
+  final void Function(DrawerIndex)? onNavigateToDrawerIndex;
   @override
   _LayoutScreenState createState() => _LayoutScreenState();
 }
@@ -101,6 +105,7 @@ class _LayoutScreenState extends State<LayoutScreen>
       listViews.add(
         StatisticsView(
           statisticsData: statisticsData,
+          onNavigateToDrawerIndex: widget.onNavigateToDrawerIndex,
           mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
                   parent: widget.animationController!,
@@ -141,15 +146,34 @@ class _LayoutScreenState extends State<LayoutScreen>
 
       if (recentTogetherDataList.isNotEmpty) {
         for (int i = 0; i < recentTogetherDataList.length; i++) {
+          final data = recentTogetherDataList[i];
+          final togetherId = data.togetherId;
           listViews.add(
-            RecentTogetherView(
-              recentTogetherData: recentTogetherDataList[i],
-              mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-                  CurvedAnimation(
-                      parent: widget.animationController!,
-                      curve: Interval((1 / count) * 7, 1.0,
-                          curve: Curves.fastOutSlowIn))),
-              mainScreenAnimationController: widget.animationController!,
+            GestureDetector(
+              onTap: togetherId != null
+                  ? () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TogetherDetailScreen(
+                            key: ValueKey('detail_$togetherId'),
+                            togetherId: togetherId,
+                          ),
+                          settings: RouteSettings(name: '/together/$togetherId'),
+                          fullscreenDialog: true,
+                        ),
+                      );
+                    }
+                  : null,
+              child: RecentTogetherView(
+                recentTogetherData: data,
+                mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                    CurvedAnimation(
+                        parent: widget.animationController!,
+                        curve: Interval((1 / count) * 7, 1.0,
+                            curve: Curves.fastOutSlowIn))),
+                mainScreenAnimationController: widget.animationController!,
+              ),
             ),
           );
         }
@@ -173,6 +197,7 @@ class _LayoutScreenState extends State<LayoutScreen>
       listViews.add(
         StatisticsView(
           statisticsData: statisticsData,
+          onNavigateToDrawerIndex: widget.onNavigateToDrawerIndex,
           mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
                   parent: widget.animationController!,

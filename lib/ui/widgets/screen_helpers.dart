@@ -1,3 +1,4 @@
+/// 리스트·검색·페이지네이션·로딩/에러/빈 화면 등 공통 위젯.
 import 'package:flutter/material.dart';
 import 'package:gotogether/ui/app_theme.dart';
 

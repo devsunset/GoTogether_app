@@ -37,21 +37,25 @@ class DioExceptions implements Exception {
   }
 
   String _handleError(int? statusCode, dynamic error) {
+    String? serverMessage;
+    if (error is Map) {
+      serverMessage = error['message']?.toString() ?? error['description']?.toString() ?? error['error']?.toString();
+    }
     switch (statusCode) {
       case 400:
-        return 'Bad request';
+        return serverMessage ?? 'Bad request';
       case 401:
-        return 'Unauthorized';
+        return serverMessage ?? 'Unauthorized';
       case 403:
-        return 'Forbidden';
+        return serverMessage ?? 'Forbidden';
       case 404:
-        return error['message'];
+        return serverMessage ?? 'Not found';
       case 500:
-        return 'Internal server error';
+        return serverMessage ?? 'Internal server error';
       case 502:
-        return 'Bad gateway';
+        return serverMessage ?? 'Bad gateway';
       default:
-        return 'Oops something went wrong';
+        return serverMessage ?? 'Oops something went wrong';
     }
   }
 

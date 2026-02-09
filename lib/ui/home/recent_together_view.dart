@@ -1,3 +1,4 @@
+/// 홈 Recent Together Top 3. 행 탭 시 Together 상세로 이동. Vue와 동일.
 import 'package:flutter/material.dart';
 import 'package:gotogether/data/models/home/recent_together_data.dart';
 import 'package:gotogether/main.dart';

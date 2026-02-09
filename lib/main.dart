@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// HEX 문자열을 [Color]로 변환하는 유틸리티 (예: #54D3C2).
+/// HEX 색상 문자열을 [Color]로 변환. 홈·통계·공지 등에서 사용.
 class HexColor extends Color {
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 

@@ -1,3 +1,4 @@
+/// Post(Talk/Q&A) 목록·상세·CRUD·댓글·changeCategory. Vue post 서비스와 동일.
 import 'package:dio/dio.dart';
 import 'package:gotogether/data/models/datat_model.dart';
 import 'package:gotogether/data/models/post/post_list_item.dart';
@@ -13,11 +14,20 @@ class PostRepository {
     try {
       final response = await postApi.getList(page, size, {'category': category, 'keyword': keyword});
       final data = _extractData(response);
-      return PostListPage.fromJson(data as Map<String, dynamic>);
+      if (data is! Map<String, dynamic>) return _emptyPostPage();
+      return PostListPage.fromJson(data);
     } on DioError catch (e) {
       throw DioExceptions.fromDioError(e).toString();
     }
   }
+
+  static PostListPage _emptyPostPage() => PostListPage(
+    content: [],
+    totalPages: 0,
+    totalElements: 0,
+    number: 0,
+    size: 10,
+  );
 
   Future<DataModel> get(int postId) async {
     try {
@@ -49,6 +59,16 @@ class PostRepository {
   Future<void> delete(int postId) async {
     try {
       await postApi.delete(postId);
+    } on DioError catch (e) {
+      throw DioExceptions.fromDioError(e).toString();
+    }
+  }
+
+  /// Vue와 동일: Admin용 Post 유형(TALK↔QA) 변경
+  Future<DataModel> changeCategory(int postId) async {
+    try {
+      final response = await postApi.changeCategory(postId);
+      return _toDataModel(response);
     } on DioError catch (e) {
       throw DioExceptions.fromDioError(e).toString();
     }

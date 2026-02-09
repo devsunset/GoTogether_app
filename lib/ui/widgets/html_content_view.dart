@@ -27,6 +27,7 @@ class HtmlContentView extends StatelessWidget {
         : '<p>${_escapeHtml(raw)}</p>';
 
     return Html(
+      key: key ?? ValueKey('html_${raw.hashCode}_${raw.length}'),
       data: htmlData,
       shrinkWrap: true,
     );

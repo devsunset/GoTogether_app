@@ -1,3 +1,4 @@
+/// 앱 전역 색상·타이포. Vue와 유사한 모던 톤.
 import 'package:flutter/material.dart';
 
 class AppTheme {

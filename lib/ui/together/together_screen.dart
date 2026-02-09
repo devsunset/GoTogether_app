@@ -57,11 +57,16 @@ class _TogetherScreenState extends State<TogetherScreen> {
   }
 
   void _goDetail(TogetherListItem item) async {
+    if (!mounted) return;
     final needRefresh = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(builder: (context) => TogetherDetailScreen(togetherId: item.togetherId!)),
+      MaterialPageRoute(
+        builder: (context) => TogetherDetailScreen(key: ValueKey('detail_${item.togetherId}'), togetherId: item.togetherId!),
+        settings: RouteSettings(name: '/together/${item.togetherId}'),
+        fullscreenDialog: true,
+      ),
     );
-    if (needRefresh == true) _load();
+    if (mounted && needRefresh == true) _load();
   }
 
   void _goNew() async {
@@ -155,11 +160,9 @@ class _TogetherScreenState extends State<TogetherScreen> {
                               ),
                               if (item.progress != null) ...[
                                 const SizedBox(width: 8),
-                                Chip(
-                                  label: Text('${item.progress}%', style: const TextStyle(fontSize: 12)),
-                                  backgroundColor: _progressColor(item.progressLegend).withOpacity(0.2),
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                _ProgressBadge(
+                                  progress: item.progress!,
+                                  legend: item.progressLegend,
                                 ),
                               ],
                               const SizedBox(width: 4),
@@ -175,12 +178,47 @@ class _TogetherScreenState extends State<TogetherScreen> {
     );
   }
 
-  Color _progressColor(String? legend) {
+}
+
+/// 달성률(%) 표시용 뱃지. 원색 대신 테마에 맞는 부드러운 색상 사용.
+class _ProgressBadge extends StatelessWidget {
+  final int progress;
+  final String? legend;
+
+  const _ProgressBadge({required this.progress, this.legend});
+
+  static ({Color bg, Color fg}) _colors(String? legend) {
     switch (legend) {
-      case 'success': return Colors.green;
-      case 'primary': return Colors.blue;
-      case 'warning': return Colors.orange;
-      default: return Colors.red;
+      case 'success':
+        return (bg: const Color(0xFFECFDF5), fg: const Color(0xFF059669));
+      case 'primary':
+        return (bg: const Color(0xFFEEF2FF), fg: AppTheme.primary);
+      case 'warning':
+        return (bg: const Color(0xFFFFFBEB), fg: const Color(0xFFD97706));
+      default:
+        return (bg: const Color(0xFFFEF2F2), fg: const Color(0xFFDC2626));
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = _colors(legend);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: c.bg,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: c.fg.withOpacity(0.25), width: 1),
+      ),
+      child: Text(
+        '$progress%',
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: c.fg,
+          letterSpacing: 0.2,
+        ),
+      ),
+    );
   }
 }

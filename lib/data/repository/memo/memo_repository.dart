@@ -1,3 +1,4 @@
+/// 쪽지 수신/발신 목록·읽음 처리·삭제·전송. Vue memo 서비스와 동일.
 import 'package:dio/dio.dart';
 import 'package:gotogether/data/models/datat_model.dart';
 import 'package:gotogether/data/models/memo/memo_list_item.dart';
@@ -9,11 +10,16 @@ class MemoRepository {
 
   MemoRepository(this.memoApi);
 
+  /// 백엔드 반환: { data: { MEMO: Long } }
   Future<int> getNewReceiveCount() async {
     try {
       final response = await memoApi.getNewReceive();
       final data = _extractData(response);
-      return data is int ? data : 0;
+      if (data is Map && data['MEMO'] != null) {
+        final v = data['MEMO'];
+        return v is int ? v : (v is num ? v.toInt() : 0);
+      }
+      return 0;
     } on DioError catch (e) {
       throw DioExceptions.fromDioError(e).toString();
     }
@@ -23,7 +29,8 @@ class MemoRepository {
     try {
       final response = await memoApi.getReceiveList(page, size);
       final data = _extractData(response);
-      return MemoListPage.fromJson(data as Map<String, dynamic>);
+      if (data is! Map<String, dynamic>) return _emptyMemoPage();
+      return MemoListPage.fromJson(data);
     } on DioError catch (e) {
       throw DioExceptions.fromDioError(e).toString();
     }
@@ -33,11 +40,20 @@ class MemoRepository {
     try {
       final response = await memoApi.getSendList(page, size);
       final data = _extractData(response);
-      return MemoListPage.fromJson(data as Map<String, dynamic>);
+      if (data is! Map<String, dynamic>) return _emptyMemoPage();
+      return MemoListPage.fromJson(data);
     } on DioError catch (e) {
       throw DioExceptions.fromDioError(e).toString();
     }
   }
+
+  static MemoListPage _emptyMemoPage() => MemoListPage(
+    content: [],
+    totalPages: 0,
+    totalElements: 0,
+    number: 0,
+    size: 10,
+  );
 
   Future<DataModel> send(String memo, String receiver) async {
     try {

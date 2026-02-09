@@ -24,9 +24,10 @@ class PostListItem {
   });
 
   factory PostListItem.fromJson(Map<String, dynamic> json) {
+    final cat = json['category'] ?? json['Category'];
     return PostListItem(
       postId: json['postId'] as int?,
-      category: json['category'] as String?,
+      category: cat?.toString(),
       title: json['title'] as String?,
       content: json['content'] as String?,
       createdDate: json['createdDate'] as String?,
@@ -55,9 +56,10 @@ class PostListPage {
   });
 
   factory PostListPage.fromJson(Map<String, dynamic> json) {
-    final contentList = json['content'] as List<dynamic>? ?? [];
+    final raw = json['content'];
+    final contentList = raw is List ? raw : [];
     return PostListPage(
-      content: contentList.map((e) => PostListItem.fromJson(e as Map<String, dynamic>)).toList(),
+      content: contentList.map((e) => PostListItem.fromJson(e is Map<String, dynamic> ? e : {})).toList(),
       totalPages: json['totalPages'] as int? ?? 0,
       totalElements: json['totalElements'] as int? ?? 0,
       number: json['number'] as int? ?? 0,

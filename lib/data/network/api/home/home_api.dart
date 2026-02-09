@@ -1,3 +1,4 @@
+/// 홈 공통 API (통계·공지·Recent Together). Vue common/home과 동일.
 import 'package:dio/dio.dart';
 import 'package:gotogether/data/network/api/constant/endpoints.dart';
 import 'package:gotogether/data/network/dio_client.dart';

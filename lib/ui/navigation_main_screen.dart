@@ -1,3 +1,4 @@
+/// 메인 네비게이션. 드로어 메뉴에 따라 화면 전환 (Vue Main 레이아웃과 동일).
 import 'package:flutter/material.dart';
 import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/custom_drawer/drawer_user_controller.dart';
@@ -21,7 +22,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
-    screenView = HomeScreen();
+    screenView = HomeScreen(onNavigateToDrawerIndex: changeIndex);
     super.initState();
   }
 
@@ -67,9 +68,14 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             screenView = MemberScreen();
           });
           break;
-        case DrawerIndex.POST:
+        case DrawerIndex.POST_TALK:
           setState(() {
-            screenView = PostScreen();
+            screenView = PostScreen(category: 'TALK');
+          });
+          break;
+        case DrawerIndex.POST_QA:
+          setState(() {
+            screenView = PostScreen(category: 'QA');
           });
           break;
         case DrawerIndex.MEMO:

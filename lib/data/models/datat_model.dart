@@ -1,3 +1,4 @@
+/// 백엔드 공통 응답 래퍼. data에 실제 페이로드.
 class DataModel {
   int? status;
   String? result;

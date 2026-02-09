@@ -1,5 +1,5 @@
 import 'package:gotogether/data/di/service_locator.dart';
-import 'package:gotogether/data/models/datat_model.dart';
+import 'package:gotogether/data/models/data_model.dart';
 
 import '../../data/repository/user/user_repository.dart';
 

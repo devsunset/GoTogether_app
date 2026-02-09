@@ -4,7 +4,7 @@ import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/repository/together/together_repository.dart';
 import 'package:gotogether/ui/widgets/html_editor_field.dart';
 import 'package:gotogether/ui/widgets/kakao_map_widget.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:quill_html_editor/quill_html_editor.dart';
 
 class TogetherEditScreen extends StatefulWidget {
   final int? togetherId;
@@ -20,7 +20,7 @@ class _TogetherEditScreenState extends State<TogetherEditScreen> {
   final TogetherRepository _repo = getIt<TogetherRepository>();
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
-  final _contentEditorController = HtmlEditorController();
+  final _contentEditorController = QuillEditorController();
   final _categoryController = TextEditingController();
   final _involveTypeController = TextEditingController();
   final _openKakaoChatController = TextEditingController();
@@ -28,7 +28,7 @@ class _TogetherEditScreenState extends State<TogetherEditScreen> {
   List<TextEditingController> _skillItemControllers = [];
   List<String> _skillLevelsList = ['INTEREST'];
 
-  int _maxMember = 2;
+  int _maxMember = 4;
   int _currentMember = 1;
   bool _saving = false;
   /// Vue와 동일: 참여 방식이 ONLINE이 아닐 때 지도에서 선택한 위·경도
@@ -89,7 +89,7 @@ class _TogetherEditScreenState extends State<TogetherEditScreen> {
       _categoryController.text = d['category']?.toString() ?? 'STUDY';
       _involveTypeController.text = d['involveType']?.toString() ?? 'ONOFFLINE';
       _openKakaoChatController.text = d['openKakaoChat']?.toString() ?? '';
-      _maxMember = (d['maxMember'] as int?) ?? 2;
+      _maxMember = (d['maxMember'] as int?) ?? 4;
       _currentMember = (d['currentMember'] as int?) ?? 1;
       _latitude = _parseDouble(d['latitude']);
       _longitude = _parseDouble(d['longitude']);
@@ -109,6 +109,7 @@ class _TogetherEditScreenState extends State<TogetherEditScreen> {
     _categoryController.dispose();
     _involveTypeController.dispose();
     _openKakaoChatController.dispose();
+    _contentEditorController.dispose();
     for (final c in _skillItemControllers) {
       c.dispose();
     }
@@ -314,19 +315,27 @@ class _TogetherEditScreenState extends State<TogetherEditScreen> {
               );
             }),
             const SizedBox(height: 12),
+            const Text('최대 모집 인원 / 현재 참여 인원', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
+            const SizedBox(height: 8),
             Row(
               children: [
-                const Text('Max Member: '),
                 Expanded(
-                  child: Slider(
-                    value: _maxMember.toDouble(),
-                    min: 2,
-                    max: 100,
-                    divisions: 98,
-                    onChanged: (v) => setState(() => _maxMember = v.toInt()),
+                  child: DropdownButtonFormField<int>(
+                    value: _maxMember.clamp(1, 9),
+                    decoration: const InputDecoration(labelText: '최대 모집 인원', isDense: true, border: OutlineInputBorder()),
+                    items: List.generate(9, (i) => i + 1).map((v) => DropdownMenuItem(value: v, child: Text('$v'))).toList(),
+                    onChanged: (v) => setState(() => _maxMember = v ?? 4),
                   ),
                 ),
-                Text('$_maxMember'),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: DropdownButtonFormField<int>(
+                    value: _currentMember.clamp(0, 9),
+                    decoration: const InputDecoration(labelText: '현재 참여 인원', isDense: true, border: OutlineInputBorder()),
+                    items: List.generate(10, (i) => i).map((v) => DropdownMenuItem(value: v, child: Text('$v'))).toList(),
+                    onChanged: (v) => setState(() => _currentMember = v ?? 1),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 24),

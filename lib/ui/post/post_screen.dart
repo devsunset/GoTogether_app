@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/models/post/post_list_item.dart';
 import 'package:gotogether/data/repository/post/post_repository.dart';
@@ -19,6 +20,7 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   final PostRepository _repo = getIt<PostRepository>();
+  static const _storage = FlutterSecureStorage();
   final TextEditingController _keywordController = TextEditingController();
   List<PostListItem> _list = [];
   int _page = 0;
@@ -26,6 +28,10 @@ class _PostScreenState extends State<PostScreen> {
   bool _loading = false;
   String? _error;
   late String _category;
+  Future<bool> get _isLoggedIn async {
+    final nickname = await _storage.read(key: 'NICK_NAME');
+    return nickname != null && nickname.isNotEmpty && nickname != 'Anonymous';
+  }
 
   static const List<String> _categoryCodes = ['TALK', 'QA'];
   String get _titleLabel => _category == 'QA' ? 'Post Q&A' : 'Post Talk';
@@ -113,10 +119,18 @@ class _PostScreenState extends State<PostScreen> {
         elevation: 0,
         scrolledUnderElevation: 2,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add_circle_outline),
-            onPressed: _goNew,
-            tooltip: '새 글',
+          FutureBuilder<bool>(
+            future: _isLoggedIn,
+            builder: (context, snap) {
+              if (snap.data == true) {
+                return IconButton(
+                  icon: const Icon(Icons.add_circle_outline),
+                  onPressed: _goNew,
+                  tooltip: '새 글',
+                );
+              }
+              return const SizedBox.shrink();
+            },
           ),
         ],
       ),
@@ -209,6 +223,18 @@ class _PostScreenState extends State<PostScreen> {
                                     Text(
                                       '${item.nickname ?? ''} · $shortDate',
                                       style: const TextStyle(fontSize: 13, color: AppTheme.lightText),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.chat_bubble_outline, size: 14, color: AppTheme.lightText),
+                                        const SizedBox(width: 4),
+                                        Text('${item.comment_count ?? 0}', style: const TextStyle(fontSize: 12, color: AppTheme.lightText)),
+                                        const SizedBox(width: 12),
+                                        Icon(Icons.visibility_outlined, size: 14, color: AppTheme.lightText),
+                                        const SizedBox(width: 4),
+                                        Text('${item.hit ?? 0}', style: const TextStyle(fontSize: 12, color: AppTheme.lightText)),
+                                      ],
                                     ),
                                   ],
                                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/models/together/together_list_item.dart';
 import 'package:gotogether/data/repository/together/together_repository.dart';
@@ -17,11 +18,16 @@ class TogetherScreen extends StatefulWidget {
 class _TogetherScreenState extends State<TogetherScreen> {
   final TogetherRepository _repo = getIt<TogetherRepository>();
   final TextEditingController _keywordController = TextEditingController();
+  static const _storage = FlutterSecureStorage();
   List<TogetherListItem> _list = [];
   int _page = 0;
   int _totalPages = 0;
   bool _loading = false;
   String? _error;
+  Future<bool> get _isLoggedIn async {
+    final nickname = await _storage.read(key: 'NICK_NAME');
+    return nickname != null && nickname.isNotEmpty && nickname != 'Anonymous';
+  }
 
   @override
   void initState() {
@@ -87,10 +93,18 @@ class _TogetherScreenState extends State<TogetherScreen> {
         elevation: 0,
         scrolledUnderElevation: 2,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add_circle_outline),
-            onPressed: _goNew,
-            tooltip: '새 글',
+          FutureBuilder<bool>(
+            future: _isLoggedIn,
+            builder: (context, snap) {
+              if (snap.data == true) {
+                return IconButton(
+                  icon: const Icon(Icons.add_circle_outline),
+                  onPressed: _goNew,
+                  tooltip: '새 글',
+                );
+              }
+              return const SizedBox.shrink();
+            },
           ),
         ],
       ),
@@ -154,6 +168,18 @@ class _TogetherScreenState extends State<TogetherScreen> {
                                         fontSize: 13,
                                         color: AppTheme.lightText,
                                       ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.chat_bubble_outline, size: 14, color: AppTheme.lightText),
+                                        const SizedBox(width: 4),
+                                        Text('${item.togetherComment_count ?? 0}', style: const TextStyle(fontSize: 12, color: AppTheme.lightText)),
+                                        const SizedBox(width: 12),
+                                        Icon(Icons.visibility_outlined, size: 14, color: AppTheme.lightText),
+                                        const SizedBox(width: 4),
+                                        Text('${item.hit ?? 0}', style: const TextStyle(fontSize: 12, color: AppTheme.lightText)),
+                                      ],
                                     ),
                                   ],
                                 ),

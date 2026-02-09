@@ -1,6 +1,6 @@
 /// 쪽지 수신/발신 목록·읽음 처리·삭제·전송. Vue memo 서비스와 동일.
 import 'package:dio/dio.dart';
-import 'package:gotogether/data/models/datat_model.dart';
+import 'package:gotogether/data/models/data_model.dart';
 import 'package:gotogether/data/models/memo/memo_list_item.dart';
 import 'package:gotogether/data/network/api/memo/memo_api.dart';
 import 'package:gotogether/data/network/dio_exception.dart';

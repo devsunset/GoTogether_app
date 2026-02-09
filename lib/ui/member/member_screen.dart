@@ -7,6 +7,7 @@ import 'package:gotogether/data/repository/memo/memo_repository.dart';
 import 'package:gotogether/data/repository/user/user_repository.dart';
 import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/widgets/screen_helpers.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Vue와 동일: Skill 범례, 펼침 상세(Introduce/Note/Github/Homepage/Skills), 메모 전송(로그인 시 본인 제외)
 class MemberScreen extends StatefulWidget {
@@ -401,14 +402,24 @@ class _MemberCard extends StatelessWidget {
   }
 
   Widget _rowLink(String label, String url) {
-    final link = url.startsWith('http') ? url : 'https://$url';
+    final link = url.trim().isEmpty ? null : (url.trim().startsWith('http') ? url.trim() : 'https://${url.trim()}');
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(width: 80, child: Text('$label', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
-          Expanded(child: SelectableText(url, style: const TextStyle(fontSize: 13, color: Colors.blue))),
+          Expanded(
+            child: link != null
+                ? InkWell(
+                    onTap: () async {
+                      final uri = Uri.tryParse(link);
+                      if (uri != null && await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    },
+                    child: Text(url, style: const TextStyle(fontSize: 13, color: Colors.blue, decoration: TextDecoration.underline)),
+                  )
+                : SelectableText(url.isEmpty ? '-' : url, style: const TextStyle(fontSize: 13)),
+          ),
         ],
       ),
     );

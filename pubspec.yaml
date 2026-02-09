@@ -1,5 +1,5 @@
 name: gotogether
-description: A new Flutter project.
+description: GoTogether 모바일/웹 클라이언트. 백엔드 API 연동, Vue와 동일 기능(인증·Together·Post·Memo·Member·Profile·카카오맵).
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -38,13 +38,9 @@ dependencies:
     get_it: ^7.2.0
     flutter_secure_storage: ^6.0.0
     flutter_html: ^3.0.0-beta.2
-    html_editor_enhanced: ^2.5.1
+    quill_html_editor: ^2.2.8
     webview_flutter: ^4.4.2
     url_launcher: ^6.2.0
-
-dependency_overrides:
-    html_editor_enhanced:
-        path: packages/html_editor_enhanced
 
 dev_dependencies:
     flutter_test:

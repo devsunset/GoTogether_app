@@ -35,7 +35,7 @@ class PostListItem {
       nickname: json['nickname'] as String?,
       username: json['username'] as String?,
       hit: json['hit'] as int?,
-      comment_count: json['comment_count'] as int?,
+      comment_count: json['comment_count'] as int? ?? json['commentCount'] as int?,
     );
   }
 }

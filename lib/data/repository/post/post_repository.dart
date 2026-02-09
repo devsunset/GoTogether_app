@@ -1,6 +1,6 @@
 /// Post(Talk/Q&A) 목록·상세·CRUD·댓글·changeCategory. Vue post 서비스와 동일.
 import 'package:dio/dio.dart';
-import 'package:gotogether/data/models/datat_model.dart';
+import 'package:gotogether/data/models/data_model.dart';
 import 'package:gotogether/data/models/post/post_list_item.dart';
 import 'package:gotogether/data/network/api/post/post_api.dart';
 import 'package:gotogether/data/network/dio_exception.dart';
@@ -12,7 +12,7 @@ class PostRepository {
 
   Future<PostListPage> getList(int page, int size, {String? category, String? keyword}) async {
     try {
-      final response = await postApi.getList(page, size, {'category': category, 'keyword': keyword});
+      final response = await postApi.getList(page, size, {'category': category ?? '', 'keyword': keyword ?? ''});
       final data = _extractData(response);
       if (data is! Map<String, dynamic>) return _emptyPostPage();
       return PostListPage.fromJson(data);
@@ -88,6 +88,14 @@ class PostRepository {
     try {
       final response = await postApi.createComment(data);
       return _toDataModel(response);
+    } on DioError catch (e) {
+      throw DioExceptions.fromDioError(e).toString();
+    }
+  }
+
+  Future<void> deleteComment(int commentId) async {
+    try {
+      await postApi.deleteComment(commentId);
     } on DioError catch (e) {
       throw DioExceptions.fromDioError(e).toString();
     }

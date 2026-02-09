@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:gotogether/data/models/datat_model.dart';
+import 'package:gotogether/data/models/data_model.dart';
 import 'package:gotogether/data/network/api/home/home_api.dart';
 import 'package:gotogether/data/network/dio_exception.dart';
 

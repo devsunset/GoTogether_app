@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/repository/post/post_repository.dart';
 import 'package:gotogether/ui/widgets/html_editor_field.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:quill_html_editor/quill_html_editor.dart';
 
 /// 유형(category): TALK | QA. 새 글은 [initialCategory]로 고정, 수정 시 기존 category 표시(비활성).
 class PostEditScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
   final PostRepository _repo = getIt<PostRepository>();
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
-  final _contentEditorController = HtmlEditorController();
+  final _contentEditorController = QuillEditorController();
   String _category = 'TALK';
   bool _saving = false;
 
@@ -43,6 +43,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
   @override
   void dispose() {
     _titleController.dispose();
+    _contentEditorController.dispose();
     super.dispose();
   }
 

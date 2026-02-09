@@ -1,12 +1,12 @@
 # GoTogether_app
 
 GoTogether 모바일/웹 클라이언트 (Flutter).  
-백엔드 [gotogether-backend](https://github.com/devsunset/gotogether-backend) API와 연동하며, Vue/React 프론트와 동일한 기능을 제공합니다.
+백엔드 [gotogether-backend](https://github.com/devsunset/gotogether-backend) API와 연동하며, Vue 프론트와 동일한 기능을 제공합니다.
 
 ## 요구사항
 
-- Flutter SDK (stable, 2.17.5+)
-- Dart 2.17.5+
+- Flutter SDK (stable)
+- Dart 2.17.5+ (3.x 권장)
 
 ## Cursor / VS Code에서 Git 인식
 
@@ -49,7 +49,7 @@ lib/
 ├── data/
 │   ├── di/
 │   │   └── service_locator.dart   # GetIt 의존성 주입
-│   ├── models/               # API 응답·리스트 모델
+│   ├── models/               # API 응답·리스트 모델 (data_model, post_list_item 등)
 │   ├── network/
 │   │   ├── api/constant/endpoints.dart   # API 경로·타임아웃
 │   │   ├── dio_client.dart   # Dio + JWT·401 재시도
@@ -60,12 +60,13 @@ lib/
     ├── navigation_main_screen.dart   # Drawer + 화면 전환
     ├── home/                 # 메인(통계·공지·Recent Together)
     ├── sign/                 # 로그인·회원가입
-    ├── together/             # Together 목록·상세·작성·수정·댓글
+    ├── together/             # Together 목록·상세·작성·수정·댓글·카카오맵
     ├── post/                 # Post 목록·상세·작성·수정·댓글
     ├── memo/                 # 쪽지 받은/보낸·작성
     ├── member/               # 회원(UserInfo) 목록
     ├── profile/              # 내 프로필·수정
-    └── custom_drawer/        # 사이드 메뉴
+    ├── custom_drawer/        # 사이드 메뉴
+    └── widgets/              # HTML 에디터·카카오맵·공통 위젯
 ```
 
 ## 구현 기능
@@ -74,22 +75,26 @@ lib/
 |------|------|
 | **인증** | 로그인(Sign-In), 회원가입(Register, 이메일 포함), JWT·Refresh Token 자동 갱신 |
 | **홈** | 통계·공지·Recent Together Top 3 (API 연동) |
-| **Together** | 목록(검색·페이징)·상세·작성·수정·삭제·댓글 |
+| **Together** | 목록(검색·페이징)·상세·작성·수정·삭제·댓글, 카카오맵(WebView) 장소 표시·편집 |
 | **Post** | 목록(검색·페이징)·상세·작성·수정·삭제·댓글 |
 | **Memo** | 받은/보낸 목록·작성 |
-| **Member** | UserInfo 목록(검색·페이징) |
+| **Member** | UserInfo 목록(검색·페이징), Github/Homepage 링크 오픈 |
 | **Profile** | UserInfo 조회·수정(Introduce, Note, Github, Homepage, Skill) |
 
 ## 웹 빌드 시 참고
 
 - **Future already completed**: 웹에서는 `LogInterceptor`를 비활성화해 두었습니다. (`dio_client.dart`)
 - **dart:io**: 웹에서는 사용하지 않으며, HTTP 클라이언트는 플랫폼별 스텁(`dio_client_stub` / `dio_client_io`)으로 분리되어 있습니다.
+- **카카오맵**: 웹에서는 WebView 미지원으로 지도 클릭 선택 불가. 좌표·카카오맵 링크 표시 및 편집 안내 UI 사용.
+
+## 카카오맵 Flutter SDK 전환
+
+Dart 3.5+ 환경에서 네이티브 카카오맵 SDK 사용 시: [doc/kakao_map_sdk_migration.md](doc/kakao_map_sdk_migration.md) 참고.
 
 ## 관련 저장소
 
 - [gotogether-backend](https://github.com/devsunset/gotogether-backend) - API 서버
 - [gotogether-frontend-vue](https://github.com/devsunset/gotogether-frontend-vue) - Vue 프론트
-- [gotogether-frontend-react](https://github.com/devsunset/gotogether-frontend-react) - React 프론트
 
 ## UI 템플릿
 

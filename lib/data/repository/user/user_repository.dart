@@ -1,6 +1,6 @@
 /// 회원 목록·상세(멤버 화면). Vue userinfo 서비스와 동일.
 import 'package:dio/dio.dart';
-import 'package:gotogether/data/models/datat_model.dart';
+import 'package:gotogether/data/models/data_model.dart';
 import 'package:gotogether/data/models/user/user_info_item.dart';
 import 'package:gotogether/data/network/api/user/user_api.dart';
 import 'package:gotogether/data/network/dio_exception.dart';
@@ -23,7 +23,7 @@ class UserRepository {
 
   Future<UserInfoListPage> getUserInfoList(int page, int size, {String? keyword}) async {
     try {
-      final response = await userApi.getUserInfoList(page, size, {'category': null, 'keyword': keyword ?? ''});
+      final response = await userApi.getUserInfoList(page, size, {'category': '', 'keyword': keyword ?? ''});
       final body = response.data;
       final data = body is Map && body.containsKey('data') ? body['data'] : body;
       return UserInfoListPage.fromJson(data as Map<String, dynamic>);

@@ -13,7 +13,7 @@ import 'package:gotogether/ui/home/title_view.dart';
 import 'package:gotogether/ui/memo/memo_screen.dart';
 import 'package:gotogether/ui/together/together_detail_screen.dart';
 
-import '../../data/models/datat_model.dart';
+import '../../data/models/data_model.dart';
 import '../../data/models/home/recent_together_data.dart';
 import 'home_controller.dart';
 

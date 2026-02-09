@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:gotogether/data/models/datat_model.dart';
+import 'package:gotogether/data/models/data_model.dart';
 import 'package:gotogether/data/models/together/together_list_item.dart';
 import 'package:gotogether/data/network/api/together/together_api.dart';
 import 'package:gotogether/data/network/dio_exception.dart';
@@ -23,7 +23,7 @@ class TogetherRepository {
 
   Future<TogetherListPage> getList(int page, int size, {String? category, String? keyword}) async {
     try {
-      final response = await togetherApi.getList(page, size, {'category': category, 'keyword': keyword});
+      final response = await togetherApi.getList(page, size, {'category': category ?? '', 'keyword': keyword ?? ''});
       final data = _extractData(response);
       return TogetherListPage.fromJson(data as Map<String, dynamic>);
     } on DioError catch (e) {
@@ -80,6 +80,15 @@ class TogetherRepository {
     try {
       final response = await togetherApi.createComment(data);
       return _toDataModel(response);
+    } on DioError catch (e) {
+      throw DioExceptions.fromDioError(e).toString();
+    }
+  }
+
+  /// Together 댓글 삭제 (본인/관리자만)
+  Future<void> deleteComment(int commentId) async {
+    try {
+      await togetherApi.deleteComment(commentId);
     } on DioError catch (e) {
       throw DioExceptions.fromDioError(e).toString();
     }

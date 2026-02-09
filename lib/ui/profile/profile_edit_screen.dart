@@ -60,7 +60,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     _skillItems = parts.map((s) {
       final sub = s.split('^');
       final item = sub.isNotEmpty ? sub[0] : '';
-      final level = sub.length > 1 && _skillLevels.contains(sub[1]) ? sub[1]! : 'INTEREST';
+      final level = sub.length > 1 && _skillLevels.contains(sub[1]) ? sub[1] : 'INTEREST';
       return SkillItem(item: item, level: level);
     }).toList();
     if (_skillItems.isEmpty) {

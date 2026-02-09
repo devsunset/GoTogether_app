@@ -1,4 +1,5 @@
-/// 백엔드 공통 응답 래퍼. data에 실제 페이로드.
+/// 백엔드 공통 응답 래퍼.
+/// status, result, code, message 등과 함께 data에 실제 페이로드를 담는다.
 class DataModel {
   int? status;
   String? result;
@@ -9,15 +10,16 @@ class DataModel {
   String? timestamp;
   Map<String, dynamic>? data;
 
-  DataModel(
-      {this.status,
-      this.result,
-      this.code,
-      this.error,
-      this.message,
-      this.description,
-      this.timestamp,
-      this.data});
+  DataModel({
+    this.status,
+    this.result,
+    this.code,
+    this.error,
+    this.message,
+    this.description,
+    this.timestamp,
+    this.data,
+  });
 
   DataModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];

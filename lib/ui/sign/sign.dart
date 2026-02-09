@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotogether/ui/sign/register.dart';
 
 import '../../data/di/service_locator.dart';
-import '../../data/models/datat_model.dart';
+import '../../data/models/data_model.dart';
 import '../navigation_main_screen.dart';
 import 'auth_controller.dart';
 

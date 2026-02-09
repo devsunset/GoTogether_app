@@ -5,9 +5,8 @@ import 'package:gotogether/data/models/memo/memo_list_item.dart';
 import 'package:gotogether/data/repository/memo/memo_repository.dart';
 import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/widgets/screen_helpers.dart';
-import 'package:gotogether/ui/memo/memo_compose_screen.dart';
 
-/// Vue와 동일: 수신/발신 탭, 체크박스+선택 삭제, 펼침+답장, New 뱃지, 열 때 읽음 처리
+/// Vue와 동일: 수신/발신 탭, 체크박스+선택 삭제, 펼침+답장(Send), New 뱃지, 열 때 읽음 처리. Vue에는 별도 쓰기 버튼 없음.
 class MemoScreen extends StatefulWidget {
   const MemoScreen({Key? key}) : super(key: key);
 
@@ -101,17 +100,6 @@ class _MemoScreenState extends State<MemoScreen> with SingleTickerProviderStateM
         _error = e.toString();
         _loadingSend = false;
       });
-    }
-  }
-
-  void _goCompose() async {
-    final needRefresh = await Navigator.push<bool>(
-      context,
-      MaterialPageRoute(builder: (context) => const MemoComposeScreen()),
-    );
-    if (needRefresh == true) {
-      _loadReceive();
-      _loadSend();
     }
   }
 
@@ -297,13 +285,6 @@ class _MemoScreenState extends State<MemoScreen> with SingleTickerProviderStateM
             Tab(text: '발신 메모함'),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit_note),
-            onPressed: _goCompose,
-            tooltip: '쪽지 쓰기',
-          ),
-        ],
       ),
       body: _error != null
           ? ErrorView(

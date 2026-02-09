@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// Vue와 동일: 카카오맵 연동 (상세=표시만, 편집=클릭으로 장소 선택)
@@ -126,11 +127,14 @@ class _KakaoMapWidgetState extends State<KakaoMapWidget> {
     );
   }
 
-  /// 웹 플랫폼: WebView 제한으로 카카오맵 페이지 링크 안내
+  /// 웹 플랫폼: WebView 미지원으로 좌표·링크만 표시. 탭 시 카카오맵 앱/웹으로 열기.
   Widget _buildWebFallback() {
     final lat = widget.lat;
     final lng = widget.lng;
     final hasLocation = lat != null && lng != null;
+    final mapUrl = hasLocation
+        ? 'https://map.kakao.com/link/map/모임장소,$lat,$lng'
+        : null;
     return Container(
       height: widget.height,
       decoration: BoxDecoration(
@@ -147,18 +151,20 @@ class _KakaoMapWidgetState extends State<KakaoMapWidget> {
           Text(
             hasLocation
                 ? '모임 장소: ${lat!.toStringAsFixed(5)}, ${lng!.toStringAsFixed(5)}'
-                : '지도는 iOS/Android 앱에서 확인할 수 있습니다.',
+                : '웹에서는 지도 표시가 제한됩니다. 앱에서 확인하거나 아래 버튼으로 위치를 선택해 주세요.',
             style: TextStyle(fontSize: 13, color: Colors.grey[700]),
             textAlign: TextAlign.center,
           ),
-          if (hasLocation) ...[
-            const SizedBox(height: 8),
-            TextButton.icon(
+          if (mapUrl != null) ...[
+            const SizedBox(height: 12),
+            FilledButton.icon(
               icon: const Icon(Icons.open_in_new, size: 18),
               label: const Text('카카오맵에서 보기'),
-              onPressed: () {
-                final url = 'https://map.kakao.com/link/map/모임장소,$lat,$lng';
-                // url_launcher 사용 가능 시 열기. 여기서는 단순 표시만.
+              onPressed: () async {
+                final uri = Uri.parse(mapUrl);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                }
               },
             ),
           ],

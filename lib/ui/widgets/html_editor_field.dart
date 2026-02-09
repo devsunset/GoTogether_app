@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
-/// Together·Post 게시판 본문용 HTML(웹) 에디터 필드. 웹/모바일 모두 HtmlEditor 사용.
+/// Together·Post 본문 에디터. Vue와 동일하게 웹/모바일 모두 HtmlEditor 사용.
 class HtmlEditorField extends StatelessWidget {
   final HtmlEditorController controller;
   final String? initialHtml;

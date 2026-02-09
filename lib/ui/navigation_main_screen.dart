@@ -4,7 +4,10 @@ import 'package:gotogether/ui/custom_drawer/drawer_user_controller.dart';
 import 'package:gotogether/ui/custom_drawer/home_drawer.dart';
 import 'package:gotogether/ui/home/home_screen.dart';
 import 'package:gotogether/ui/member/member_screen.dart';
+import 'package:gotogether/ui/memo/memo_screen.dart';
+import 'package:gotogether/ui/post/post_screen.dart';
 import 'package:gotogether/ui/profile/profile_screen.dart';
+import 'package:gotogether/ui/together/together_screen.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -56,7 +59,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           break;
         case DrawerIndex.TOGETHER:
           setState(() {
-            screenView = MemberScreen();
+            screenView = TogetherScreen();
           });
           break;
         case DrawerIndex.MEMBER:
@@ -66,12 +69,12 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           break;
         case DrawerIndex.POST:
           setState(() {
-            screenView = MemberScreen();
+            screenView = PostScreen();
           });
           break;
         case DrawerIndex.MEMO:
           setState(() {
-            screenView = MemberScreen();
+            screenView = MemoScreen();
           });
           break;
         case DrawerIndex.PROFILE:

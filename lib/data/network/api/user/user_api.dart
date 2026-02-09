@@ -8,11 +8,18 @@ class UserApi {
   UserApi({required this.dioClient});
 
   Future<Response> getUserInfoApi() async {
-    try {
-      final Response response = await dioClient.get(Endpoints.userinfo);
-      return response;
-    } catch (e) {
-      rethrow;
-    }
+    return dioClient.get(Endpoints.userinfo);
+  }
+
+  Future<Response> getUserInfoList(int page, int size, Map<String, dynamic>? body) async {
+    return dioClient.post(
+      Endpoints.userinfoList,
+      queryParameters: {'page': page, 'size': size},
+      data: body ?? {'category': null, 'keyword': null},
+    );
+  }
+
+  Future<Response> saveUserInfo(Map<String, dynamic> data) async {
+    return dioClient.post(Endpoints.userinfo, data: data);
   }
 }

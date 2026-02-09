@@ -7,7 +7,10 @@ class AuthController {
   final authRepository = getIt.get<AuthRepository>();
 
   Future<DataModel> singIn(String username, String password) async {
-    final response = await authRepository.signIn(username, password);
-    return response;
+    return authRepository.signIn(username, password);
+  }
+
+  Future<DataModel> signUp(String username, String nickname, String email, String password) async {
+    return authRepository.signUp(username, nickname, email, password);
   }
 }

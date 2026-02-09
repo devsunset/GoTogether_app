@@ -1,192 +1,128 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gotogether/data/models/member/member_list_data.dart';
-import 'package:gotogether/ui/member/member_list_view.dart';
-
-import 'member_theme.dart';
+import 'package:gotogether/data/di/service_locator.dart';
+import 'package:gotogether/data/models/user/user_info_item.dart';
+import 'package:gotogether/data/repository/user/user_repository.dart';
+import 'package:gotogether/ui/member/member_theme.dart';
 
 class MemberScreen extends StatefulWidget {
   @override
   _MemberScreenState createState() => _MemberScreenState();
 }
 
-class _MemberScreenState extends State<MemberScreen>
-    with TickerProviderStateMixin {
-  AnimationController? animationController;
-  List<MemberListData> hotelList = MemberListData.hotelList;
-  final ScrollController _scrollController = ScrollController();
-
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now().add(const Duration(days: 5));
+class _MemberScreenState extends State<MemberScreen> {
+  final UserRepository _repo = getIt<UserRepository>();
+  final TextEditingController _keywordController = TextEditingController();
+  List<UserInfoItem> _list = [];
+  int _page = 0;
+  int _totalPages = 0;
+  bool _loading = false;
+  String? _error;
 
   @override
   void initState() {
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 1000), vsync: this);
     super.initState();
-  }
-
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
-    return true;
+    _load();
   }
 
   @override
   void dispose() {
-    animationController?.dispose();
+    _keywordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _load() async {
+    if (_loading) return;
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final page = await _repo.getUserInfoList(
+        _page,
+        10,
+        keyword: _keywordController.text.isEmpty ? null : _keywordController.text,
+      );
+      setState(() {
+        _list = page.content;
+        _totalPages = page.totalPages;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: MemberTheme.buildLightTheme(),
-      child: Container(
-        child: Scaffold(
-          body: Stack(
-            children: <Widget>[
-              InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Column(
-                  children: <Widget>[
-                    getAppBarUI(),
-                    Expanded(
-                      child: NestedScrollView(
-                        controller: _scrollController,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return <Widget>[
-                            SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                return Column(
-                                  children: <Widget>[
-                                    getSearchBarUI(),
-                                  ],
-                                );
-                              }, childCount: 1),
-                            ),
-                          ];
-                        },
-                        body: Container(
-                          color: MemberTheme.buildLightTheme().backgroundColor,
-                          child: ListView.builder(
-                            itemCount: hotelList.length,
-                            padding: const EdgeInsets.only(top: 8),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              final int count =
-                                  hotelList.length > 10 ? 10 : hotelList.length;
-                              final Animation<double> animation =
-                                  Tween<double>(begin: 0.0, end: 1.0).animate(
-                                      CurvedAnimation(
-                                          parent: animationController!,
-                                          curve: Interval(
-                                              (1 / count) * index, 1.0,
-                                              curve: Curves.fastOutSlowIn)));
-                              animationController?.forward();
-                              return MemberListView(
-                                callback: () {},
-                                memberData: hotelList[index],
-                                animation: animation,
-                                animationController: animationController!,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+      child: Scaffold(
+        body: Column(
+          children: [
+            getAppBarUI(),
+            getSearchBarUI(),
+            if (_error != null)
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(_error!, style: const TextStyle(color: Colors.red)),
               ),
-            ],
-          ),
+            if (_loading)
+              const Expanded(child: Center(child: CircularProgressIndicator()))
+            else
+              Expanded(
+                child: _list.isEmpty
+                    ? const Center(child: Text('No Data.'))
+                    : ListView.builder(
+                        itemCount: _list.length + (_totalPages > 1 ? 1 : 0),
+                        padding: const EdgeInsets.all(16),
+                        itemBuilder: (context, index) {
+                          if (index == _list.length) {
+                            return Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (_page > 0)
+                                    TextButton(
+                                        onPressed: () {
+                                          _page--;
+                                          _load();
+                                        },
+                                        child: const Text('Prev')),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    child: Text('${_page + 1} / $_totalPages'),
+                                  ),
+                                  if (_page < _totalPages - 1)
+                                    TextButton(
+                                        onPressed: () {
+                                          _page++;
+                                          _load();
+                                        },
+                                        child: const Text('Next')),
+                                ],
+                              ),
+                            );
+                          }
+                          final item = _list[index];
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: ListTile(
+                              title: Text(item.nickname ?? item.username ?? ''),
+                              subtitle: Text(item.introduce ?? item.username ?? ''),
+                              trailing: const Icon(Icons.chevron_right),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+          ],
         ),
       ),
-    );
-  }
-
-  Widget getListUI() {
-    return Container(
-      decoration: BoxDecoration(
-        color: MemberTheme.buildLightTheme().backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, -2),
-              blurRadius: 8.0),
-        ],
-      ),
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height - 156 - 50,
-            child: FutureBuilder<bool>(
-              future: getData(),
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (!snapshot.hasData) {
-                  return const SizedBox();
-                } else {
-                  return ListView.builder(
-                    itemCount: hotelList.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (BuildContext context, int index) {
-                      final int count =
-                          hotelList.length > 10 ? 10 : hotelList.length;
-                      final Animation<double> animation =
-                          Tween<double>(begin: 0.0, end: 1.0).animate(
-                              CurvedAnimation(
-                                  parent: animationController!,
-                                  curve: Interval((1 / count) * index, 1.0,
-                                      curve: Curves.fastOutSlowIn)));
-                      animationController?.forward();
-
-                      return MemberListView(
-                        callback: () {},
-                        memberData: hotelList[index],
-                        animation: animation,
-                        animationController: animationController!,
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget getHotelViewList() {
-    final List<Widget> hotelListViews = <Widget>[];
-    for (int i = 0; i < hotelList.length; i++) {
-      final int count = hotelList.length;
-      final Animation<double> animation =
-          Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController!,
-          curve: Interval((1 / count) * i, 1.0, curve: Curves.fastOutSlowIn),
-        ),
-      );
-      hotelListViews.add(
-        MemberListView(
-          callback: () {},
-          memberData: hotelList[i],
-          animation: animation,
-          animationController: animationController!,
-        ),
-      );
-    }
-    animationController?.forward();
-    return Column(
-      children: hotelListViews,
     );
   }
 
@@ -194,71 +130,28 @@ class _MemberScreenState extends State<MemberScreen>
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       child: Row(
-        children: <Widget>[
+        children: [
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: MemberTheme.buildLightTheme().backgroundColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(38.0),
-                  ),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        offset: const Offset(0, 2),
-                        blurRadius: 8.0),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 4, bottom: 4),
-                  child: TextField(
-                    onChanged: (String txt) {},
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                    cursorColor: MemberTheme.buildLightTheme().primaryColor,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Search...',
-                    ),
-                  ),
-                ),
+            child: TextField(
+              controller: _keywordController,
+              decoration: const InputDecoration(
+                hintText: 'Search...',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
+              onSubmitted: (_) {
+                _page = 0;
+                _load();
+              },
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: MemberTheme.buildLightTheme().primaryColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(38.0),
-              ),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.4),
-                    offset: const Offset(0, 2),
-                    blurRadius: 8.0),
-              ],
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(32.0),
-                ),
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Icon(FontAwesomeIcons.magnifyingGlass,
-                      size: 20,
-                      color: MemberTheme.buildLightTheme().backgroundColor),
-                ),
-              ),
-            ),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: Icon(FontAwesomeIcons.magnifyingGlass, size: 20, color: MemberTheme.buildLightTheme().primaryColor),
+            onPressed: () {
+              _page = 0;
+              _load();
+            },
           ),
         ],
       ),
@@ -304,7 +197,7 @@ class _MemberScreenState extends State<MemberScreen>
             Expanded(
               child: Center(
                 child: Text(
-                  'To-Do',
+                  'Member',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 22,
@@ -338,29 +231,5 @@ class _MemberScreenState extends State<MemberScreen>
         ),
       ),
     );
-  }
-}
-
-class ContestTabHeader extends SliverPersistentHeaderDelegate {
-  ContestTabHeader(
-    this.searchUI,
-  );
-  final Widget searchUI;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return searchUI;
-  }
-
-  @override
-  double get maxExtent => 52.0;
-
-  @override
-  double get minExtent => 52.0;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
   }
 }

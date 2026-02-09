@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:gotogether/data/models/datat_model.dart';
 import 'package:gotogether/data/network/dio_exception.dart';
@@ -14,11 +12,22 @@ class AuthRepository {
   Future<DataModel> signIn(String username, String password) async {
     try {
       final response = await authApi.signIn(username, password);
-      Map<String, dynamic> jsonData = jsonDecode(response.toString());
-      return DataModel.fromJson(jsonData);
+      final body = response.data;
+      if (body is Map<String, dynamic>) return DataModel.fromJson(body);
+      return DataModel.fromJson({'data': body, 'status': response.statusCode});
     } on DioError catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
-      throw errorMessage;
+      throw DioExceptions.fromDioError(e).toString();
+    }
+  }
+
+  Future<DataModel> signUp(String username, String nickname, String email, String password) async {
+    try {
+      final response = await authApi.signUp(username, nickname, email, password);
+      final body = response.data;
+      if (body is Map<String, dynamic>) return DataModel.fromJson(body);
+      return DataModel.fromJson({'data': body, 'status': response.statusCode});
+    } on DioError catch (e) {
+      throw DioExceptions.fromDioError(e).toString();
     }
   }
 }

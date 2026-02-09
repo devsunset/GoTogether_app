@@ -1,11 +1,17 @@
-import 'dart:io';
-
-import 'package:dio/adapter.dart';
+/// Dio 기반 HTTP 클라이언트
+///
+/// - JWT: 요청 시 Authorization 헤더 자동 첨부
+/// - 401 시 refresh token으로 갱신 후 원래 요청 1회 재시도
+/// - 웹 빌드: LogInterceptor 비활성화 (브라우저 fetch와 Future 충돌 방지)
+/// - 플랫폼별: IO에서는 SSL 검증 무시, 웹에서는 브라우저 기본 사용
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotogether/data/network/api/constant/endpoints.dart';
+import 'package:gotogether/data/network/dio_client_stub.dart'
+    if (dart.library.io) 'dio_client_io.dart' as platform;
 
 class DioClient {
   final Dio _dio;
@@ -15,104 +21,101 @@ class DioClient {
       ..options.baseUrl = Endpoints.baseUrl
       ..options.connectTimeout = Endpoints.connectionTimeout
       ..options.receiveTimeout = Endpoints.receiveTimeout
-      ..options.responseType = ResponseType.json
-      ..interceptors.add(LogInterceptor(
+      ..options.responseType = ResponseType.json;
+
+    // 웹에서는 LogInterceptor가 브라우저 fetch와 충돌해 "Future already completed" 발생할 수 있어 비활성화
+    if (!kIsWeb) {
+      _dio.interceptors.add(LogInterceptor(
         request: true,
         requestHeader: true,
         requestBody: true,
         responseHeader: true,
         responseBody: true,
       ));
+    }
 
-    // SSL 인증서 검증 무시
-     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-         (client) {
-       client.badCertificateCallback =
-           (X509Certificate cert, String host, int port) => true;
-     };
+    platform.setupDioHttpClient(_dio);
 
+    final storage = FlutterSecureStorage();
 
-    final storage = new FlutterSecureStorage();
-    // _dio.interceptors.clear();
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        final accessToken = await storage.read(key: 'ACCESS_TOKEN');
+        options.headers['Authorization'] = 'Bearer $accessToken';
+        return handler.next(options);
+      },
+      onError: (error, handler) async {
+        if (error.response?.statusCode != 401) {
+          return handler.next(error);
+        }
 
-    _dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (options, handler) async {
-      // 저장된 AccessToken 로드
-      final accessToken = await storage.read(key: 'ACCESS_TOKEN');
-      options.headers['Authorization'] = 'Bearer $accessToken';
-      return handler.next(options);
-    }, onError: (error, handler) async {
-      // 인증 오류가 발생했을 경우: AccessToken 의 만료
-      // To-Do : "Request failed with status code 403" message check
-      if (error.response?.statusCode == 401) {
-        // 기기에 저장된 RefreshToken 로드
         final refreshToken = await storage.read(key: 'REFRESH_TOKEN');
+        if (refreshToken == null || refreshToken.isEmpty) {
+          return handler.next(error);
+        }
 
-        // 토큰 갱신 요청을 담당할 dio 객체 구현 후 그에 따른 interceptor 정의
-        var refreshDio = Dio();
-        refreshDio
-          ..options.baseUrl = Endpoints.baseUrl
-          ..options.connectTimeout = Endpoints.connectionTimeout
-          ..options.receiveTimeout = Endpoints.receiveTimeout
-          ..options.responseType = ResponseType.json
-          ..interceptors.add(LogInterceptor(
-            request: true,
-            requestHeader: true,
-            requestBody: true,
-            responseHeader: true,
-            responseBody: true,
+        try {
+          var refreshDio = Dio();
+          refreshDio
+            ..options.baseUrl = Endpoints.baseUrl
+            ..options.connectTimeout = Endpoints.connectionTimeout
+            ..options.receiveTimeout = Endpoints.receiveTimeout
+            ..options.responseType = ResponseType.json;
+
+          refreshDio.interceptors.add(InterceptorsWrapper(
+            onError: (err, h) async {
+              if (err.response?.statusCode == 401) {
+                await storage.deleteAll();
+                showToast("LogIn Token Invalid.");
+              }
+              return h.next(err);
+            },
           ));
 
-        // refreshDio.interceptors.clear();
+          final refreshResponse = await refreshDio.post(
+            Endpoints.refreshtoken,
+            data: <String, dynamic>{'refreshToken': refreshToken},
+          );
 
-        refreshDio.interceptors
-            .add(InterceptorsWrapper(onError: (error, handler) async {
-          // 다시 인증 오류가 발생했을 경우: RefreshToken의 만료
-          // To-Do : "Request failed with status code 403" message check
-          if (error.response?.statusCode == 401) {
-            // 기기의 자동 로그인 정보 삭제
-            await storage.deleteAll();
-            // . . .
-            // 로그인 만료 dialog 발생 후 로그인 페이지로 이동
-            // . . .
-            showToast("LogIn Token Invalid.");
+          final responseData = refreshResponse.data;
+          final payload = responseData is Map && responseData.containsKey('data')
+              ? responseData['data']
+              : responseData;
+          final newAccessToken = payload is Map && payload.containsKey('token')
+              ? payload['token']?.toString() ?? ''
+              : '';
+          final newRefreshToken = payload is Map && payload.containsKey('refreshToken')
+              ? payload['refreshToken']?.toString()
+              : null;
+
+          if (newAccessToken.isEmpty) {
+            return handler.next(error);
           }
-          return handler.next(error);
-        }));
 
-        Map<String, dynamic>? data = Map<String, dynamic>();
-        data['refreshToken'] = refreshToken;
+          await storage.write(key: 'ACCESS_TOKEN', value: newAccessToken);
+          if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
+            await storage.write(key: 'REFRESH_TOKEN', value: newRefreshToken);
+          }
 
-        // 토큰 갱신 API 요청
-        final refreshResponse =
-            await refreshDio.post(Endpoints.refreshtoken, data: data);
+          error.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
 
-        print(refreshResponse);
-
-        // response로부터 새로 갱신된 AccessToken과 RefreshToken 파싱
-        final newAccessToken =
-            ''; //To-Do : Get accesstoken from refreshResponse;
-        // 기기에 저장된 AccessToken 갱신
-        await storage.write(key: 'ACCESS_TOKEN', value: newAccessToken);
-
-        // AccessToken의 만료로 수행하지 못했던 API 요청에 담겼던 AccessToken 갱신
-        error.requestOptions.headers['Authorization'] =
-            'Bearer $newAccessToken';
-
-        // 수행하지 못했던 API 요청 복사본 생성
-        final clonedRequest = await _dio.request(error.requestOptions.path,
+          // 재요청 시 _dio.request 사용 (interceptor 체인 통과). handler.resolve는 한 번만 호출
+          final clonedResponse = await _dio.request(
+            error.requestOptions.path,
             options: Options(
-                method: error.requestOptions.method,
-                headers: error.requestOptions.headers),
+              method: error.requestOptions.method,
+              headers: error.requestOptions.headers,
+            ),
             data: error.requestOptions.data,
-            queryParameters: error.requestOptions.queryParameters);
+            queryParameters: error.requestOptions.queryParameters,
+          );
 
-        // API 복사본으로 재요청
-        return handler.resolve(clonedRequest);
-      }
-
-      return handler.next(error);
-    }));
+          return handler.resolve(clonedResponse);
+        } catch (_) {
+          return handler.next(error);
+        }
+      },
+    ));
   }
 
   Future<Response> get(
@@ -186,7 +189,7 @@ class DioClient {
     }
   }
 
-  Future<dynamic> delete(
+  Future<Response> delete(
     String uri, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -203,7 +206,7 @@ class DioClient {
         options: options,
         cancelToken: cancelToken,
       );
-      return response.data;
+      return response;
     } catch (e) {
       rethrow;
     }

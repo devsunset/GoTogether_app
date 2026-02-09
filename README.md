@@ -8,6 +8,16 @@ GoTogether 모바일/웹 클라이언트 (Flutter).
 - Flutter SDK (stable, 2.17.5+)
 - Dart 2.17.5+
 
+## Cursor / VS Code에서 Git 인식
+
+**"Scanning folder for Git repositories..."에서 멈출 때**  
+워크스페이스를 **이 프로젝트 루트(GoTogether_app 폴더)**로 열어 주세요.
+
+- ✅ `File > Open Folder` → **GoTogether_app** 선택  
+- ❌ 상위 폴더(예: devwork)를 열면 Git 스캔이 길어지거나 멈출 수 있음  
+
+`.vscode/settings.json`에 Git 스캔 깊이(`git.repositoryScanMaxDepth: 1`)가 설정되어 있어, 루트를 이 폴더로 열면 바로 인식됩니다.
+
 ## 실행 방법
 
 ### 웹 (에뮬레이터 없이 확인)

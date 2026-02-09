@@ -41,6 +41,19 @@ dependencies:
 dev_dependencies:
     flutter_test:
         sdk: flutter
+    flutter_launcher_icons: ^0.14.4
+
+# GoTogether 앱 아이콘·파비콘 생성 (assets/icon/app_icon.png 기준)
+flutter_launcher_icons:
+    image_path: "assets/icon/app_icon.png"
+    android: true
+    ios: true
+    web:
+        generate: true
+        image_path: "assets/icon/app_icon.png"
+        background_color: "#0043ba"
+        theme_color: "#0043ba"
+    min_sdk_android: 21
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -56,6 +69,7 @@ flutter:
     assets:
         - assets/images/
         - assets/home/
+        - assets/icon/
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/assets-and-images/#resolution-aware.
 

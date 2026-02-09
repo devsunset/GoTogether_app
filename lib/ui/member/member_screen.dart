@@ -118,18 +118,18 @@ class _MemberScreenState extends State<MemberScreen> {
     }
   }
 
-  static List<({String item, String level})> _parseSkill(String? skill) {
+  static List<_SkillEntry> _parseSkill(String? skill) {
     final raw = skill?.trim() ?? '';
     if (raw.isEmpty) return [];
-    final list = <({String item, String level})>[];
+    final list = <_SkillEntry>[];
     for (final part in raw.split('|')) {
       final s = part.trim();
       if (s.isEmpty) continue;
       final idx = s.indexOf('^');
       if (idx < 0) {
-        list.add((s, 'INTEREST'));
+        list.add(_SkillEntry(s, 'INTEREST'));
       } else {
-        list.add((s.substring(0, idx).trim(), s.substring(idx + 1).trim().toUpperCase()));
+        list.add(_SkillEntry(s.substring(0, idx).trim(), s.substring(idx + 1).trim().toUpperCase()));
       }
     }
     return list;
@@ -255,7 +255,7 @@ class _MemberCard extends StatelessWidget {
   final TextEditingController memoController;
   final bool sendingMemo;
   final VoidCallback onSendMemo;
-  final List<({String item, String level})> Function(String?) parseSkill;
+  final List<_SkillEntry> Function(String?) parseSkill;
   final Color Function(String) skillColor;
 
   const _MemberCard({
@@ -413,4 +413,10 @@ class _MemberCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _SkillEntry {
+  final String item;
+  final String level;
+  _SkillEntry(this.item, this.level);
 }

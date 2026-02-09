@@ -10,6 +10,7 @@ import 'package:gotogether/ui/home/notice_view.dart';
 import 'package:gotogether/ui/home/recent_together_view.dart';
 import 'package:gotogether/ui/home/statistics_view.dart';
 import 'package:gotogether/ui/home/title_view.dart';
+import 'package:gotogether/ui/memo/memo_screen.dart';
 import 'package:gotogether/ui/together/together_detail_screen.dart';
 
 import '../../data/models/datat_model.dart';

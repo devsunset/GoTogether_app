@@ -187,16 +187,16 @@ class _ProgressBadge extends StatelessWidget {
 
   const _ProgressBadge({required this.progress, this.legend});
 
-  static ({Color bg, Color fg}) _colors(String? legend) {
+  static _ColorPair _colors(String? legend) {
     switch (legend) {
       case 'success':
-        return (bg: const Color(0xFFECFDF5), fg: const Color(0xFF059669));
+        return _ColorPair(const Color(0xFFECFDF5), const Color(0xFF059669));
       case 'primary':
-        return (bg: const Color(0xFFEEF2FF), fg: AppTheme.primary);
+        return _ColorPair(const Color(0xFFEEF2FF), AppTheme.primary);
       case 'warning':
-        return (bg: const Color(0xFFFFFBEB), fg: const Color(0xFFD97706));
+        return _ColorPair(const Color(0xFFFFFBEB), const Color(0xFFD97706));
       default:
-        return (bg: const Color(0xFFFEF2F2), fg: const Color(0xFFDC2626));
+        return _ColorPair(const Color(0xFFFEF2F2), const Color(0xFFDC2626));
     }
   }
 
@@ -221,4 +221,10 @@ class _ProgressBadge extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ColorPair {
+  final Color bg;
+  final Color fg;
+  _ColorPair(this.bg, this.fg);
 }

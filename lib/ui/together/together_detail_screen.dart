@@ -238,18 +238,18 @@ class _TogetherDetailScreenState extends State<TogetherDetailScreen> {
   }
 
   /// Vue와 동일: "item1^LEVEL1|item2^LEVEL2" 파싱
-  static List<({String item, String level})> _skillEntries(dynamic skill) {
+  static List<_SkillEntry> _skillEntries(dynamic skill) {
     final raw = skill?.toString().trim() ?? '';
     if (raw.isEmpty) return [];
-    final list = <({String item, String level})>[];
+    final list = <_SkillEntry>[];
     for (final part in raw.split('|')) {
       final s = part.trim();
       if (s.isEmpty) continue;
       final idx = s.indexOf('^');
       if (idx < 0) {
-        list.add((item: s, level: 'INTEREST'));
+        list.add(_SkillEntry(s, 'INTEREST'));
       } else {
-        list.add((item: s.substring(0, idx).trim(), level: s.substring(idx + 1).trim().toUpperCase()));
+        list.add(_SkillEntry(s.substring(0, idx).trim(), s.substring(idx + 1).trim().toUpperCase()));
       }
     }
     return list;
@@ -288,16 +288,16 @@ class _SkillChip extends StatelessWidget {
 
   const _SkillChip({required this.item, required this.level});
 
-  static ({Color fg, Color bg}) _colors(String level) {
+  static _SkillColorPair _colors(String level) {
     switch (level.toUpperCase()) {
       case 'BASIC':
-        return (fg: const Color(0xFF059669), bg: const Color(0xFFECFDF5));
+        return _SkillColorPair(const Color(0xFF059669), const Color(0xFFECFDF5));
       case 'JOB':
-        return (fg: const Color(0xFFDC2626), bg: const Color(0xFFFEF2F2));
+        return _SkillColorPair(const Color(0xFFDC2626), const Color(0xFFFEF2F2));
       case 'TOY_PROJECT':
-        return (fg: AppTheme.primary, bg: const Color(0xFFEEF2FF));
+        return _SkillColorPair(AppTheme.primary, const Color(0xFFEEF2FF));
       default:
-        return (fg: const Color(0xFFD97706), bg: const Color(0xFFFFFBEB));
+        return _SkillColorPair(const Color(0xFFD97706), const Color(0xFFFFFBEB));
     }
   }
 
@@ -314,4 +314,16 @@ class _SkillChip extends StatelessWidget {
       child: Text(item, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: c.fg)),
     );
   }
+}
+
+class _SkillEntry {
+  final String item;
+  final String level;
+  _SkillEntry(this.item, this.level);
+}
+
+class _SkillColorPair {
+  final Color fg;
+  final Color bg;
+  _SkillColorPair(this.fg, this.bg);
 }

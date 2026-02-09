@@ -45,9 +45,9 @@ class _KakaoMapWidgetState extends State<KakaoMapWidget> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
         'MapClient',
-        onMessageReceived: (JavaScriptMessageMessage msg) {
+        onMessageReceived: (msg) {
           try {
-            final map = jsonDecode(msg.message) as Map<String, dynamic>;
+            final map = jsonDecode(msg.message as String) as Map<String, dynamic>;
             final latV = map['lat'];
             final lngV = map['lng'];
             if (latV != null && lngV != null) {

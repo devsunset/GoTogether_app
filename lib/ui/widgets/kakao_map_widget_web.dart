@@ -66,7 +66,8 @@ class _WebKakaoMapEmbedState extends State<WebKakaoMapEmbed> {
     if (_registered) return;
     final lat = widget.lat;
     final lng = widget.lng;
-    // 루트 기준 절대 경로로 iframe 로드 (Flutter 웹 서버가 web/ 파일을 루트에 서빙)
+    // web/kakao_map_embed.html은 빌드 시 web/ 아래에 그대로 복사되므로
+    // 루트 배포 시 /kakao_map_embed.html, base-href 사용 시 pathPrefix/kakao_map_embed.html 로 로드
     final params = <String, String>{
       'lat': lat.toString(),
       'lng': lng.toString(),

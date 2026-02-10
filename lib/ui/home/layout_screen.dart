@@ -1,6 +1,7 @@
 /// 홈 레이아웃: 통계 4칸(Together/Member/Talk/Q&A)·공지·Recent Together Top 3.
 /// 통계 탭 → 해당 메뉴, Recent 행 탭 → Together 상세.
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gotogether/data/di/service_locator.dart';
 import 'package:gotogether/data/models/home/statistics_data.dart';
@@ -287,6 +288,12 @@ class _LayoutScreenState extends State<LayoutScreen>
         context, MaterialPageRoute(builder: (context) => const MemoScreen()));
   }
 
+  Future<bool> _isLoggedIn() async {
+    final storage = FlutterSecureStorage();
+    final nickname = await storage.read(key: 'NICK_NAME');
+    return nickname != null && nickname.isNotEmpty;
+  }
+
   Widget getAppBarUI() {
     return Column(
       children: <Widget>[
@@ -339,20 +346,28 @@ class _LayoutScreenState extends State<LayoutScreen>
                                 ),
                               ),
                             ),
-                            Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: goMemo,
-                                borderRadius: BorderRadius.circular(AppTheme.radiusXl),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Icon(
-                                    FontAwesomeIcons.envelope,
-                                    size: 20,
-                                    color: HomeTheme.dark_grey,
-                                  ),
-                                ),
-                              ),
+                            FutureBuilder<bool>(
+                              future: _isLoggedIn(),
+                              builder: (context, snapshot) {
+                                if (snapshot.data == true) {
+                                  return Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: goMemo,
+                                      borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Icon(
+                                          FontAwesomeIcons.envelope,
+                                          size: 20,
+                                          color: HomeTheme.dark_grey,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return const SizedBox.shrink();
+                              },
                             ),
                           ],
                         ),

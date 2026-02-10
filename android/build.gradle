@@ -1,17 +1,25 @@
-plugins {
-    // Android Gradle Plugin 8.5.x (Gradle 8.7, Java 17)
-    id "com.android.application" version "8.5.2" apply false
-
-    // Kotlin 1.9.x (AGP 8.5 호환)
-    id "org.jetbrains.kotlin.android" version "1.9.24" apply false
-
-    id "dev.flutter.flutter-gradle-plugin" apply false
-}
-
 allprojects {
     repositories {
         google()
-        mavenCentral() // jcenter()는 서비스 중단되었으므로 mavenCentral로 교체 권장
+        mavenCentral()
+    }
+}
+
+// AGP 8+ 필수: namespace 미지정 플러그인에 AndroidManifest package로 namespace 설정
+subprojects { subproject ->
+    subproject.afterEvaluate {
+        if (subproject.plugins.hasPlugin("com.android.library")) {
+            def android = subproject.extensions.findByName("android")
+            if (android != null && android.namespace == null) {
+                def manifest = file("${subproject.projectDir}/src/main/AndroidManifest.xml")
+                if (manifest.exists()) {
+                    def matcher = (manifest.text =~ /package="([^"]+)"/)
+                    if (matcher.find()) {
+                        android.namespace = matcher.group(1)
+                    }
+                }
+            }
+        }
     }
 }
 

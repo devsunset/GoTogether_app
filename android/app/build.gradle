@@ -1,7 +1,6 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    // 최신 Flutter Gradle 플러그인 적용
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -55,5 +54,5 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.2.20"
 }

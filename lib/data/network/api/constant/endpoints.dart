@@ -3,8 +3,8 @@
 class Endpoints {
   Endpoints._();
 
-  /// Vue api.js baseURL: http://193.123.252.22:8282/api (동일 호스트·포트, https 사용)
-  static const String baseUrl = "https://193.123.252.22:8282/api";
+  /// Vue api.js baseURL: http://devsunset.mooo.com:8282/api (동일 호스트·포트, https 사용)
+  static const String baseUrl = "https://devsunset.mooo.com:8282/api";
   static const int receiveTimeout = 30000;
   static const int connectionTimeout = 30000;
 

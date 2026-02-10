@@ -42,6 +42,10 @@ dependencies:
     kakao_map_sdk: ^1.2.3
     url_launcher: ^6.2.0
 
+dependency_overrides:
+    # Dart 3.5+에서 제거된 UnmodifiableUint8ListView 대응 (win32 5.5.1+)
+    win32: ^5.5.1
+
 dev_dependencies:
     flutter_test:
         sdk: flutter

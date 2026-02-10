@@ -1,3 +1,4 @@
+/// Together 상세: 글 정보·내용·기타정보·참여방식·모임장소(지도)·댓글·댓글 작성 영역 구분.
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -190,10 +191,12 @@ class _TogetherDetailScreenState extends State<TogetherDetailScreen> {
           key: ValueKey('together_detail_body_$togetherId'),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(AppTheme.paddingScreen),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 8),
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 8),
                 DetailSection(
                   title: '글 정보',
                   icon: Icons.article_outlined,
@@ -393,7 +396,8 @@ class _TogetherDetailScreenState extends State<TogetherDetailScreen> {
                     ),
                   ),
                 const SizedBox(height: 24),
-              ],
+                ],
+              ),
             ),
           ),
         ),

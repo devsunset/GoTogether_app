@@ -1,5 +1,5 @@
-/// 홈 레이아웃. Vue Home과 동일: 통계(4칸)·공지·Recent Together Top 3.
-/// 통계 탭 시 해당 메뉴로 이동, Recent 탭 시 Together 상세로 이동.
+/// 홈 레이아웃: 통계 4칸(Together/Member/Talk/Q&A)·공지·Recent Together Top 3.
+/// 통계 탭 → 해당 메뉴, Recent 행 탭 → Together 상세.
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gotogether/data/di/service_locator.dart';

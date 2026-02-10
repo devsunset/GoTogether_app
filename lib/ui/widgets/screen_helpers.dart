@@ -1,4 +1,5 @@
-/// 리스트·검색·페이지네이션·로딩/에러/빈 화면 등 공통 위젯.
+/// 공통 UI 위젯: 로딩/에러/빈 화면, 검색바, 리스트 카드, 페이지네이션, 상세 섹션.
+/// Post·Together·Member 상세 화면에서 [DetailSection]으로 영역 구분.
 import 'package:flutter/material.dart';
 import 'package:gotogether/ui/app_theme.dart';
 
@@ -222,7 +223,7 @@ class PaginationBar extends StatelessWidget {
   }
 }
 
-/// 상세 화면용 섹션: 제목+아이콘, 카드로 감싼 영역 구분
+/// 상세 화면용 섹션: 제목+아이콘, 카드로 감싼 영역. width 100% 적용.
 class DetailSection extends StatelessWidget {
   final String title;
   final IconData? icon;
@@ -239,31 +240,33 @@ class DetailSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 10),
-          child: Row(
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: 20, color: AppTheme.primary),
-                const SizedBox(width: 8),
-              ],
-              Text(
-                title,
-                style: const TextStyle(
-                  fontFamily: AppTheme.fontName,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.2,
-                  color: AppTheme.darkerText,
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 10),
+            child: Row(
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, size: 20, color: AppTheme.primary),
+                  const SizedBox(width: 8),
+                ],
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontFamily: AppTheme.fontName,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.2,
+                    color: AppTheme.darkerText,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         Card(
           elevation: 2,
           shadowColor: AppTheme.primary.withOpacity(0.08),
@@ -277,7 +280,8 @@ class DetailSection extends StatelessWidget {
             child: child,
           ),
         ),
-      ],
+        ],
+      ),
     );
   }
 }

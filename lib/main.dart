@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
+        // 색상 체계: primary·surface·container
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppTheme.primary,
           brightness: Brightness.light,
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
           surfaceContainerHighest: AppTheme.white,
         ),
         scaffoldBackgroundColor: AppTheme.surface,
+        // 앱바·카드·리스트타일·입력·버튼·칩
         appBarTheme: const AppBarTheme(
           centerTitle: true,
           elevation: 0,

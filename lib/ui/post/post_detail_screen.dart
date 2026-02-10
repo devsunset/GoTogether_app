@@ -1,4 +1,5 @@
-/// Post 상세·댓글·수정/삭제. Admin일 때만 "Category 변경" 버튼 표시. Vue post detail과 동일.
+/// Post(Talk/Q&A) 상세: 글 정보·내용·댓글·댓글 작성 영역 구분.
+/// Admin일 때만 Category 변경, 작성자/Admin만 수정·삭제.
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -218,9 +219,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           key: ValueKey('post_detail_body_$postId'),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(AppTheme.paddingScreen),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
                 const SizedBox(height: 8),
                 DetailSection(
                   title: '글 정보',
@@ -353,7 +356,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ),
                   ),
                 const SizedBox(height: 24),
-              ],
+                ],
+              ),
             ),
           ),
         ),

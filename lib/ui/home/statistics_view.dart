@@ -54,8 +54,8 @@ class _StatisticsViewState extends State<StatisticsView>
     final horizontalPadding = AppTheme.paddingCard;
     const gap = 8.0;
     const cardCount = 4;
-    final cardWidth = ((screenWidth - horizontalPadding * 2 - gap * (cardCount - 1)) / cardCount).clamp(90.0, 140.0);
-    final containerHeight = (cardWidth * (186 / 98)).clamp(170.0, 280.0);
+    final cardWidth = ((screenWidth - horizontalPadding * 2 - gap * (cardCount - 1)) / cardCount).clamp(100.0, 165.0);
+    final containerHeight = (cardWidth * (186 / 98)).clamp(190.0, 320.0);
 
     return AnimatedBuilder(
       animation: widget.mainScreenAnimationController!,
@@ -193,8 +193,8 @@ class ItemsView extends StatelessWidget {
                         child: LayoutBuilder(
                           builder: (context, constraints) {
                             final scale = cardWidth / 98;
-                            final titleSize = (12 * scale).clamp(11.0, 16.0);
-                            final legendSize = (10 * scale).clamp(9.0, 14.0);
+                            final titleSize = (12 * scale).clamp(12.0, 16.0);
+                            final legendSize = (11 * scale).clamp(10.0, 14.0);
                             final countSize = (24 * scale).clamp(20.0, 32.0);
                             return Padding(
                               padding: EdgeInsets.only(
@@ -221,11 +221,12 @@ class ItemsView extends StatelessWidget {
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                           top: 8 * scale, bottom: 8 * scale),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
                                             statisticsData!.legend!.join('\n'),
                                             style: TextStyle(
                                               fontFamily: HomeTheme.fontName,
@@ -234,8 +235,10 @@ class ItemsView extends StatelessWidget {
                                               letterSpacing: 0.2,
                                               color: HomeTheme.white,
                                             ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ),

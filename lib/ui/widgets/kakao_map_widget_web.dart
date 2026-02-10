@@ -66,24 +66,22 @@ class _WebKakaoMapEmbedState extends State<WebKakaoMapEmbed> {
     if (_registered) return;
     final lat = widget.lat;
     final lng = widget.lng;
-    final basePath = Uri.base.path.endsWith('/')
-        ? Uri.base.path
-        : '${Uri.base.path}/';
+    // 루트 기준 절대 경로로 iframe 로드 (Flutter 웹 서버가 web/ 파일을 루트에 서빙)
     final params = <String, String>{
       'lat': lat.toString(),
       'lng': lng.toString(),
       'level': '3',
     };
     if (widget.mode == 'edit') params['edit'] = '1';
-    final embedUri = Uri.parse(
-      '${Uri.base.origin}${basePath}kakao_map_embed.html',
-    ).replace(queryParameters: params);
+    final query = params.entries.map((e) => '${e.key}=${Uri.encodeComponent(e.value)}').join('&');
+    final pathPrefix = Uri.base.path == '/' || Uri.base.path.isEmpty ? '' : Uri.base.path.replaceAll(RegExp(r'/$'), '');
+    final embedSrc = '${pathPrefix}/kakao_map_embed.html?$query';
     final iframe = html.IFrameElement()
-      ..src = embedUri.toString()
+      ..src = embedSrc
       ..style.width = '100%'
       ..style.height = '100%'
       ..style.border = 'none'
-      ..style.minHeight = '${widget.height}px';
+      ..style.display = 'block';
     ui_web.platformViewRegistry.registerViewFactory(
       _viewType,
       (int viewId) => iframe,
@@ -99,21 +97,24 @@ class _WebKakaoMapEmbedState extends State<WebKakaoMapEmbed> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
+        SizedBox(
+          width: double.infinity,
           height: widget.height,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey.shade400),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey.shade400),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: HtmlElementView(viewType: _viewType),
           ),
-          clipBehavior: Clip.antiAlias,
-          child: HtmlElementView(viewType: _viewType),
         ),
         const SizedBox(height: 8),
         Align(

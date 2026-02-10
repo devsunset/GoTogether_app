@@ -5,6 +5,7 @@ import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/profile/user_controller.dart';
 import 'package:gotogether/ui/profile/profile_edit_screen.dart';
 import 'package:gotogether/ui/widgets/screen_helpers.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -88,48 +89,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     final d = _data ?? {};
     return Scaffold(
-      backgroundColor: AppTheme.notWhite,
+      backgroundColor: AppTheme.surface,
       body: Column(
         children: [
           const Expanded(flex: 2, child: _TopPortion()),
           Expanded(
             flex: 8,
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(AppTheme.paddingCard),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Card(
-                    elevation: AppTheme.cardElevation,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
-                    child: Padding(
-                      padding: EdgeInsets.all(AppTheme.paddingScreen),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.all(AppTheme.paddingScreen),
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    DetailSection(
+                      title: '프로필',
+                      icon: Icons.person_outline,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                d['nickname']?.toString() ?? '-',
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppTheme.darkerText,
-                                ),
-                              ),
-                              FilledButton.tonal(
-                                onPressed: _edit,
-                                child: const Text('수정'),
-                              ),
-                            ],
+                          Text(
+                            d['nickname']?.toString() ?? '-',
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.darkerText,
+                            ),
                           ),
-                          const SizedBox(height: 16),
-                          ..._profileRows(d),
+                          FilledButton.tonal(
+                            onPressed: _edit,
+                            child: const Text('수정'),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    if (_hasValue(d['introduce'])) ...[
+                      const SizedBox(height: 12),
+                      DetailSection(
+                        title: '소개',
+                        icon: Icons.info_outlined,
+                        child: SelectableText(
+                          d['introduce']?.toString() ?? '',
+                          style: const TextStyle(fontSize: 14, color: AppTheme.darkText, height: 1.4),
+                        ),
+                      ),
+                    ],
+                    if (_hasValue(d['note'])) ...[
+                      const SizedBox(height: 12),
+                      DetailSection(
+                        title: '메모',
+                        icon: Icons.note_outlined,
+                        child: SelectableText(
+                          d['note']?.toString() ?? '',
+                          style: const TextStyle(fontSize: 14, color: AppTheme.darkText, height: 1.4),
+                        ),
+                      ),
+                    ],
+                    if (_hasValue(d['github'])) ...[
+                      const SizedBox(height: 12),
+                      DetailSection(
+                        title: 'Github',
+                        icon: Icons.code,
+                        child: _buildLink(d['github']!.toString()),
+                      ),
+                    ],
+                    if (_hasValue(d['homepage'])) ...[
+                      const SizedBox(height: 12),
+                      DetailSection(
+                        title: '홈페이지',
+                        icon: Icons.language,
+                        child: _buildLink(d['homepage']!.toString()),
+                      ),
+                    ],
+                    if (_hasSkill(d['skill'])) ...[
+                      const SizedBox(height: 12),
+                      DetailSection(
+                        title: '스킬',
+                        icon: Icons.star_outline,
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: _skillChips(d['skill']?.toString()),
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
             ),
           ),
@@ -138,49 +183,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  List<Widget> _profileRows(Map<String, dynamic> d) {
-    final list = <Widget>[];
-    void add(String label, String? value) {
-      if (value != null && value.isNotEmpty) {
-        list.add(
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppTheme.lightText,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: const TextStyle(fontSize: 14, color: AppTheme.darkText),
-                ),
-              ],
-            ),
-          ),
-        );
-      }
+  static bool _hasValue(dynamic v) =>
+      v != null && v.toString().trim().isNotEmpty;
+
+  static bool _hasSkill(dynamic v) {
+    final s = v?.toString().trim() ?? '';
+    if (s.isEmpty) return false;
+    for (final part in s.split('|')) {
+      final item = part.split('^').first.trim();
+      if (item.isNotEmpty) return true;
     }
-    add('소개', d['introduce']?.toString());
-    add('메모', d['note']?.toString());
-    add('Github', d['github']?.toString());
-    add('홈페이지', d['homepage']?.toString());
-    _addSkillRow(list, d['skill']?.toString());
-    return list;
+    return false;
   }
 
-  /// Vue와 동일: "item^level|item^level" 파싱 후 레벨별 칩으로 표시
-  void _addSkillRow(List<Widget> list, String? skillStr) {
-    if (skillStr == null || skillStr.trim().isEmpty) return;
-    final parts = skillStr.split('|');
+  List<Widget> _skillChips(String? skillStr) {
+    if (skillStr == null || skillStr.trim().isEmpty) return [];
     final chips = <Widget>[];
-    for (final s in parts) {
+    for (final s in skillStr.split('|')) {
       final sub = s.split('^');
       if (sub.isEmpty) continue;
       final item = sub[0].trim();
@@ -188,33 +207,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final level = sub.length > 1 ? sub[1] : 'INTEREST';
       final color = _skillLevelColor(level);
       chips.add(
-        Padding(
-          padding: const EdgeInsets.only(right: 6, bottom: 6),
-          child: Chip(
-            label: Text(item, style: const TextStyle(fontSize: 12)),
-            backgroundColor: color.withOpacity(0.2),
-            side: BorderSide(color: color.withOpacity(0.5)),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
+        Chip(
+          label: Text(item, style: const TextStyle(fontSize: 12)),
+          backgroundColor: color.withOpacity(0.2),
+          side: BorderSide(color: color.withOpacity(0.5)),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
       );
     }
-    if (chips.isEmpty) return;
-    list.add(
-      Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              '스킬',
-              style: TextStyle(fontSize: 12, color: AppTheme.lightText, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height: 6),
-            Wrap(children: chips),
-          ],
-        ),
+    return chips;
+  }
+
+  Widget _buildLink(String url) {
+    final link = url.trim().isEmpty ? null : (url.trim().startsWith('http') ? url.trim() : 'https://${url.trim()}');
+    if (link == null) return SelectableText(url, style: const TextStyle(fontSize: 14));
+    return InkWell(
+      onTap: () async {
+        final uri = Uri.tryParse(link);
+        if (uri != null && await canLaunchUrl(uri)) {
+          launchUrl(uri, mode: LaunchMode.externalApplication);
+        }
+      },
+      child: Text(
+        url,
+        style: const TextStyle(fontSize: 14, color: AppTheme.primary, decoration: TextDecoration.underline),
       ),
     );
   }

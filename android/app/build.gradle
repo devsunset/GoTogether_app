@@ -17,17 +17,17 @@ def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '
 def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0'
 
 android {
-    namespace "com.gotogether" // 필요 시 추가
-    compileSdkVersion flutter.compileSdkVersion
+    namespace "com.gotogether"
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -36,8 +36,8 @@ android {
 
     defaultConfig {
         applicationId "com.gotogether"
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 24
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -55,7 +55,5 @@ flutter {
 }
 
 dependencies {
-    // 기존 $kotlin_version 변수 대신 stdlib를 직접 명시하거나
-    // 필요 없다면 제거해도 됩니다 (최신 버전은 자동으로 포함됨).
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
 }

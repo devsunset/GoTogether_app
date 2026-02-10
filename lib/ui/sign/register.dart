@@ -40,8 +40,10 @@ class _RegisterState extends State<Register> {
         key: _formKey,
         child: Center(
           child: Card(
-            elevation: AppTheme.cardElevationHover,
-            shadowColor: Colors.black.withOpacity(0.08),
+            elevation: 3,
+            shadowColor: AppTheme.primary.withOpacity(0.15),
+            color: AppTheme.cardSurface,
+            surfaceTintColor: AppTheme.primary.withOpacity(0.05),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
             child: Container(
               padding: EdgeInsets.all(AppTheme.paddingScreen + 12),

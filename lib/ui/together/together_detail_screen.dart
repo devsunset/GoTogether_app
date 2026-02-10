@@ -7,6 +7,7 @@ import 'package:gotogether/ui/app_theme.dart';
 import 'package:gotogether/ui/together/together_edit_screen.dart';
 import 'package:gotogether/ui/widgets/html_content_view.dart';
 import 'package:gotogether/ui/widgets/kakao_map_widget.dart';
+import 'package:gotogether/ui/widgets/screen_helpers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TogetherDetailScreen extends StatefulWidget {
@@ -188,148 +189,210 @@ class _TogetherDetailScreenState extends State<TogetherDetailScreen> {
         child: KeyedSubtree(
           key: ValueKey('together_detail_body_$togetherId'),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppTheme.paddingScreen),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        d['title']?.toString() ?? '',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.visibility_outlined, size: 16, color: AppTheme.lightText),
-                        const SizedBox(width: 4),
-                        Text('${d['hit'] ?? 0}', style: const TextStyle(fontSize: 13, color: AppTheme.lightText)),
-                        const SizedBox(width: 12),
-                        Icon(Icons.chat_bubble_outline, size: 16, color: AppTheme.lightText),
-                        const SizedBox(width: 4),
-                        Text('${_comments.length}', style: const TextStyle(fontSize: 13, color: AppTheme.lightText)),
-                      ],
-                    ),
-                  ],
-                ),
                 const SizedBox(height: 8),
-                Text('${d['nickname'] ?? ''} · ${d['modifiedDate'] ?? d['createdDate'] ?? ''}'),
-                const Divider(),
-                HtmlContentView(key: ValueKey('html_content_$togetherId'), content: d['content']?.toString()),
-                if (d['maxMember'] != null || d['currentMember'] != null) ...[
-                  const SizedBox(height: 12),
-                  Text('최대 모집 인원: ${d['maxMember'] ?? '-'} · 현재 참여 인원: ${d['currentMember'] ?? '-'}', style: const TextStyle(fontSize: 13, color: AppTheme.lightText)),
-                ],
-                if (d['openKakaoChat']?.toString().trim().isNotEmpty == true) ...[
-                  const SizedBox(height: 8),
-                  InkWell(
-                    onTap: () async {
-                      final url = d['openKakaoChat']?.toString().trim() ?? '';
-                      if (url.isEmpty) return;
-                      final uri = Uri.tryParse(url.startsWith('http') ? url : 'https://$url');
-                      if (uri != null && await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
-                    },
-                    child: Text('Kakao Open Chat: ${d['openKakaoChat']}', style: const TextStyle(fontSize: 14, color: Colors.blue, decoration: TextDecoration.underline)),
-                  ),
-                ],
-                if (_skillEntries(d['skill']).isNotEmpty) ...[
-                  const SizedBox(height: 16),
-                  const Text('Skill', style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 6),
-                  _SkillLegend(),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 6,
-                    children: _skillEntries(d['skill']).map((e) => _SkillChip(item: e.item, level: e.level)).toList(),
-                  ),
-                ],
-                const SizedBox(height: 16),
-                const Text('참여 방식', style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Text(_involveTypeLabel(d['involveType']?.toString())),
-                if (_showMapOnDetail(d)) ...[
-                  const SizedBox(height: 12),
-                  const Text('모임 장소', style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 6),
-                  KakaoMapWidget(
-                    mode: 'view',
-                    lat: _parseDouble(d['latitude']),
-                    lng: _parseDouble(d['longitude']),
-                    height: 280,
-                  ),
-                ],
-                const SizedBox(height: 16),
-                const Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
-                ...List.generate(_comments.length, (i) {
-                  final c = _comments[i];
-                  final map = c is Map ? c : {};
-                  final rawId = map['togetherCommentId'] ?? map['id'];
-                  final intId = rawId == null ? null : (rawId is int ? rawId : (rawId is num ? rawId.toInt() : int.tryParse(rawId.toString())));
-                  return Card(
-                    key: ValueKey('comment_${togetherId}_$i'),
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: ListTile(
-                      title: Text(map['nickname']?.toString() ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                DetailSection(
+                  title: '글 정보',
+                  icon: Icons.article_outlined,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        d['title']?.toString() ?? '',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppTheme.darkerText,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
                         children: [
-                          Text(map['modifiedDate']?.toString() ?? map['createdDate']?.toString() ?? '', style: const TextStyle(fontSize: 12, color: AppTheme.lightText)),
-                          const SizedBox(height: 6),
-                          Text(map['content']?.toString() ?? '', style: const TextStyle(fontSize: 14), maxLines: 20, overflow: TextOverflow.ellipsis),
+                          Icon(Icons.visibility_outlined, size: 16, color: AppTheme.lightText),
+                          const SizedBox(width: 4),
+                          Text('${d['hit'] ?? 0}', style: const TextStyle(fontSize: 13, color: AppTheme.lightText)),
+                          const SizedBox(width: 16),
+                          Icon(Icons.chat_bubble_outline, size: 16, color: AppTheme.lightText),
+                          const SizedBox(width: 4),
+                          Text('${_comments.length}', style: const TextStyle(fontSize: 13, color: AppTheme.lightText)),
                         ],
                       ),
-                      trailing: _canDeleteComment(c) && intId != null && intId > 0
-                          ? IconButton(
-                              icon: const Icon(Icons.close, size: 20),
-                              onPressed: () => _deleteComment(intId),
-                              tooltip: '댓글 삭제',
-                            )
-                          : null,
-                      isThreeLine: true,
-                    ),
-                  );
-                }),
-                const SizedBox(height: 16),
-                if (_currentUsername != null && _currentUsername!.isNotEmpty) ...[
-                  const Text('Reply', style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _commentController,
-                    maxLines: 5,
-                    maxLength: 1000,
-                    decoration: const InputDecoration(
-                      hintText: 'Comment를 남겨 보세요.',
-                      border: OutlineInputBorder(),
-                    ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '${d['nickname'] ?? ''} · ${d['modifiedDate'] ?? d['createdDate'] ?? ''}',
+                        style: const TextStyle(fontSize: 13, color: AppTheme.lightText),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: FilledButton(
-                      onPressed: _addComment,
-                      child: const Text('Submit'),
-                    ),
-                  ),
-                ] else ...[
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.blue.shade200),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.info_outline, color: Colors.blue, size: 24),
-                        SizedBox(width: 12),
-                        Expanded(child: Text('로그인을 하시면 댓글 작성이 가능합니다.', style: TextStyle(color: Colors.blue, fontSize: 14))),
+                ),
+                const SizedBox(height: 20),
+                DetailSection(
+                  title: '내용',
+                  icon: Icons.description_outlined,
+                  padding: const EdgeInsets.all(AppTheme.paddingCard),
+                  child: HtmlContentView(key: ValueKey('html_content_$togetherId'), content: d['content']?.toString()),
+                ),
+                const SizedBox(height: 20),
+                DetailSection(
+                  title: '기타 정보',
+                  icon: Icons.info_outlined,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (d['maxMember'] != null || d['currentMember'] != null) ...[
+                        Text('최대 모집 인원: ${d['maxMember'] ?? '-'} · 현재 참여 인원: ${d['currentMember'] ?? '-'}', style: const TextStyle(fontSize: 14, color: AppTheme.darkText)),
+                        const SizedBox(height: 12),
                       ],
+                      if (d['openKakaoChat']?.toString().trim().isNotEmpty == true) ...[
+                        InkWell(
+                          onTap: () async {
+                            final url = d['openKakaoChat']?.toString().trim() ?? '';
+                            if (url.isEmpty) return;
+                            final uri = Uri.tryParse(url.startsWith('http') ? url : 'https://$url');
+                            if (uri != null && await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          },
+                          child: Row(
+                            children: [
+                              Icon(Icons.chat, size: 18, color: AppTheme.primary),
+                              const SizedBox(width: 8),
+                              Text('Kakao Open Chat: ${d['openKakaoChat']}', style: const TextStyle(fontSize: 14, color: AppTheme.primary, decoration: TextDecoration.underline)),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      if (_skillEntries(d['skill']).isNotEmpty) ...[
+                        _SkillLegend(),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: _skillEntries(d['skill']).map((e) => _SkillChip(item: e.item, level: e.level)).toList(),
+                        ),
+                      ],
+                      if ((d['maxMember'] == null && d['currentMember'] == null) &&
+                          (d['openKakaoChat']?.toString().trim() ?? '').isEmpty &&
+                          _skillEntries(d['skill']).isEmpty)
+                        const Text('없음', style: TextStyle(fontSize: 14, color: AppTheme.lightText)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                DetailSection(
+                  title: '참여 방식',
+                  icon: Icons.groups_outlined,
+                  child: Text(_involveTypeLabel(d['involveType']?.toString()), style: const TextStyle(fontSize: 14, color: AppTheme.darkText)),
+                ),
+                if (_showMapOnDetail(d)) ...[
+                  const SizedBox(height: 20),
+                  DetailSection(
+                    title: '모임 장소',
+                    icon: Icons.map_outlined,
+                    padding: EdgeInsets.zero,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(AppTheme.radiusSm),
+                      child: KakaoMapWidget(
+                        mode: 'view',
+                        lat: _parseDouble(d['latitude']),
+                        lng: _parseDouble(d['longitude']),
+                        height: 280,
+                      ),
                     ),
                   ),
                 ],
+                const SizedBox(height: 20),
+                DetailSection(
+                  title: '댓글 (${_comments.length})',
+                  icon: Icons.chat_bubble_outline,
+                  child: _comments.isEmpty
+                      ? const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Text('아직 댓글이 없습니다.', style: TextStyle(color: AppTheme.lightText, fontSize: 14)),
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(_comments.length, (i) {
+                            final c = _comments[i];
+                            final map = c is Map ? c : {};
+                            final rawId = map['togetherCommentId'] ?? map['id'];
+                            final intId = rawId == null ? null : (rawId is int ? rawId : (rawId is num ? rawId.toInt() : int.tryParse(rawId.toString())));
+                            return Column(
+                              key: ValueKey('comment_${togetherId}_$i'),
+                              children: [
+                                if (i > 0) const Divider(height: 24),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(map['nickname']?.toString() ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: AppTheme.darkerText)),
+                                          const SizedBox(height: 4),
+                                          Text(map['modifiedDate']?.toString() ?? map['createdDate']?.toString() ?? '', style: const TextStyle(fontSize: 12, color: AppTheme.lightText)),
+                                          const SizedBox(height: 8),
+                                          Text(map['content']?.toString() ?? '', style: const TextStyle(fontSize: 14), maxLines: 20, overflow: TextOverflow.ellipsis),
+                                        ],
+                                      ),
+                                    ),
+                                    if (_canDeleteComment(c) && intId != null && intId > 0)
+                                      IconButton(
+                                        icon: const Icon(Icons.close, size: 20),
+                                        onPressed: () => _deleteComment(intId),
+                                        tooltip: '댓글 삭제',
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                ),
+                const SizedBox(height: 20),
+                if (_currentUsername != null && _currentUsername!.isNotEmpty)
+                  DetailSection(
+                    title: '댓글 작성',
+                    icon: Icons.reply_outlined,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextField(
+                          controller: _commentController,
+                          maxLines: 5,
+                          maxLength: 1000,
+                          decoration: const InputDecoration(
+                            hintText: 'Comment를 남겨 보세요.',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        FilledButton(
+                          onPressed: _addComment,
+                          child: const Text('등록'),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  DetailSection(
+                    title: '댓글 작성',
+                    icon: Icons.reply_outlined,
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outline, color: AppTheme.primary, size: 24),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Text(
+                            '로그인을 하시면 댓글 작성이 가능합니다.',
+                            style: TextStyle(color: AppTheme.darkText, fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 24),
               ],
             ),
           ),

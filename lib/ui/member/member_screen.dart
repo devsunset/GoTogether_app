@@ -322,59 +322,97 @@ class _MemberCard extends StatelessWidget {
                 ],
               ),
               if (expanded) ...[
-                const Divider(height: 24),
-                _row('Introduce', item.introduce ?? ''),
-                _row('Note', item.note ?? ''),
-                if (item.github != null && item.github!.isNotEmpty)
-                  _rowLink('Github', item.github!),
-                if (item.homepage != null && item.homepage!.isNotEmpty)
-                  _rowLink('Homepage', item.homepage!),
+                const SizedBox(height: 16),
+                DetailSection(
+                  title: '소개',
+                  icon: Icons.person_outline,
+                  padding: const EdgeInsets.all(AppTheme.paddingCard),
+                  child: SelectableText(
+                    (item.introduce ?? '').isEmpty ? '-' : (item.introduce ?? ''),
+                    style: const TextStyle(fontSize: 14, color: AppTheme.darkText, height: 1.4),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                DetailSection(
+                  title: '메모',
+                  icon: Icons.note_outlined,
+                  padding: const EdgeInsets.all(AppTheme.paddingCard),
+                  child: SelectableText(
+                    (item.note ?? '').isEmpty ? '-' : (item.note ?? ''),
+                    style: const TextStyle(fontSize: 14, color: AppTheme.darkText, height: 1.4),
+                  ),
+                ),
+                if (item.github != null && item.github!.trim().isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  DetailSection(
+                    title: 'Github',
+                    icon: Icons.code,
+                    padding: const EdgeInsets.all(AppTheme.paddingCard),
+                    child: _buildLink(context, item.github!),
+                  ),
+                ],
+                if (item.homepage != null && item.homepage!.trim().isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  DetailSection(
+                    title: 'Homepage',
+                    icon: Icons.language,
+                    padding: const EdgeInsets.all(AppTheme.paddingCard),
+                    child: _buildLink(context, item.homepage!),
+                  ),
+                ],
                 if (skills.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  const Text('Skills', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-                  const SizedBox(height: 4),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 4,
-                    children: skills.map((e) {
-                      final c = skillColor(e.level);
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: c.withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: c.withOpacity(0.3)),
-                        ),
-                        child: Text(e.item, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: c)),
-                      );
-                    }).toList(),
+                  const SizedBox(height: 12),
+                  DetailSection(
+                    title: 'Skills',
+                    icon: Icons.star_outline,
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 6,
+                      children: skills.map((e) {
+                        final c = skillColor(e.level);
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: c.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(AppTheme.radiusSm),
+                            border: Border.all(color: c.withOpacity(0.3)),
+                          ),
+                          child: Text(e.item, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: c)),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
                 if (canSendMemo) ...[
-                  const SizedBox(height: 16),
-                  const Text('메모 전송', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: memoController,
-                    maxLines: 3,
-                    maxLength: 1000,
-                    decoration: const InputDecoration(
-                      hintText: '메모를 남겨 보세요.',
-                      border: OutlineInputBorder(),
-                      isDense: true,
+                  const SizedBox(height: 12),
+                  DetailSection(
+                    title: '메모 전송',
+                    icon: Icons.send_outlined,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextField(
+                          controller: memoController,
+                          maxLines: 3,
+                          maxLength: 1000,
+                          decoration: const InputDecoration(
+                            hintText: '메모를 남겨 보세요.',
+                            border: OutlineInputBorder(),
+                            isDense: true,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        sendingMemo
+                            ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2))
+                            : FilledButton(
+                                onPressed: onSendMemo,
+                                child: const Text('전송'),
+                              ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: sendingMemo
-                        ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2))
-                        : FilledButton(
-                            onPressed: onSendMemo,
-                            child: const Text('Send'),
-                          ),
-                  ),
                 ],
+                const SizedBox(height: 8),
               ],
             ],
           ),
@@ -383,45 +421,15 @@ class _MemberCard extends StatelessWidget {
     );
   }
 
-  Widget _row(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(width: 80, child: Text('$label', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
-          Expanded(
-            child: SelectableText(
-              value.isEmpty ? '-' : value,
-              style: const TextStyle(fontSize: 13),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _rowLink(String label, String url) {
+  Widget _buildLink(BuildContext context, String url) {
     final link = url.trim().isEmpty ? null : (url.trim().startsWith('http') ? url.trim() : 'https://${url.trim()}');
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(width: 80, child: Text('$label', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
-          Expanded(
-            child: link != null
-                ? InkWell(
-                    onTap: () async {
-                      final uri = Uri.tryParse(link);
-                      if (uri != null && await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
-                    },
-                    child: Text(url, style: const TextStyle(fontSize: 13, color: Colors.blue, decoration: TextDecoration.underline)),
-                  )
-                : SelectableText(url.isEmpty ? '-' : url, style: const TextStyle(fontSize: 13)),
-          ),
-        ],
-      ),
+    if (link == null) return SelectableText(url.isEmpty ? '-' : url, style: const TextStyle(fontSize: 14));
+    return InkWell(
+      onTap: () async {
+        final uri = Uri.tryParse(link);
+        if (uri != null && await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+      },
+      child: Text(url, style: const TextStyle(fontSize: 14, color: AppTheme.primary, decoration: TextDecoration.underline)),
     );
   }
 }

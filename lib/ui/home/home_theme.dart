@@ -6,23 +6,23 @@ class HomeTheme {
   HomeTheme._();
   static const Color nearlyWhite = Color(0xFFFAFAFA);
   static const Color white = Color(0xFFFFFFFF);
-  static const Color background = Color(0xFFF8FAFC);
+  static const Color background = Color(0xFFF5F3FF);
   static const Color nearlyDarkBlue = Color(0xFF4F46E5);
-  static const Color nearlyYellow = Color(0xFFFBBF24);
+  static const Color nearlyYellow = Color(0xFFF59E0B);
   static const Color nearlyRed = Color(0xFFEF4444);
   static const Color nearlyGreen = Color(0xFF10B981);
 
   static const Color nearlyBlue = Color(0xFF6366F1);
-  static const Color nearlyBlack = Color(0xFF1E293B);
+  static const Color nearlyBlack = Color(0xFF1E1B4B);
   static const Color grey = Color(0xFF64748B);
-  static const Color dark_grey = Color(0xFF334155);
+  static const Color dark_grey = Color(0xFF4338CA);
 
-  static const Color darkText = Color(0xFF334155);
-  static const Color darkerText = Color(0xFF1E293B);
-  static const Color lightText = Color(0xFF64748B);
-  static const Color deactivatedText = Color(0xFF94A3B8);
-  static const Color dismissibleBackground = Color(0xFF475569);
-  static const Color spacer = Color(0xFFE2E8F0);
+  static const Color darkText = Color(0xFF3730A3);
+  static const Color darkerText = Color(0xFF1E1B4B);
+  static const Color lightText = Color(0xFF6B7280);
+  static const Color deactivatedText = Color(0xFF9CA3AF);
+  static const Color dismissibleBackground = Color(0xFF5B21B6);
+  static const Color spacer = Color(0xFFE9E5FF);
   static const String fontName = AppTheme.fontName;
 
   static const TextTheme textTheme = TextTheme(

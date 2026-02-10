@@ -1,11 +1,10 @@
 plugins {
-    // Android Gradle Plugin 버전 (Java 21 사용 시 8.1.0 이상 권장)
-    id "com.android.application" version "8.1.0" apply false
+    // Android Gradle Plugin 8.5.x (Gradle 8.7, Java 17)
+    id "com.android.application" version "8.5.2" apply false
 
-    // Kotlin 버전 (기존 1.6.10에서 최신 안정화 버전으로 상향)
-    id "org.jetbrains.kotlin.android" version "1.8.22" apply false
+    // Kotlin 1.9.x (AGP 8.5 호환)
+    id "org.jetbrains.kotlin.android" version "1.9.24" apply false
 
-    // 최신 Flutter 플러그인 (settings.gradle에서 정의한 것을 가져옴)
     id "dev.flutter.flutter-gradle-plugin" apply false
 }
 

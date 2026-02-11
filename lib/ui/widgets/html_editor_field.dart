@@ -30,7 +30,9 @@ class HtmlEditorField extends StatefulWidget {
 
 class _HtmlEditorFieldState extends State<HtmlEditorField> {
   bool _hasSetInitialText = false;
+  bool _editorReady = false; // 로딩 숨김: 초기값 설정 완료 또는 초기값 없음일 때
   Timer? _pollTimer;
+  Timer? _readyTimer;
   static const int _maxAttempts = 28;
   static const Duration _pollInterval = Duration(milliseconds: 600);
   static const Duration _startDelay = Duration(milliseconds: 1200);
@@ -67,6 +69,7 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
                 current.length > 8);
         if (ok && mounted) {
           _hasSetInitialText = true;
+          _editorReady = true;
           timer.cancel();
           _pollTimer = null;
           setState(() {});
@@ -90,9 +93,15 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
   @override
   void initState() {
     super.initState();
-    // 웹: onEditorCreated가 첫 로드에 안 불리므로, 무조건 지연 후 폴링 시작.
+    // 초기값 없을 때(새 글): 일정 시간 후 로딩 숨김 (웹에서 패키지 onPageFinished 미호출 대응)
+    if (!_hasInitial) {
+      _readyTimer = Timer(const Duration(milliseconds: 2200), () {
+        if (mounted && !_editorReady) {
+          setState(() => _editorReady = true);
+        }
+      });
+    }
     _scheduleStart();
-    // 모바일: onEditorCreated가 불리면 즉시 한 번 시도 + 폴링도 이미 예약됨.
     widget.controller.onEditorLoaded(() {
       if (mounted && _hasInitial && !_hasSetInitialText) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -100,6 +109,9 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
             if (mounted && !_hasSetInitialText) _startPolling();
           });
         });
+      } else if (mounted && !_hasInitial) {
+        _editorReady = true;
+        setState(() {});
       }
     });
   }
@@ -107,6 +119,7 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
   @override
   void dispose() {
     _pollTimer?.cancel();
+    _readyTimer?.cancel();
     super.dispose();
   }
 
@@ -116,7 +129,9 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
     if (oldWidget.initialHtml != widget.initialHtml &&
         (widget.initialHtml?.trim().isNotEmpty == true)) {
       _hasSetInitialText = false;
+      _editorReady = false;
       _pollTimer?.cancel();
+      _readyTimer?.cancel();
       _scheduleStart();
     }
   }
@@ -158,13 +173,16 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
             backgroundColor: Theme.of(context).brightness == Brightness.dark
                 ? Colors.grey.shade900
                 : Colors.white,
-            loadingBuilder: (context) => const Center(
-              child: SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            ),
+            // 값 설정 완료(_editorReady)되면 로딩 숨김. 웹에서 패키지 onPageFinished 미호출 시 스피너 계속 도는 문제 대응.
+            loadingBuilder: (context) => _editorReady
+                ? const SizedBox.shrink()
+                : const Center(
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
             onEditorCreated: () {
               if (_hasInitial && !_hasSetInitialText) _startPolling();
             },

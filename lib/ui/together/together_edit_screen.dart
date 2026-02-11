@@ -339,11 +339,27 @@ class _TogetherEditScreenState extends State<TogetherEditScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _saving ? null : _save,
-              child: _saving ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)) : const Text('저장'),
+            const SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: FilledButton.icon(
+                onPressed: _saving ? null : _save,
+                icon: _saving
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      )
+                    : const Icon(Icons.check_circle_outline, size: 22),
+                label: Text(_saving ? '저장 중...' : '저장하기', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                style: FilledButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  elevation: 1,
+                ),
+              ),
             ),
+            SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
           ],
         ),
       ),
